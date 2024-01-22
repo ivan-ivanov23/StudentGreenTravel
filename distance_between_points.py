@@ -38,8 +38,6 @@ df_airports = pd.read_csv("GBairports.csv")
 for i in df_airports['Unnamed: 0']:
     airports_dict[i] = [df_airports.loc[df_airports['Unnamed: 0'] == i, 'Latitude'].iloc[0], df_airports.loc[df_airports['Unnamed: 0'] == i, 'Longitude'].iloc[0]]
 
-
-
 # Find distance between coords_2 and all airports
 # Create a new dict to store the distances with the airport as the key and the distance as the value
 distances = {}
