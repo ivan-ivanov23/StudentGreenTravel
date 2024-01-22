@@ -47,11 +47,19 @@ for i in airports_dict:
     # https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude
     distances[i] = round(geopy.distance.geodesic(coords_2, (airports_dict[i][0], airports_dict[i][1])).km,2)
 
+
 # Select the airport with the smallest distance and print the distance and the airport
 # print the postcode that we are using
-print('Closest airport to', df['Home_Postcode'][0], 'is: ')
-print(min(distances, key=distances.get), "~", min(distances.values()),"km")
+print('Closest airport to', df['Home_Postcode'][0], 'is:', min(distances, key=distances.get), "~", min(distances.values()),"km")
+airport = min(distances, key=distances.get)
 
+# Get the longitude and latitude of the airport and of aberdeen airport
+cur_airport = (airports_dict[airport][0], airports_dict[airport][1])
+# Data from GBairports.csv
+aberdeen_airport = (57.2019004822,-2.1977798939)
 
+# Calculate the distance between the two airports
+travel_distance = round(geopy.distance.distance(cur_airport, aberdeen_airport).km,2)
+print('Distance between', airport, 'and Aberdeen Airport is:', travel_distance, 'km')
 
 
