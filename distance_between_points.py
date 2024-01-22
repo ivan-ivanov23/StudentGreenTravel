@@ -62,4 +62,8 @@ aberdeen_airport = (57.2019004822,-2.1977798939)
 travel_distance = round(geopy.distance.distance(cur_airport, aberdeen_airport).km,2)
 print('Distance between', airport, 'and Aberdeen Airport is:', travel_distance, 'km')
 
-
+# University of Aberdeen longitude and latitude from Google Maps
+aberdeen_uni = (57.1645,-2.0999)
+# Calculate the distance between the aberdeen_uni and aberdeen_airport
+uni_distance = round(geopy.distance.distance(aberdeen_uni, aberdeen_airport).km,2)
+print('Distance between University of Aberdeen and Aberdeen Airport is:', uni_distance, 'km')
