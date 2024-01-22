@@ -1,6 +1,5 @@
 import pandas as pd
 import geopy.distance
-import airportsdata
 
 
 # Open addresses file and for each postcode, get the longitude and latitude from ukpostcodes.csv
@@ -30,16 +29,16 @@ for i in df['Home_Postcode']:
 # print(result)
             
 # coords_2 is the longitude and latitude of the first postcode in the results dict which is HA9 0WS
-coords_2 = (result[df['Home_Postcode'][2]][0], result[df['Home_Postcode'][2]][1])
+coords_2 = (result[df['Home_Postcode'][0]][0], result[df['Home_Postcode'][0]][1])
 
-
-airports = airportsdata.load('IATA')  # key is the IATA location code
-# Add all UK airports to a dict with their city as the key and longitude and latitude as the value
 airports_dict = {}
-for i in airports:
-    if airports[i]['country'] == 'GB':
-        airports_dict[airports[i]['city']] = [airports[i]['lat'], airports[i]['lon']]
-# print(airports_dict)
+# Read in the airports csv file
+df_airports = pd.read_csv("GBairports.csv")
+# Add the airports to the airports_dict with the airport name as the key and the longitude and latitude as the value
+for i in df_airports['Unnamed: 0']:
+    airports_dict[i] = [df_airports.loc[df_airports['Unnamed: 0'] == i, 'Latitude'].iloc[0], df_airports.loc[df_airports['Unnamed: 0'] == i, 'Longitude'].iloc[0]]
+
+
 
 # Find distance between coords_2 and all airports
 # Create a new dict to store the distances with the airport as the key and the distance as the value
@@ -50,8 +49,8 @@ for i in airports_dict:
 
 # Select the airport with the smallest distance and print the distance and the airport
 # print the postcode that we are using
-print('Closest airport to', df['Home_Postcode'][2], 'is: ')
-print(min(distances, key=distances.get), min(distances.values()), "km")
+print('Closest airport to', df['Home_Postcode'][0], 'is: ')
+print(min(distances, key=distances.get), "~", min(distances.values()),"km")
 
 
 
