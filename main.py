@@ -4,7 +4,6 @@ import customtkinter, tkinter
 from tkinter.filedialog import askopenfile
 
 
-# =================================================================================================
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -38,10 +37,8 @@ class App(customtkinter.CTk):
         # If the user selected a file, then read it using pandas
         if file:
             df = pd.read_excel(file.name, engine='openpyxl')
-            print(df)
-        
+            print(df)        
 
 # Run the app
 app = App()
 app.mainloop()
-# app.quit()
