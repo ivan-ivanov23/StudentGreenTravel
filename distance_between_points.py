@@ -26,13 +26,13 @@ for i in df['Home_Postcode']:
             # Save the longitude and latitude of the postcode in results dict with key being the postcode
             result[i] = [df_postcodes.loc[df_postcodes['postcode'] == i, 'latitude'].iloc[0], df_postcodes.loc[df_postcodes['postcode'] == i, 'longitude'].iloc[0]]
 
-print(result)
+# print(result)
 
 # Get the longitude and latitude of uni of aberdeen AB24 3FX from ukpostcodes.csv
 uni_lat = df_postcodes.loc[df_postcodes['postcode'] == 'AB24 3FX', 'latitude'].iloc[0]
-print("Uni of Aberdeen latitude: ", uni_lat)
+# print("Uni of Aberdeen latitude: ", uni_lat)
 uni_long = df_postcodes.loc[df_postcodes['postcode'] == 'AB24 3FX', 'longitude'].iloc[0]
-print("Uni of Aberdeen longitude: ", uni_long)
+# print("Uni of Aberdeen longitude: ", uni_long)
 
 coords_1 = (uni_lat, uni_long)
 # coords_2 is the longitude and latitude of the first postcode in the results dict which is HA9 0WS
@@ -42,5 +42,29 @@ coords_2 = (result[df['Home_Postcode'][0]][0], result[df['Home_Postcode'][0]][1]
 
 
 # https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude
-print(round(geopy.distance.geodesic(coords_1, coords_2).km,2), "km")
+# print(round(geopy.distance.geodesic(coords_1, coords_2).km,2), "km")
+
+import airportsdata
+import pgeocode
+airports = airportsdata.load('IATA')  # key is the IATA location code
+# Add all UK airports to a dict with their city as the key and longitude and latitude as the value
+airports_dict = {}
+for i in airports:
+    if airports[i]['country'] == 'GB':
+        airports_dict[airports[i]['city']] = [airports[i]['lat'], airports[i]['lon']]
+# print(airports_dict)
+
+# Find distance between coords_2 and all airports
+# Create a new dict to store the distances with the airport as the key and the distance as the value
+distances = {}
+for i in airports_dict:
+    distances[i] = round(geopy.distance.geodesic(coords_2, (airports_dict[i][0], airports_dict[i][1])).km,2)
+
+# Select the airport with the smallest distance and print the distance and the airport
+# print the postcode that we are using
+print('Closest airport to', df['Home_Postcode'][0], 'is: ')
+print(min(distances, key=distances.get), min(distances.values()), "km")
+
+
+
 
