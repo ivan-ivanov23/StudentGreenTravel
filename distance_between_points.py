@@ -65,3 +65,6 @@ aberdeen_uni = (57.1645,-2.0999)
 # Calculate the distance between the aberdeen_uni and aberdeen_airport
 uni_distance = round(geopy.distance.distance(aberdeen_uni, aberdeen_airport).km,2)
 print('Distance between University of Aberdeen and Aberdeen Airport is:', uni_distance, 'km')
+
+# Clearing variables
+del df, df_results, df_postcodes, result, coords_2, airports_dict, df_airports, distances, airport, cur_airport, aberdeen_airport, travel_distance, aberdeen_uni, uni_distance
