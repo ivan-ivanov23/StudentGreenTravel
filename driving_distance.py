@@ -33,6 +33,19 @@ folium.Marker([57.20388512416447,-2.1995228641920734], popup='Aberdeen Airport',
 # Add marker for University of Aberdeen
 folium.Marker([57.16334530172521, -2.099854019707735], popup='University of Aberdeen', icon=folium.Icon(color="red")).add_to(m)
 
+# Use a tileset with no labels
+folium.TileLayer('cartodbvoyagernolabels').add_to(m)
+# tileset with labels
+#folium.TileLayer('cartodbvoyager').add_to(m)
+
+# Add tilelayer provider Jawg.Streets
+# folium.TileLayer(tiles='https://{s}.tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token={accessToken}',
+#                  attr='Jawg.Streets',
+#                  name='Jawg.Streets',
+#                  max_zoom=22,
+#                  zoom_start=12,
+#                  control_scale=True,
+#                  accessToken='2NgqcKLOhcfu6uaUDub1XJw1Sj3nfqxjBu1in7N5bmNe4uDeti8bWcub1WKtavV9').add_to(m)
 
 
 # Save map to HTML file
