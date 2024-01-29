@@ -57,29 +57,26 @@ def closest_airport(postcode, postcode_coords, airports_dict):
     distances = calculate_distances(postcode, postcode_coords, airports_dict)
     return min(distances, key=distances.get)
 
-# print(closest_airport('HA9 0WS', postcode_coords(addresses, postcodes), airports_coords(airports)))
 
-# Print the closest airport to each postcode in the addresses file and the distance to that airport
-# for i in addresses['Home_Postcode']:
-#     airport = closest_airport(i, postcode_coords(addresses, postcodes), airports_coords(airports))
-#     distance = min(calculate_distances(i, postcode_coords(addresses, postcodes), airports_coords(airports)).values())
-#     print(f'Closest airport to {i} is {airport} ~ {distance} km')
-
-def closest_airport_all(closest_airport, postcode_coords, airports_dict):
+def travel(closest_airport, postcode_coords, airports_dict):
     """Returns a dictionary with postcodes as key and closest airport as value"""
     for i in addresses['Home_Postcode']:
         airport = closest_airport(i, postcode_coords(addresses, postcodes), airports_coords(airports))
         distance = min(calculate_distances(i, postcode_coords(addresses, postcodes), airports_coords(airports)).values())
         print(f'Closest airport to {i} is {airport} ~ {distance} km')
+        # Get longitude and latitude of the airport
+        cur_airport = (airports_dict[airport][0], airports_dict[airport][1])
+        # Calculate the distance between the two airports
+        travel_distance = round(geopy.distance.distance(cur_airport, aberdeen_airport).km,2)
+        print(f'The distance between {airport} and Aberdeen airport is {travel_distance} km')
+        print('====================================================================================================')
+        
+    # Print the distance between the Aberdeen airport and the university
+    uni_airport_distance = round(geopy.distance.distance(aberdeen_airport, aberdeen_uni).km,2)
+    print(f'The distance between Aberdeen airport and the university is {uni_airport_distance} km')
 
-closest_airport_all(closest_airport, postcode_coords, airports_coords)
 
-
-
-
-
-
-
+travel(closest_airport, postcode_coords, airports_coords(airports))
 
 
     
