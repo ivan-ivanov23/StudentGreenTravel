@@ -82,6 +82,3 @@ def travel(closest_airport, postcode_coords, airports_dict):
 
 
 travel(closest_airport, postcode_coords, airports_coords(airports))
-
-
-    
