@@ -22,7 +22,9 @@ def postcode_coords(addresses, postcodes):
         for j in postcodes['postcode']:
             if i == j:
                 # Save the longitude and latitude of the postcode in results dict with key being the postcode
-                result[i] = [postcodes.loc[postcodes['postcode'] == i, 'latitude'].iloc[0], postcodes.loc[postcodes['postcode'] == i, 'longitude'].iloc[0]]
+                latitude = postcodes.loc[postcodes['postcode'] == i, 'latitude'].iloc[0]
+                longitude = postcodes.loc[postcodes['postcode'] == i, 'longitude'].iloc[0]
+                result[i] = [latitude, longitude]
 
     return result
 
@@ -35,7 +37,9 @@ def airports_coords(airports):
 
     # Add the airports to the airports_dict with the airport name as the key and the longitude and latitude as the value
     for i in airports['Unnamed: 0']:
-        airports_dict[i] = [airports.loc[airports['Unnamed: 0'] == i, 'Latitude'].iloc[0], airports.loc[airports['Unnamed: 0'] == i, 'Longitude'].iloc[0]]
+        latitude = airports.loc[airports['Unnamed: 0'] == i, 'Latitude'].iloc[0]
+        longitude = airports.loc[airports['Unnamed: 0'] == i, 'Longitude'].iloc[0]
+        airports_dict[i] = [latitude, longitude]
 
     return airports_dict
 
@@ -47,7 +51,8 @@ def calculate_distances(postcode, postcode_coords, airports_dict):
     # Create a new dict to store the distances with the airport as the key and the distance as the value
     for i in airports_dict:
         # https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude
-        distances[i] = round(geopy.distance.geodesic(coords, (airports_dict[i][0], airports_dict[i][1])).km,2)
+        airport = (airports_dict[i][0], airports_dict[i][1])
+        distances[i] = round(geopy.distance.geodesic(coords, airport).km,2)
 
     return distances
 
