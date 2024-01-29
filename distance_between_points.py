@@ -5,13 +5,13 @@ import geopy.distance
 # Open addresses file and for each postcode, get the longitude and latitude from ukpostcodes.csv
 # Then calculate the distance between the two points
 # Read in the addresses file
-df = pd.read_excel("Addresses.xlsx", engine='openpyxl')
+df = pd.read_excel("data/Addresses.xlsx", engine='openpyxl')
 
 # Create a new dataframe to store the results
 df_results = pd.DataFrame(columns=['Postcode', 'Latitude', 'Longitude', 'Distance'])
 
 # Read in the ukpostcodes.csv file
-df_postcodes = pd.read_csv("ukpostcodes.csv")
+df_postcodes = pd.read_csv("data/ukpostcodes.csv")
 # Drop the index column
 df_postcodes = df_postcodes.drop(columns=['id'])
 
@@ -33,7 +33,7 @@ coords_2 = (result[df['Home_Postcode'][0]][0], result[df['Home_Postcode'][0]][1]
 
 airports_dict = {}
 # Read in the airports csv file
-df_airports = pd.read_csv("GBairports.csv")
+df_airports = pd.read_csv("data/GBairports.csv")
 # Add the airports to the airports_dict with the airport name as the key and the longitude and latitude as the value
 for i in df_airports['Unnamed: 0']:
     airports_dict[i] = [df_airports.loc[df_airports['Unnamed: 0'] == i, 'Latitude'].iloc[0], df_airports.loc[df_airports['Unnamed: 0'] == i, 'Longitude'].iloc[0]]

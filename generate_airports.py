@@ -15,4 +15,4 @@ for i in airports:
         
 # Save airports_dict to a csv file
 df_airports = pd.DataFrame.from_dict(airports_dict, orient='index', columns=['Latitude', 'Longitude'])
-df_airports.to_csv('GBairports.csv')
+df_airports.to_csv('data/GBairports.csv')
