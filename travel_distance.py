@@ -77,28 +77,31 @@ def closest_airport(postcode, postcode_coords, airports_dict):
 
 def travel(postcode_coords, airports_dict):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
+    # Dictionary to store postcode as key and closest airport, distance to it, and flying distance to Aberdeen as values
+    data = {}
     # For postcode in column 2 of address file
     for postcode in addresses.iloc[:, 1]:
         # Find the closest airport to the postcode
         closest_airport_name, distance = closest_airport(postcode, postcode_coords, airports_dict)
-        print(f'Closest airport to {postcode} is {closest_airport_name} ~ {distance:.2f} km')
         
         # If the closest airport is not Aberdeen (default value for nan postcodes)
         if closest_airport_name != 'Aberdeen':
             # Calculate the distance between the two airports
             travel_distance = geodesic(airports_dict[closest_airport_name], aberdeen_airport).km
-            print(f'The distance between {closest_airport_name} and Aberdeen airport is {travel_distance:.2f} km')
         else:
             # For default value, set the distance to 0
             travel_distance = 0
-            print(f'The distance between {closest_airport_name} and Aberdeen airport is {travel_distance:.2f} km')
-
-        print('====================================================================================================')
+        data[postcode] = (closest_airport_name, round(distance, 2), round(travel_distance, 2))
     
     # Print the distance between the Aberdeen airport and the university
     uni_airport_distance = geodesic(aberdeen_airport, aberdeen_uni).km
-    print(f'The distance between Aberdeen airport and the university is {uni_airport_distance:.2f} km')
+    data['Airport to University'] = round(uni_airport_distance, 2)
+
+    return data
 
 
 """=========================================Execute============================================================"""
-travel(postcode_coord_dict, airport_coord_dict)
+info = travel(postcode_coord_dict, airport_coord_dict)
+# - 1 because the last entry is the distance between Aberdeen Airport and Univerity
+# print(len(info) - 1)
+
