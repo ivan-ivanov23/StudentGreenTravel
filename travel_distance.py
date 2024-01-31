@@ -7,6 +7,9 @@ from tkinter.filedialog import askopenfile
 # Coordinates of Aberdeen airport and university (taken from Google)
 aberdeen_airport = (57.2019004822, -2.1977798939)
 aberdeen_uni = (57.1645, -2.0999)
+gatwick_airport = (51.15380339080233, -0.18165520746018157)
+scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
+london_postcodes = ['E', 'EW', 'EC', 'N', 'NW', 'SE', 'SW', 'W', 'WC', 'EN', 'HA', 'IG', 'KT', 'TW', 'UB', 'WD']
 
 """=========================================File Explorer window============================================================"""
 # open file explorer for excel files only so that it is utf-8 encoded
@@ -79,15 +82,25 @@ def travel(postcode_coords, airports_dict):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
     # Dictionary to store postcode as key and closest airport, distance to it, and flying distance to Aberdeen as values
     data = {}
+
     # For postcode in column 2 of address file
     for postcode in addresses.iloc[:, 1]:
         # Find the closest airport to the postcode
         closest_airport_name, distance = closest_airport(postcode, postcode_coords, airports_dict)
         
-        # If the closest airport is not Aberdeen (default value for nan postcodes)
-        if closest_airport_name != 'Aberdeen':
+        # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is not from Scotland or London
+        if closest_airport_name != 'Aberdeen' and postcode[:2] not in scot_postcodes and postcode[:2] not in london_postcodes:
             # Calculate the distance between the two airports
+            travel_distance1 = geodesic(airports_dict[closest_airport_name], gatwick_airport).km
+            # Calculate the distance 2: between Gatwick (layover) and Aberdeen airport
+            travel_distance2 = geodesic(gatwick_airport, aberdeen_airport).km
+            travel_distance = travel_distance1 + travel_distance2
+
+        # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is from Scotland or London
+        elif closest_airport_name != 'Aberdeen' and postcode[:2] in scot_postcodes or postcode[:2] in london_postcodes:
+            # Calculate the distance 1: between closest airport and Gatwick (layover)
             travel_distance = geodesic(airports_dict[closest_airport_name], aberdeen_airport).km
+
         else:
             # For default value, set the distance to 0
             travel_distance = 0
