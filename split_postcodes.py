@@ -37,3 +37,7 @@ def determine_postcode(postcodes):
     return scotland, rest
 
 scotland, rest = determine_postcode(addresses.iloc[:, 1])
+
+# Convert scotland and rest to numpy arrays
+scotland = np.array(scotland)
+rest = np.array(rest)

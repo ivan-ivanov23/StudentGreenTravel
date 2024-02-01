@@ -39,6 +39,8 @@ stop_longitude_array = stops['Longitude'].values
 
 # Create a dictionary to store stop coordinates and type
 stop_coord_dict = dict(zip(stop_name_array, zip(stop_longitude_array, stop_latitude_array)))
+# Convert to numpy array for faster processing
+stop_type_array = np.array(stop_type_array)
 
 def calculate_distances(coords1, coords2_array):
     """Calculate distances between two coordinates and an array of coordinates."""
@@ -56,8 +58,7 @@ def calculate_distances(coords1, coords2_array):
 def closest_stop(postcode, postcode_coords, stops_dict):
     """Returns the closest bus stop to the postcode"""
     if 'AB' not in postcode:
-        # Calculate the distance between the given postcode and all bus stops
-        distances = calculate_distances((postcode_coords[postcode][1], postcode_coords[postcode][0]), np.array(list(stops_dict.values())))
+        # Calculate the distance between the given postcode and only bus stops in the area
         # Find the index of the closest bus stop
         closest_stop_index = np.nanargmin(distances)
         # Find the name of the closest bus stop
@@ -95,6 +96,7 @@ def land_travel(postcode_coords, stops_dict):
         else:
             # If the postcode is invalid, set default values
             data[postcode] = ('Invalid Postcode', np.nan, np.nan)
+        
     
     # Print the distance between the Aberdeen airport and the university
     uni_airport_distance = geodesic(aberdeen_bus_stop, aberdeen_uni).km
