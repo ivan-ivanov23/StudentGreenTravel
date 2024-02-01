@@ -1,4 +1,4 @@
-from travel_distance import info
+from flying_distance import info
 
 
 print(info)
