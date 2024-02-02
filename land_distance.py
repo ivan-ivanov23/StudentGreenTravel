@@ -30,17 +30,16 @@ longitude_array = postcodes['longitude'].values
 postcode_coord_dict = dict(zip(postcode_array, zip(latitude_array, longitude_array)))
 
 # Read in the airpo csv file
-stops = pd.read_csv("data/FilteredStops.csv")
+stops = pd.read_csv("data/Scotland_Bus_Stations.csv")
 # Convert DataFrame columns to numpy arrays for faster processing
-stop_name_array = stops['CommonName'].values
-stop_type_array = stops['StopType'].values
+stop_name_array = stops['StationName'].values
 stop_latitude_array = stops['Latitude'].values
 stop_longitude_array = stops['Longitude'].values
 
 # Create a dictionary to store stop coordinates and type
 stop_coord_dict = dict(zip(stop_name_array, zip(stop_longitude_array, stop_latitude_array)))
 # Convert to numpy array for faster processing
-stop_type_array = np.array(stop_type_array)
+
 
 def calculate_distances(coords1, coords2_array):
     """Calculate distances between two coordinates and an array of coordinates."""
