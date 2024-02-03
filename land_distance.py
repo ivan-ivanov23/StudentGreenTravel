@@ -48,7 +48,7 @@ def calculate_distances(coords1, coords2_array):
     for coords2 in coords2_array:
         # If any of the two are nan
         if np.isnan(coords2).any() or np.isnan(coords1).any():
-            distances.append(np.nan)
+            continue
         else:
             # Find distance in km
             distances.append(geodesic(coords1, coords2).km)
@@ -67,8 +67,6 @@ def closest_stop(postcode, postcode_coords, stops_dict):
         return closest_stop_name, distances[closest_stop_index]
     else:
         return 'Aberdeen', 0
-
-
 
 
 def land_travel(postcode_coords, stops_dict):
@@ -94,14 +92,15 @@ def land_travel(postcode_coords, stops_dict):
                 travel_distance = 0
             data[postcode] = (closest_stop_name, round(distance, 2), round(travel_distance, 2))
         else:
-            # If the postcode is invalid, set default values
-            data[postcode] = ('Invalid Postcode', np.nan, np.nan)
+            # If the postcode is invalid, continue 
+            # data[postcode] = ('Invalid Postcode', np.nan, np.nan)
+            continue
         
 
     return data
 
 
 # Execute
-#land_travel = land_travel(postcode_coord_dict, stop_coord_dict)
-#print(land_travel)
+# land_travel = land_travel(postcode_coord_dict, stop_coord_dict)
+# print(land_travel)
 

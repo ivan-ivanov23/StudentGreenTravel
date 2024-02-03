@@ -23,18 +23,17 @@ def bus_emissions(data: dict, factors: dict):
     # Dictionary to store the results in kgCO2e for each postcode
     bus_result = {}
     for key, value in data.items():
-        # # Coach emissions are just the lastlue in the tuple of values in land.items * the coach factor
-        if value[-1] is not np.nan:
-            # Use numpy to calculate the emissions
-            coach = np.multiply(value[-1], factors['coach'])
-            # Local bus = distance from postcode to bus station + distance from Aberdeen bus station to university
-            # Account for students that are from Aberdeen and travel 0 distance to the city
-            if value[-1] != 0: 
-                bus = (value[1] + 2.28) * factors['bus']
-                # Total emissions
-                bus_result[key] = round(coach + bus, 2)
-            else:
-                bus_result[key] = 0
+        # Coach emissions are just the lastlue in the tuple of values in land.items * the coach factor
+        # Use numpy to calculate the emissions
+        coach = np.multiply(value[-1], factors['coach'])
+        # Local bus = distance from postcode to bus station + distance from Aberdeen bus station to university
+        # Account for students that are from Aberdeen and travel 0 distance to the city
+        if value[-1] != 0: 
+            bus = (value[1] + 2.28) * factors['bus']
+            # Total emissions
+            bus_result[key] = round(coach + bus, 2)
+        else:
+            bus_result[key] = 0
 
     return bus_result
 
@@ -42,15 +41,14 @@ def plane_emissions(data: dict, factors: dict):
     # Dictionary to store the results in kgCO2e for each postcode
     plane_result = {}
     for key, value in data.items():
-        # # Coach emissions are just the lastlue in the tuple of values in land.items * the coach factor
-        if value[-1] is not np.nan:
-            # Use numpy to calculate the emissions
-            plane = np.multiply(value[-1], factors['plane'])
-            # Local bus = distance from postcode to bus station + distance from Aberdeen airport to university
-            # Account for students that are from Aberdeen and travel 0 distance to the city
-            bus = (value[1] + 7.24) * factors['bus']
-            # Total emissions
-            plane_result[key] = round(plane + bus, 2)
+    # Coach emissions are just the lastlue in the tuple of values in land.items * the coach factor
+        # Use numpy to calculate the emissions
+        plane = np.multiply(value[-1], factors['plane'])
+        # Local bus = distance from postcode to bus station + distance from Aberdeen airport to university
+        # Account for students that are from Aberdeen and travel 0 distance to the city
+        bus = (value[1] + 7.24) * factors['bus']
+        # Total emissions
+        plane_result[key] = round(plane + bus, 2)
 
     return plane_result
 
