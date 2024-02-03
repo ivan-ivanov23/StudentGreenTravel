@@ -1,5 +1,5 @@
-# This file calculates the distance between the postcode and the closest bus/rail stop, 
-# and the distance between the bus/rail stop and Aberdeen bus station.
+# This file calculates the distance between the postcode and the closest bus station, 
+# and the distance between the bus station and Aberdeen bus station.
 # At the end of the dictionary that is printed, the distance between the Aberdeen bus station and the university is printed.
 
 import pandas as pd
@@ -97,15 +97,11 @@ def land_travel(postcode_coords, stops_dict):
             # If the postcode is invalid, set default values
             data[postcode] = ('Invalid Postcode', np.nan, np.nan)
         
-    
-    # Print the distance between the Aberdeen airport and the university
-    uni_airport_distance = geodesic(aberdeen_bus_stop, aberdeen_uni).km
-    data['Bus Station to University'] = round(uni_airport_distance, 2)
 
     return data
 
 
 # Execute
-land_travel = land_travel(postcode_coord_dict, stop_coord_dict)
-print(land_travel)
+#land_travel = land_travel(postcode_coord_dict, stop_coord_dict)
+#print(land_travel)
 

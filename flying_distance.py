@@ -96,14 +96,11 @@ def travel(postcode_coords, airports_dict):
             # For default value, set the distance to 0
             travel_distance = 0
         data[postcode] = (closest_airport_name, round(distance, 2), round(travel_distance, 2))
-    
-    # Print the distance between the Aberdeen airport and the university
-    uni_airport_distance = geodesic(aberdeen_airport, aberdeen_uni).km
-    data['Airport to University'] = round(uni_airport_distance, 2)
+
 
     return data
 
 """=========================================Execute============================================================"""
-info = travel(postcode_coord_dict, airport_coord_dict)
-print(info)
+# info = travel(postcode_coord_dict, airport_coord_dict)
+#print(info)
 
