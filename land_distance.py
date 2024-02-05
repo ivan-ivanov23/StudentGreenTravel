@@ -73,6 +73,8 @@ def land_travel(postcode_coords, stops_dict):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
     # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
     data = {}
+    # List to store invalid postcodes
+    invalid_postcodes = []
 
     # For postcode in column 2 of address file
     for postcode in addresses:
@@ -92,15 +94,22 @@ def land_travel(postcode_coords, stops_dict):
                 travel_distance = 0
             data[postcode] = (closest_stop_name, round(distance, 2), round(travel_distance, 2))
         else:
-            # If the postcode is invalid, continue 
-            # data[postcode] = ('Invalid Postcode', np.nan, np.nan)
+            # If the postcode is invalid, add it to the list of invalid postcodes
+            invalid_postcodes.append(postcode)
             continue
         
 
-    return data
+    return data, invalid_postcodes
 
 
 # Execute
 # land_travel = land_travel(postcode_coord_dict, stop_coord_dict)
-# print(land_travel)
+# # Print the dictionary with postcodes as keys and closest stops as values
+# print(land_travel[0])
+# print('\n')
+
+# if len(land_travel[1]) > 0:
+#     print('Invalid postcodes:', land_travel[1])
+# else:
+#     print('All postcodes are valid.')
 
