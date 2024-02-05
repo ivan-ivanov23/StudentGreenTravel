@@ -27,7 +27,6 @@ scotland = []
 rest = []
 
 def determine_postcode(postcodes):
-    result = []
     for postcode in postcodes:
         # Account for incorrect postcodes
         if not isinstance(postcode, float):
