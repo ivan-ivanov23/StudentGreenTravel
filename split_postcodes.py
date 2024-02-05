@@ -28,7 +28,7 @@ rest = []
 
 def determine_postcode(postcodes):
     result = []
-    for postcode in addresses.iloc[:, 1]:
+    for postcode in postcodes:
         # Account for incorrect postcodes
         if not isinstance(postcode, float):
             # If the first one or two characters of the postcode are in the scot_postcodes list
