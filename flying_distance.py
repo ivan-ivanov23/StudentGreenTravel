@@ -1,27 +1,21 @@
+# This file is for calculating the distance between the closest airport to the postcode and Aberdeen airport.
+# It is intended only for non-Scottish postcodes from split_postcodes.py.
+
 import pandas as pd
 import numpy as np
 from geopy.distance import geodesic
 from tkinter.filedialog import askopenfile
+from split_postcodes import rest
 
 
 # Coordinates of Aberdeen airport and university (taken from Google)
 aberdeen_airport = (57.2019004822, -2.1977798939)
 aberdeen_uni = (57.1645, -2.0999)
+gatwick_airport = (51.15380339080233, -0.18165520746018157)
+london_postcodes = ['E', 'EW', 'EC', 'N', 'NW', 'SE', 'SW', 'W', 'WC', 'EN', 'HA', 'IG', 'KT', 'TW', 'UB', 'WD']
 
-"""=========================================File Explorer window============================================================"""
-# open file explorer for excel files only so that it is utf-8 encoded
-file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
-# If the user selected a file, then read it using pandas
-if file:
-# Read address file
-    addresses = pd.read_excel(file.name, engine='openpyxl')
-    # Drop any rows with missing values
-    addresses = addresses.dropna()
-    # Trim the postcode column
-    addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
-# Else, close the program
-else:
-    exit()
+# Only use the postcodes from the rest of the UK (non-Scottish postcodes)
+addresses = rest
 
 """=========================================Read Data============================================================"""
 # Read ukpostcodes.csv
@@ -77,28 +71,36 @@ def closest_airport(postcode, postcode_coords, airports_dict):
 
 def travel(postcode_coords, airports_dict):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
-    # For postcode in column 2 of address file
-    for postcode in addresses.iloc[:, 1]:
+    # Dictionary to store postcode as key and closest airport, distance to it, and flying distance to Aberdeen as values
+    data = {}
+
+    # For postcode in addresses
+    for postcode in addresses:
         # Find the closest airport to the postcode
         closest_airport_name, distance = closest_airport(postcode, postcode_coords, airports_dict)
-        print(f'Closest airport to {postcode} is {closest_airport_name} ~ {distance:.2f} km')
         
-        # If the closest airport is not Aberdeen (default value for nan postcodes)
-        if closest_airport_name != 'Aberdeen':
+        # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is not from Scotland or London
+        if closest_airport_name != 'Aberdeen' and postcode[:2] not in london_postcodes:
             # Calculate the distance between the two airports
+            travel_distance1 = geodesic(airports_dict[closest_airport_name], gatwick_airport).km
+            # Calculate the distance 2: between Gatwick (layover) and Aberdeen airport
+            travel_distance2 = geodesic(gatwick_airport, aberdeen_airport).km
+            travel_distance = travel_distance1 + travel_distance2
+
+        # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is from Scotland or London
+        elif closest_airport_name != 'Aberdeen' and  postcode[:2] in london_postcodes:
+            # Calculate the distance 1: between closest airport and Gatwick (layover)
             travel_distance = geodesic(airports_dict[closest_airport_name], aberdeen_airport).km
-            print(f'The distance between {closest_airport_name} and Aberdeen airport is {travel_distance:.2f} km')
+
         else:
             # For default value, set the distance to 0
             travel_distance = 0
-            print(f'The distance between {closest_airport_name} and Aberdeen airport is {travel_distance:.2f} km')
+        data[postcode] = (closest_airport_name, round(distance, 2), round(travel_distance, 2))
 
-        print('====================================================================================================')
-    
-    # Print the distance between the Aberdeen airport and the university
-    uni_airport_distance = geodesic(aberdeen_airport, aberdeen_uni).km
-    print(f'The distance between Aberdeen airport and the university is {uni_airport_distance:.2f} km')
 
+    return data
 
 """=========================================Execute============================================================"""
-travel(postcode_coord_dict, airport_coord_dict)
+# info = travel(postcode_coord_dict, airport_coord_dict)
+# print(info)
+
