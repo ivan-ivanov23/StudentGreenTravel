@@ -73,6 +73,8 @@ def travel(postcode_coords, airports_dict):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
     # Dictionary to store postcode as key and closest airport, distance to it, and flying distance to Aberdeen as values
     data = {}
+    # List to store invalid postcodes
+    invalid_postcodes = []
 
     # For postcode in addresses
     for postcode in addresses:
@@ -93,14 +95,23 @@ def travel(postcode_coords, airports_dict):
             travel_distance = geodesic(airports_dict[closest_airport_name], aberdeen_airport).km
 
         else:
-            # For default value, set the distance to 0
-            travel_distance = 0
+            # If the postcode is invalid, add it to the list of invalid postcodes
+            invalid_postcodes.append(postcode)
+            continue
         data[postcode] = (closest_airport_name, round(distance, 2), round(travel_distance, 2))
 
 
-    return data
+    return data, invalid_postcodes
 
 """=========================================Execute============================================================"""
 # info = travel(postcode_coord_dict, airport_coord_dict)
-# print(info)
+# # Print the dictionary with postcodes as keys and closest airports as values
+# print(info[0])
+# print('\n')
+
+# if len(info[1]) == 0:
+#     print('All postcodes are valid.')
+# else:
+#     # Print the list of invalid postcodes
+#     print('Invalid postcodes: ', info[1])
 

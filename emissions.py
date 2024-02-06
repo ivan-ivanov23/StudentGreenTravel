@@ -3,8 +3,10 @@ from land_distance import *
 import numpy as np
 import random
 
-land = land_travel(postcode_coord_dict, stop_coord_dict)
-fly = travel(postcode_coord_dict, airport_coord_dict)
+# The [0] index is used to get the dictionary with postcodes as keys and closest stops/airports as values
+# If the [1] index is used, the list of invalid postcodes is returned
+land = land_travel(postcode_coord_dict, stop_coord_dict)[0]
+fly = travel(postcode_coord_dict, airport_coord_dict)[0]
 
 # TODO
 # If postcode is in Scotland, it should consider not flying
