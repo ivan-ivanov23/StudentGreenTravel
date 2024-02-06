@@ -1,6 +1,8 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QHBoxLayout
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QTableView
+from PyQt6.QtCore import QSize
+
+
 
 class WelcomePage(QWidget):
     def __init__(self):
@@ -52,6 +54,8 @@ class Page1(QWidget):
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(self.label)
         self.layout().addWidget(self.back_button)
+
+
 
     def back_to_menu(self):
         self.parent().setCentralWidget(WelcomePage())
