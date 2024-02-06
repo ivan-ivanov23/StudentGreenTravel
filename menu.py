@@ -14,14 +14,24 @@ class WelcomePage(QWidget):
         self.setStyleSheet("background-color: rgb(193, 225, 193);")
 
         self.title_label = QLabel("Welcome to StudentCarbon", self)
-        self.title_label.setStyleSheet("font-size: 24px; font-weight: bold; color: #2d3436;")
+        self.title_label.setStyleSheet("font-size: 34px; font-weight: bold; color: #2d3436;")
+        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.button_layout = QVBoxLayout()
         self.button_layout.addWidget(QPushButton("Emission Calculator", clicked=lambda: self.show_page(Page1())))
         self.button_layout.addWidget(QPushButton("Display Routes", clicked=lambda: self.show_page(Page2())))
         self.button_layout.addWidget(QPushButton("Statistics", clicked=lambda: self.show_page(Page3())))
+        # Make the buttons fixed size
+        for i in range(self.button_layout.count()):
+            self.button_layout.itemAt(i).widget().setFixedHeight(60)
+            self. button_layout.itemAt(i).widget().setFixedWidth(300)
+
+        # Center the buttons
+        self.button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.main_layout = QVBoxLayout()
+        # Add margins to the layout
+        self.main_layout.setContentsMargins(100, 150, 100, 150)
         self.main_layout.addWidget(self.title_label)
         self.main_layout.addLayout(self.button_layout)
         self.main_layout.addStretch()
@@ -39,6 +49,7 @@ class WelcomePage(QWidget):
                 border: none;
                 border-radius: 5px;
                 margin: 5px 0;
+                font-size: 16px;
             }
             QPushButton:hover {
                 background-color: #74b9ff;

@@ -19,9 +19,9 @@ def create_address_df():
         # Trim the postcode column
         addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
         return addresses.iloc[:, 1]
-    # Else, close the program
+    # If the user didn't select a file, then return an empty dataframe
     else:
-        exit()
+        return pd.DataFrame()
         
 
 def determine_postcode():

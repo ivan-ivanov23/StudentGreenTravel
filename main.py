@@ -35,6 +35,7 @@ def main():
 
     # Call the determine_postcode function to get the postcodes for Scotland and the rest of the UK
     scotland, rest = determine_postcode()
+    # Stop main function if there are no postcodes
 
     # Call the land_travel function and pass the postcode coordinates, stop coordinates, and the rest of the postcodes to it
     # The [0] index is used to get the dictionary with postcodes as keys and closest stops/airports as values
