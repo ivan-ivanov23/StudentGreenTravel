@@ -1,14 +1,39 @@
-from tkinter.filedialog import askopenfile
-from split_postcodes import create_address_df, determine_postcode
+import threading
+import time
+from itertools import cycle
+from split_postcodes import determine_postcode
 from emissions import bus_emissions, plane_emissions
 from flying_distance import travel, postcode_coord_dict, airport_coord_dict
 from land_distance import land_travel, postcode_coord_dict, stop_coord_dict
 
+def loading_message(stop_event):
+    # Cycle of loading states
+    loading_states = cycle(["Loading.", "Loading..", "Loading...", "Loading...."])
+    
+    # This function displays a cycling loading message while the main function is running
+    while not stop_event.is_set():
+        loading_state = next(loading_states)
+        print(loading_state, end="\r")  # Use carriage return to overwrite the previous line
+        # Sleep for 0.3 seconds
+        time.sleep(0.3)
+        # If the loading message is "Loading...", start from the beginning
+        if loading_state == "Loading....":
+            # Sleep for 0.5 seconds
+            time.sleep(0.5)
+            # clear the line
+            print(" " * len(loading_state), end="\r")
+            # Start from the beginning
+            loading_states = cycle(["Loading.", "Loading..", "Loading...", "Loading...."])
+
 def main():
-    # Call the create_address_df function and pass the file to it
-    addresses = create_address_df(askopenfile(filetypes=[("Excel files", "*.xlsx")]))
-    # Call the determine_postcode function and pass the postcode column to it
-    scotland, rest = determine_postcode(addresses.iloc[:, 1])
+    stop_event = threading.Event()  # Event to signal the loading thread to stop
+
+    # Create a thread to display the loading message
+    loading_thread = threading.Thread(target=loading_message, args=(stop_event,))
+    loading_thread.start()
+
+    # Call the determine_postcode function to get the postcodes for Scotland and the rest of the UK
+    scotland, rest = determine_postcode()
 
     # Call the land_travel function and pass the postcode coordinates, stop coordinates, and the rest of the postcodes to it
     # The [0] index is used to get the dictionary with postcodes as keys and closest stops/airports as values
@@ -22,10 +47,16 @@ def main():
     # Call the plane_emissions function and pass the fly dictionary and the emission factors to it
     plane = plane_emissions(fly)
 
-    print('Bus: ', bus)
+    # Print the results
+    print('\nBus: ', bus)
     print('===========================================================================================================================')
     print('Plane: ', plane)
 
+    # Set the stop event to signal the loading thread to stop
+    stop_event.set()
+
+    # Wait for the loading thread to finish
+    loading_thread.join()
 
 if __name__ == '__main__':
     main()
