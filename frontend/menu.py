@@ -1,5 +1,6 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QHBoxLayout
+from PyQt6.QtCore import QSize, Qt
 
 class WelcomePage(QWidget):
     def __init__(self):
@@ -7,7 +8,7 @@ class WelcomePage(QWidget):
 
         self.setStyleSheet("background-color: rgb(193, 225, 193);")
 
-        self.title_label = QLabel("Welcome to My Application", self)
+        self.title_label = QLabel("Welcome to StudentCarbon", self)
         self.title_label.setStyleSheet("font-size: 24px; font-weight: bold; color: #2d3436;")
 
         self.button_layout = QVBoxLayout()
@@ -22,6 +23,7 @@ class WelcomePage(QWidget):
 
         self.setLayout(self.main_layout)
 
+
         # Set the stylesheet for the welcome page buttons
         self.setStyleSheet("""
             QPushButton {
@@ -30,6 +32,8 @@ class WelcomePage(QWidget):
                 font-weight: bold;
                 height: 40px;
                 border: none;
+                border-radius: 5px;
+                margin: 5px 0;
             }
             QPushButton:hover {
                 background-color: #74b9ff;
@@ -82,8 +86,9 @@ class Page3(QWidget):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("PyQt6 Welcome Screen")
-        self.setGeometry(100, 100, 400, 300)
+        self.setWindowTitle("StudentCarbon: Domestic Relocation Emissions Estimator")
+        self.setMinimumSize(QSize(600, 400))
+        # Max size is size of screen, so no need to set
 
         self.central_widget = WelcomePage()
         self.setCentralWidget(self.central_widget)
