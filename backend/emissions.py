@@ -3,15 +3,6 @@ from land_distance import *
 import numpy as np
 import random
 
-# The [0] index is used to get the dictionary with postcodes as keys and closest stops/airports as values
-# If the [1] index is used, the list of invalid postcodes is returned
-land = land_travel(postcode_coord_dict, stop_coord_dict)[0]
-fly = travel(postcode_coord_dict, airport_coord_dict)[0]
-
-# TODO
-# If postcode is in Scotland, it should consider not flying
-# Make it calculate emissions based on road travel distance and air travel distance
-
 
 # Emissions factors in kgCO2e per passenger km
 # Source: https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2023
@@ -24,23 +15,23 @@ emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach':
 """The random.random() function is used to represent the Flight Methodology from the tool."""
 
 # Calculate land travel emissions
-def bus_emissions(data: dict, factors: dict):
+def bus_emissions(data: dict):
     # Dictionary to store the results in kgCO2e for each postcode
     bus_result = {}
     for key, value in data.items():
         # Coach emissions are just the lastlue in the tuple of values in land.items * the coach factor
         # Use numpy to calculate the emissions
-        coach = np.multiply(value[-1], factors['coach'])
+        coach = np.multiply(value[-1], emission_factors['coach'])
         # Local bus = distance from postcode to bus station + distance from Aberdeen bus station to university
         # Account for students that are from Aberdeen and travel 0 distance to the city
         if value[-1] != 0: 
             # 50% of the students will take the bus and 50% will take the taxi
             if random.random() > 0.5:
-                taxi = (value[1] + 2.28) * factors['taxi']
+                taxi = (value[1] + 2.28) * emission_factors['taxi']
                 # Total emissions
                 bus_result[key] = round(coach + taxi, 2)
             else:
-                bus = (value[1] + 2.28) * factors['bus']
+                bus = (value[1] + 2.28) * emission_factors['bus']
              # Total emissions
                 bus_result[key] = round(coach + bus, 2)
         else:
@@ -48,31 +39,28 @@ def bus_emissions(data: dict, factors: dict):
 
     return bus_result
 
-def plane_emissions(data: dict, factors: dict):
+def plane_emissions(data: dict):
     # Dictionary to store the results in kgCO2e for each postcode
     plane_result = {}
     for key, value in data.items():
     # Coach emissions are just the lastlue in the tuple of values in land.items * the coach factor
         # Use numpy to calculate the emissions
-        plane = np.multiply(value[-1], factors['plane'])
+        plane = np.multiply(value[-1], emission_factors['plane'])
         # Local bus = distance from postcode to bus station + distance from Aberdeen airport to university
         # Account for students that are from Aberdeen and travel 0 distance to the city
         # 33% of the students will take the bus, 33% will take the taxi and 33% will take the coach
         if random.random() > 0.66:
-            taxi = (value[1] + 7.24) * factors['taxi']
+            taxi = (value[1] + 7.24) * emission_factors['taxi']
             # Total emissions
             plane_result[key] = round(plane + taxi, 2)
         elif random.random() > 0.33:
-            coach = (value[1] + 7.24) * factors['coach']
+            coach = (value[1] + 7.24) * emission_factors['coach']
             # Total emissions
             plane_result[key] = round(plane + coach, 2)
         else:
-            bus = (value[1] + 7.24) * factors['bus']
+            bus = (value[1] + 7.24) * emission_factors['bus']
             # Total emissions
             plane_result[key] = round(plane + bus, 2)
 
     return plane_result
 
-print('Bus: ', bus_emissions(land, emission_factors))
-
-print('Plane: ', plane_emissions(fly, emission_factors))
