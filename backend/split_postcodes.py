@@ -7,7 +7,9 @@ from tkinter.filedialog import askopenfile
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
 wales_postcodes = ['CF', 'LL', 'NP', 'SA', 'SY']
 
-def create_address_df(file):
+def create_address_df():
+    # Open a file dialog to select the address file
+    file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
     # If the user selected a file, then read it using pandas
     if file:
         # Read address file
@@ -16,17 +18,18 @@ def create_address_df(file):
         addresses = addresses.dropna()
         # Trim the postcode column
         addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
-        return addresses
+        return addresses.iloc[:, 1]
     # Else, close the program
     else:
         exit()
         
 
-def determine_postcode(postcodes):
+def determine_postcode():
     # empty  array of postcodes for scotland
     scotland = []
     # empty array of postcodes for the rest of the UK
     rest = []
+    postcodes = create_address_df()
     for postcode in postcodes:
         # Account for incorrect postcodes
         if not isinstance(postcode, float):
