@@ -1,5 +1,6 @@
 import threading
 import time
+import pandas as pd
 from itertools import cycle
 from split_postcodes import determine_postcode
 from emissions import bus_emissions, plane_emissions
@@ -26,11 +27,11 @@ def loading_message(stop_event):
             loading_states = cycle(["Loading.", "Loading..", "Loading...", "Loading...."])
 
 def main():
-    stop_event = threading.Event()  # Event to signal the loading thread to stop
+    # stop_event = threading.Event()  # Event to signal the loading thread to stop
 
-    # Create a thread to display the loading message
-    loading_thread = threading.Thread(target=loading_message, args=(stop_event,))
-    loading_thread.start()
+    # # Create a thread to display the loading message
+    # loading_thread = threading.Thread(target=loading_message, args=(stop_event,))
+    # loading_thread.start()
 
     # Call the determine_postcode function to get the postcodes for Scotland and the rest of the UK
     scotland, rest = determine_postcode()
@@ -48,15 +49,21 @@ def main():
     plane = plane_emissions(fly)
 
     # Print the results
-    print('\nBus: ', bus)
-    print('===========================================================================================================================')
-    print('Plane: ', plane)
+    # print('\nBus: ', bus)
+    # print('===========================================================================================================================')
+    # print('Plane: ', plane)
+
+    # Save the results to separate dataframes
+    bus_df = pd.DataFrame(bus.items(), columns=['Postcode', 'Emissions'])
+    plane_df = pd.DataFrame(plane.items(), columns=['Postcode', 'Emissions'])
+
+    return bus_df, plane_df
 
     # Set the stop event to signal the loading thread to stop
-    stop_event.set()
+    # stop_event.set()
 
-    # Wait for the loading thread to finish
-    loading_thread.join()
+    # # Wait for the loading thread to finish
+    # loading_thread.join()
 
 if __name__ == '__main__':
     main()
