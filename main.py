@@ -6,6 +6,7 @@ from split_postcodes import determine_postcode
 from emissions import bus_emissions, plane_emissions
 from flying_distance import travel, postcode_coord_dict, airport_coord_dict
 from land_distance import land_travel, postcode_coord_dict, stop_coord_dict
+from total_distance import total_distance, create_heatmap
 
 def loading_message(stop_event):
     # Cycle of loading states
@@ -44,6 +45,13 @@ def main():
     # Call the travel function and pass the postcode coordinates, airport coordinates, and the rest of the postcodes to it
     fly = travel(postcode_coord_dict, airport_coord_dict, rest)[0]
 
+    # Call the total_distance function and pass the land and fly dictionaries to it
+    total_distances_plane = total_distance(fly)
+    total_distances_bus = total_distance(land)
+    
+    # Create a heatmap of the UK showing the total distance travelled by bus and plane by country
+    create_heatmap(total_distances_bus, total_distances_plane)
+
     # Call the bus_emissions function and pass the land dictionary and the emission factors to it
     bus = bus_emissions(land)
     # Call the plane_emissions function and pass the fly dictionary and the emission factors to it
@@ -58,7 +66,7 @@ def main():
     bus_df = pd.DataFrame(bus.items(), columns=['Postcode', 'Emissions'])
     plane_df = pd.DataFrame(plane.items(), columns=['Postcode', 'Emissions'])
 
-    return bus_df, plane_df
+    # return bus_df, plane_df
 
     # Set the stop event to signal the loading thread to stop
     # stop_event.set()
