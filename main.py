@@ -1,44 +1,70 @@
-import os
+import threading
+import time
 import pandas as pd
-import customtkinter, tkinter
-from tkinter.filedialog import askopenfile
+from itertools import cycle
+from split_postcodes import determine_postcode
+from emissions import bus_emissions, plane_emissions
+from flying_distance import travel, postcode_coord_dict, airport_coord_dict
+from land_distance import land_travel, postcode_coord_dict, stop_coord_dict
 
+def loading_message(stop_event):
+    # Cycle of loading states
+    loading_states = cycle(["Loading.", "Loading..", "Loading...", "Loading...."])
+    
+    # This function displays a cycling loading message while the main function is running
+    while not stop_event.is_set():
+        loading_state = next(loading_states)
+        print(loading_state, end="\r")  # Use carriage return to overwrite the previous line
+        # Sleep for 0.3 seconds
+        time.sleep(0.3)
+        # If the loading message is "Loading...", start from the beginning
+        if loading_state == "Loading....":
+            # Sleep for 0.5 seconds
+            time.sleep(0.5)
+            # clear the line
+            print(" " * len(loading_state), end="\r")
+            # Start from the beginning
+            loading_states = cycle(["Loading.", "Loading..", "Loading...", "Loading...."])
 
-class App(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
-        self.geometry("800x600")
-        self.title("Student Emissions")
-        self.grid_columnconfigure(0, weight=1)
+def main():
+    # stop_event = threading.Event()  # Event to signal the loading thread to stop
 
-        # add widgets to app
-        self.label = customtkinter.CTkLabel(self, text="Student Emissions Tool",text_color="white", font=('Arial', 30))
-        self.label.grid(row=0, column=0, padx=20, pady=20)
+    # # Create a thread to display the loading message
+    # loading_thread = threading.Thread(target=loading_message, args=(stop_event,))
+    # loading_thread.start()
 
-        self.frame = customtkinter.CTkFrame(self, width=500, height=400, corner_radius=20)
-        # Make the frame fill almost the entire window
-        self.frame.grid_propagate(False)
-        self.frame.columnconfigure(0, weight=1)
-        self.frame.rowconfigure(1, weight=1)
-        self.frame.grid(row=1, column=0, padx=10, pady=10, sticky="ns")
+    # Call the determine_postcode function to get the postcodes for Scotland and the rest of the UK
+    scotland, rest = determine_postcode()
+    # Stop main function if there are no postcodes
 
-        self.label = customtkinter.CTkLabel(master=self.frame, text="Select a Spreadsheet",text_color="white", font=('Arial', 15), bg_color="transparent")
-        self.label.grid(row=0, column=0, padx=10, pady=10)
+    # Call the land_travel function and pass the postcode coordinates, stop coordinates, and the rest of the postcodes to it
+    # The [0] index is used to get the dictionary with postcodes as keys and closest stops/airports as values
+    # If the [1] index is used, the list of invalid postcodes is returned
+    land = land_travel(postcode_coord_dict, stop_coord_dict, scotland)[0]
+    # Call the travel function and pass the postcode coordinates, airport coordinates, and the rest of the postcodes to it
+    fly = travel(postcode_coord_dict, airport_coord_dict, rest)[0]
 
-        # Create a button to browse for a file at bottom of frame
-        self.button = customtkinter.CTkButton(master=self.frame, text="Browse", command=self.button_click)
-        self.button.grid(row=1, column=0, padx=10, pady=10)
+    # Call the bus_emissions function and pass the land dictionary and the emission factors to it
+    bus = bus_emissions(land)
+    # Call the plane_emissions function and pass the fly dictionary and the emission factors to it
+    plane = plane_emissions(fly)
 
+    # Print the results
+    # print('\nBus: ', bus)
+    # print('===========================================================================================================================')
+    # print('Plane: ', plane)
 
-    # add methods to app
-    def button_click(self):
-        # Make the button open file explorer for excel files only so that it is utf-8 encoded
-        file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
-        # If the user selected a file, then read it using pandas
-        if file:
-            df = pd.read_excel(file.name, engine='openpyxl')
-            print(df)        
+    # Save the results to separate dataframes
+    bus_df = pd.DataFrame(bus.items(), columns=['Postcode', 'Emissions'])
+    plane_df = pd.DataFrame(plane.items(), columns=['Postcode', 'Emissions'])
 
-# Run the app
-app = App()
-app.mainloop()
+    return bus_df, plane_df
+
+    # Set the stop event to signal the loading thread to stop
+    # stop_event.set()
+
+    # # Wait for the loading thread to finish
+    # loading_thread.join()
+
+if __name__ == '__main__':
+    main()

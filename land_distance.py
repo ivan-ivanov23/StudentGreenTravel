@@ -5,15 +5,11 @@
 import pandas as pd
 import numpy as np
 from geopy.distance import geodesic
-from split_postcodes import scotland
 
 # Coordinates of Aberdeen airport and university (taken from Google)
 aberdeen_uni = (-2.0999, 57.1645)
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
 aberdeen_bus_stop = (-2.095330457035445, 57.14450856576696)
-
-# Only use scottish postcodes
-addresses = scotland
 
 # Read ukpostcodes.csv
 postcodes = pd.read_csv('data/ukpostcodes.csv')
@@ -69,7 +65,7 @@ def closest_stop(postcode, postcode_coords, stops_dict):
         return 'Aberdeen', 0
 
 
-def land_travel(postcode_coords, stops_dict):
+def land_travel(postcode_coords, stops_dict, addresses):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
     # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
     data = {}
@@ -101,15 +97,4 @@ def land_travel(postcode_coords, stops_dict):
 
     return data, invalid_postcodes
 
-
-# Execute
-# land_travel = land_travel(postcode_coord_dict, stop_coord_dict)
-# # Print the dictionary with postcodes as keys and closest stops as values
-# print(land_travel[0])
-# print('\n')
-
-# if len(land_travel[1]) > 0:
-#     print('Invalid postcodes:', land_travel[1])
-# else:
-#     print('All postcodes are valid.')
 

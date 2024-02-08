@@ -4,8 +4,6 @@
 import pandas as pd
 import numpy as np
 from geopy.distance import geodesic
-from tkinter.filedialog import askopenfile
-from split_postcodes import rest
 
 
 # Coordinates of Aberdeen airport and university (taken from Google)
@@ -14,8 +12,6 @@ aberdeen_uni = (57.1645, -2.0999)
 gatwick_airport = (51.15380339080233, -0.18165520746018157)
 london_postcodes = ['E', 'EW', 'EC', 'N', 'NW', 'SE', 'SW', 'W', 'WC', 'EN', 'HA', 'IG', 'KT', 'TW', 'UB', 'WD']
 
-# Only use the postcodes from the rest of the UK (non-Scottish postcodes)
-addresses = rest
 
 """=========================================Read Data============================================================"""
 # Read ukpostcodes.csv
@@ -69,7 +65,7 @@ def closest_airport(postcode, postcode_coords, airports_dict):
         # If the postcode is invalid, return Aberdeen airport as the closest with distance 0
         return 'Aberdeen', 0
 
-def travel(postcode_coords, airports_dict):
+def travel(postcode_coords, airports_dict, addresses):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
     # Dictionary to store postcode as key and closest airport, distance to it, and flying distance to Aberdeen as values
     data = {}
@@ -103,15 +99,5 @@ def travel(postcode_coords, airports_dict):
 
     return data, invalid_postcodes
 
-"""=========================================Execute============================================================"""
-# info = travel(postcode_coord_dict, airport_coord_dict)
-# # Print the dictionary with postcodes as keys and closest airports as values
-# print(info[0])
-# print('\n')
 
-# if len(info[1]) == 0:
-#     print('All postcodes are valid.')
-# else:
-#     # Print the list of invalid postcodes
-#     print('Invalid postcodes: ', info[1])
 
