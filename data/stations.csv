@@ -1,0 +1,419 @@
+City,Station,Lat,Long
+London,London Waterloo,51.5033,-0.1128
+Birmingham,Birmingham New Street,52.4778,-1.8986
+Liverpool,Liverpool Lime Street,53.4076,-2.9775
+Nottingham,Nottingham Station,52.9471,-1.1471
+Sheffield,Sheffield Station,53.3786,-1.4627
+Bristol,Bristol Temple Meads,51.4491,-2.5813
+Glasgow,Glasgow Central,55.859,-4.2576
+Leicester,Leicester Station,52.6336,-1.1331
+Edinburgh,Edinburgh Waverley,55.9521,-3.1889
+Leeds,Leeds Station,53.7957,-1.5481
+Cardiff,Cardiff Central,51.4769,-3.1745
+Manchester,Manchester Piccadilly,53.4773,-2.2302
+Stoke-on-Trent,Stoke-on-Trent Station,53.0082,-2.18
+Coventry,Coventry Station,52.3986,-1.4994
+Sunderland,Sunderland Station,54.9046,-1.3822
+Birkenhead,Birkenhead Hamilton Square,53.3901,-3.0149
+Islington,Angel Station,51.5328,-0.1058
+Reading,Reading Station,51.4593,-0.9713
+Kingston upon Hull,Hull Paragon,53.7438,-0.3397
+Preston,Preston Station,53.7577,-2.7031
+Newport,Newport Station,51.5856,-2.9978
+Swansea,Swansea Station,51.6262,-3.9445
+Bradford,Bradford Interchange,53.7942,-1.7474
+Southend-on-Sea,Southend Central,51.538,0.7129
+Belfast,Belfast Central,54.5967,-5.9303
+Derby,Derby Station,52.9167,-1.4631
+Plymouth,Plymouth Station,50.3774,-4.1439
+Luton,Luton Airport Parkway,51.8721,-0.3864
+Wolverhampton,Wolverhampton Station,52.5863,-2.1266
+City of Westminster,London Paddington,51.5154,-0.1757
+Southampton,Southampton Central,50.9071,-1.4073
+Blackpool,Blackpool North,53.8223,-3.0496
+Milton Keynes,Milton Keynes Central,52.0406,-0.7594
+Bexley,Bexley Station,51.4404,0.1479
+Northampton,Northampton Station,52.2386,-0.9027
+Archway,Archway Station,51.5653,-0.134
+Norwich,Norwich Station,52.6282,1.30698654900449
+Dudley,Dudley Port Station,52.5224,-2.0706
+Aberdeen,Aberdeen Station,57.1437,-2.0981
+Portsmouth,Portsmouth Harbour,50.7966,-1.1077
+Newcastle upon Tyne,Newcastle Central,54.9683,-1.6174
+Sutton,Sutton Station,51.361,-0.1944
+Swindon,Swindon Station,51.564,-1.7856
+Crawley,Crawley Station,51.1168,-0.1871
+Ipswich,Ipswich Station,52.054,1.1443
+Wigan,Wigan North Western,53.5444,-2.633
+Croydon,East Croydon Station,51.3754,-0.0915
+Walsall,Walsall Station,52.5846,-1.9845
+Mansfield,Mansfield Station,53.1423,-1.1979
+Oxford,Oxford Station,51.7537,-1.2703
+Warrington,Warrington Bank Quay,53.3925,-2.5971
+Slough,Slough Station,51.5113,-0.5918
+Bournemouth,Bournemouth Station,50.725,-1.8424
+Peterborough,Peterborough Station,52.5733,-0.2406
+Cambridge,Cambridge Station,52.1949,0.1376
+Doncaster,Doncaster Station,53.5236,-1.1399
+York,York Station,53.9576,-1.0933
+Poole,Poole Station,50.715,-1.9843
+Gloucester,Gloucester Station,51.8663,-2.244
+Burnley,Burnley Central,53.7893,-2.2441
+Huddersfield,Huddersfield Station,53.6477,-1.7834
+Telford,Telford Central,52.6769,-2.4467
+Dundee,Dundee Station,56.4574,-2.9718
+Blackburn,Blackburn Station,53.746,-2.4885
+Basildon,Basildon Station,51.5708,0.4573
+Middlesbrough,Middlesbrough Station,54.5753,-1.2346
+Bolton,Bolton Station,53.5769,-2.4292
+Stockport,Stockport Station,53.4064,-2.1635
+Brighton,Brighton Station,50.8286,-0.1423
+West Bromwich,Sandwell & Dudley Station,52.5075,-1.9641
+Grimsby,Grimsby Town Station,53.5645,-0.0864
+Hastings,Hastings Station,50.8553,0.5868
+High Wycombe,High Wycombe Station,51.6309,-0.7493
+Watford,Watford Junction,51.6576,-0.4173
+Saint Peters,Saint Peters Station,52.2212,0.1572
+Burton upon Trent,Burton-on-Trent Station,52.8028,-1.6288
+Colchester,Colchester Station,51.8902,0.9033
+Eastbourne,Eastbourne Station,50.7687,0.2831
+Exeter,Exeter St Davids,50.729,-3.5438
+Rotherham,Rotherham Central,53.4326,-1.3608
+Cheltenham,Cheltenham Spa,51.8979,-2.0757
+Lincoln,Lincoln Central,53.2279,-0.5427
+Chesterfield,Chesterfield Station,53.2383,-1.4306
+Chelmsford,Chelmsford Station,51.7356,0.4694
+Mendip,Frome Station,51.2287,-2.3146
+Dagenham,Chadwell Heath Station,51.5684,0.1291
+Basingstoke,Basingstoke Station,51.2653,-1.0879
+Maidstone,Maidstone East Station,51.2755,0.525
+Sutton Coldfield,Sutton Coldfield Station,52.5705,-1.8232
+Bedford,Bedford Station,52.136,-0.4787
+Oldham,Oldham Central,53.5409,-2.1169
+Enfield Town,Enfield Town Station,51.6528,-0.0799
+Woking,Woking Station,51.3186,-0.5587
+St Helens,St Helens Central,53.4552,-2.737
+Worcester,Worcester Foregate Street,52.1939,-2.2226
+Gillingham,Gillingham Station,51.3866,0.5462
+Becontree,Becontree Station,51.5396,0.1263
+Worthing,Worthing Station,50.815,-0.3673
+Rochdale,Rochdale Station,53.6151,-2.1585
+Solihull,Solihull Station,52.414,-1.7877
+Royal Leamington Spa,Leamington Spa Station,52.288,-1.5346
+Romford,Romford Station,51.5745,0.1835
+Bath,Bath Spa Station,51.3778,-2.357
+Harlow,Harlow Town Station,51.7782,0.1167
+Nuneaton,Nuneaton Station,52.529,-1.4623
+High Peak,New Mills Central Station,53.3637,-2.007
+Darlington,Darlington Station,54.5242,-1.5482
+Southport,Southport Station,53.646,-3.0033
+Chester,Chester Station,53.1962,-2.877
+Stevenage,Stevenage Station,51.9038,-0.1954
+Wembley,Wembley Central Station,51.5526,-0.2969
+Grays,Grays Station,51.4762,0.3216
+Harrogate,Harrogate Station,53.994,-1.5426
+Hartlepool,Hartlepool Station,54.6866,-1.2166
+Londonderry County Borough,Londonderry Waterside,54.9945,-7.3194
+Cannock,Cannock Station,52.6876,-2.0266
+Hemel Hempstead,Hemel Hempstead Station,51.7506,-0.4665
+St Albans,St Albans City Station,51.7519,-0.3333
+South Shields,South Shields Station,54.999,-1.4227
+Derry,Londonderry Railway Station,54.9959,-7.3176
+Weston-super-Mare,Weston-super-Mare Station,51.3457,-2.9717
+Halifax,Halifax Station,53.725,-1.8542
+Redditch,Redditch Station,52.3084,-1.9374
+Beckenham,Beckenham Junction Station,51.4112,-0.0254
+Tamworth,Tamworth Station,52.6369,-1.6894
+Scunthorpe,Scunthorpe Station,53.5867,-0.6509
+Stockton-on-Tees,Stockton-on-Tees Station,54.5703,-1.3196
+Wakefield,Wakefield Westgate,53.6833,-1.5064
+Carlisle,Carlisle Station,54.8945,-2.9403
+Gateshead,Gateshead Metro Station,54.9527,-1.6052
+Lisburn,Lisburn Station,54.5111,-6.0466
+Fylde,Poulton-le-Fylde Station,53.8442,-2.9943
+Paisley,Paisley Gilmour Street,55.8478,-4.4249
+Bracknell,Bracknell Station,51.4131,-0.7507
+Newcastle under Lyme,Newcastle-under-Lyme Station,53.0129,-2.2234
+Battersea,Battersea Park Station,51.4752,-0.1482
+Crewe,Crewe Station,53.0893,-2.435
+Chatham,Chatham Station,51.3809,0.5251
+Hove,Hove Station,50.8344,-0.1701
+Aylesbury,Aylesbury Station,51.8161,-0.8138
+East Kilbride,Hairmyres Station,55.7593,-4.2114
+Canary Wharf,Canary Wharf Station,51.503,-0.0205
+Rugby,Rugby Station,52.3795,-1.2505
+Salford,Salford Crescent,53.4843,-2.2749
+Purley,Purley Station,51.3373,-0.1143
+Guildford,Guildford Station,51.2363,-0.5728
+Shrewsbury,Shrewsbury Station,52.7105,-2.7543
+Peckham,Peckham Rye Station,51.4701,-0.0693
+Barnsley,Barnsley Interchange,53.554,-1.4805
+Lowestoft,Lowestoft Station,52.4754,1.74926431858396
+Gosport,Portsmouth Harbour,50.7981,-1.1236
+Southall,Southall Station,51.5106,-0.3784
+Stafford,Stafford Station,52.8024,-2.1206
+Royal Tunbridge Wells,Tunbridge Wells Station,51.1334,0.2635
+Ellesmere Port,Ellesmere Port Station,53.2782,-2.9071
+Rossendale,Haslingden Station,53.7025,-2.3243
+Folkestone,Folkestone Central,51.0841,1.1667
+Brixton,Brixton Station,51.4626,-0.1146
+Wrexham,Wrexham General Station,53.0507,-2.9926
+Torquay,Torquay Station,50.4627,-3.5447
+Maidenhead,Maidenhead Station,51.5172,-0.721
+Kingswood,Kingswood Station,51.4582,-2.5099
+Taunton,Taunton Station,51.0215,-3.1033
+Waterlooville,Bedhampton Station,50.8615,-0.9814
+Macclesfield,Macclesfield Station,53.2608,-2.1224
+Bognor Regis,Bognor Regis Station,50.7836,-0.6774
+Newtownabbey,Mossley West Railway Station,54.6802,-5.9761
+Kettering,Kettering Station,52.3933,-0.7322
+Buckley,Buckley Station,53.1741,-3.0803
+Great Yarmouth,Great Yarmouth Railway Station,52.6091,1.72096659080654
+Runcorn,Runcorn East Station,53.3283,-2.6655
+Ashford,Ashford International,51.1431,0.8746
+Tonypandy,Tonypandy Station,51.6265,-3.4489
+Scarborough,Scarborough Station,54.2804,-0.4088
+Widnes,Widnes Station,53.3665,-2.7332
+Aldershot,Aldershot Station,51.2477,-0.76
+Bury,Bury Interchange,53.5937,-2.2977
+Barking,Barking Station,51.5392,0.0808
+Castleford,Castleford Station,53.7217,-1.3536
+Hereford,Hereford Station,52.0561,-2.7188
+Bangor,Bangor (Gwynedd) Station,53.2258,-4.1351
+Stroud,Stroud (Gloucestershire) Station,51.7442,-2.22
+Margate,Margate Station,51.3813610742703,1.33768008980945
+Chelsea,Imperial Wharf Station,51.4743,-0.1829
+Loughborough,Loughborough Station,52.7765,-1.2017
+Welwyn Garden City,Welwyn Garden City Station,51.8008,-0.2076
+Farnborough,Farnborough (Main) Station,51.295,-0.7563
+Rhondda,Treorchy Station,51.6421,-3.511
+Craigavon,Portadown Station,54.4203,-6.4545
+Wallasey,Wallasey Village Station,53.4284,-3.0785
+Littlehampton,Littlehampton Station,50.8109,-0.5376
+Bridgend,Bridgend Railway Station,51.5059,-3.5752
+Bootle,Bootle New Strand Station,53.4444,-2.9943
+Weymouth,Weymouth Station,50.6119,-2.4536
+Fareham,Fareham Station,50.8531,-1.1922
+Morley,Morley Station,53.7476,-1.5913
+Cheshunt,Cheshunt Station,51.7033,-0.0269
+Kidderminster,Kidderminster Station,52.3942,-2.2507
+Corby,Corby Railway Station,52.483,-0.6888
+Dartford,Dartford Station,51.4475,0.219
+Castlereagh,Lisburn Station,54.5146,-6.0436
+Dewsbury,Dewsbury Station,53.6927,-1.6298
+Livingston,Livingston North Station,55.8841,-3.548
+Stourbridge,Stourbridge Junction,52.4477,-2.1361
+Sale,Sale Station,53.4253,-2.32
+Halesowen,Old Hill Station,52.4556,-2.0459
+Canterbury,Canterbury West Station,51.2701,1.0753
+South Croydon,Purley Oaks Station,51.3465,-0.0935
+Huyton,Huyton Station,53.4095,-2.8356
+Barry,Barry Island Railway Station,51.3901,-3.2715
+Gravesend,Gravesend Station,51.4415,0.3662
+Eastleigh,Eastleigh Station,50.9675,-1.3519
+Acton,Acton Town Station,51.5028,-0.2781
+Washington,Heworth Station,54.9046,-1.5123
+Braintree,Braintree Station,51.8733,0.5521
+Hamilton,Hamilton Central,55.7789,-4.0503
+Brentwood,Brentwood Station,51.614,0.3004
+South Benfleet,Benfleet Station,51.5442,0.5612
+Redhill,Redhill Station,51.2407,-0.165
+Ashton-under-Lyne,Ashton-under-Lyne Station,53.4885,-2.0949
+Staines,Staines Station,51.4334,-0.506
+Aberdare,Aberdare Railway Station,51.7127,-3.4455
+Burntwood,Lichfield Trent Valley,52.6727,-1.9132
+Ashton in Makerfield,Bryn Railway Station,53.5128,-2.6514
+Newbury,Newbury Station,51.3974,-1.3227
+Prestwich,Heaton Park Tram Stop,53.5352,-2.2714
+Bromsgrove,Bromsgrove Station,52.3315,-2.0576
+Stirling,Stirling Station,56.1181,-3.9359
+Rugeley,Rugeley Town Station,52.7541,-1.9324
+Rhyl,Rhyl Railway Station,53.3195,-3.4935
+Altrincham,Altrincham Interchange,53.3873,-2.3464
+Grantham,Grantham Station,52.9115,-0.6427
+Peterlee,Horden Railway Station,54.7818,-1.3236
+Berkhamsted,Berkhamsted Railway Station,51.7632,-0.5625
+Droitwich,Droitwich Spa,52.2723,-2.1549
+Chester-le-Street,Chester-le-Street Station,54.8569,-1.5761
+Halewood,Halewood Railway Station,53.3631,-2.8308
+Wilmslow,Wilmslow Station,53.3264,-2.2285
+Neston,Neston Railway Station,53.2913,-3.0654
+Letchworth,Letchworth Garden City Station,51.9783,-0.227
+Pontypool,Pontypool and New Inn Station,51.7014,-3.0411
+Maldon,Hatfield Peverel Station,51.7702,0.592
+Blackheath,Blackheath Railway Station,51.4635,0.0074
+Buxton,Buxton Railway Station,53.2609,-1.9144
+Haverhill,Dullingham Railway Station,52.1382,0.3605
+Whitley Bay,Whitley Bay Station,55.0481,-1.4434
+Batley,Batley Railway Station,53.7086,-1.6345
+Hucknall,Hucknall Tram Stop,53.0374,-1.1956
+Morpeth,Morpeth Railway Station,55.1687,-1.6871
+Antrim,Antrim Railway Station,54.7188,-6.2079
+Beverley,Beverley Railway Station,53.8455,-0.4255
+Rawtenstall,Rawtenstall Station,53.7003,-2.2871
+Stalybridge,Stalybridge Railway Station,53.4836,-2.0475
+Pontefract,Pontefract Monkhill Railway Station,53.6919,-1.3091
+Accrington,Accrington Railway Station,53.7532,-2.3695
+Amersham,Amersham Station,51.6736,-0.6074
+Chippenham,Chippenham Railway Station,51.4653,-2.1221
+Darwen,Darwen Railway Station,53.6961,-2.4662
+Grangemouth,Grangemouth Railway Station,56.0009,-3.7204
+Tilbury,Tilbury Town Railway Station,51.4623,0.3542
+Yate,Yate Railway Station,51.5426,-2.4265
+Penarth,Penarth Railway Station,51.4353,-3.1731
+Formby,Formby Railway Station,53.5533,-3.0555
+Arnold,Rolleston Railway Station,53.0022,-1.1233
+Clitheroe,Clitheroe Railway Station,53.8733,-2.3943
+Atherstone,Atherstone Railway Station,52.5794,-1.5465
+Harwich,Harwich International,51.9454,1.25632581114065
+North Shields,North Shields Station,55.0073,-1.4477
+Guiseley,Guiseley Railway Station,53.8751,-1.7204
+Whitehaven,Whitehaven Railway Station,54.5522,-3.5889
+Horsforth,Horsforth Railway Station,53.8278,-1.6251
+Brownhills,Brownhills West Railway Station,52.6468,-1.9417
+Pontardawe,Pontardawe Railway Station,51.7214,-3.8681
+Rutherglen,Rutherglen Railway Station,55.8303,-4.2129
+Musselburgh,Musselburgh Railway Station,55.9349,-3.0727
+Ammanford,Ammanford Railway Station,51.7991,-3.9925
+Hoylake,Hoylake Railway Station,53.3909,-3.1804
+Sudbury,Sudbury Railway Station,52.0407,0.7402
+Lurgan,Lurgan Railway Station,54.4655,-6.3327
+March,March Railway Station,52.5532,0.0903
+Potters Bar,Potters Bar Station,51.697,-0.1772
+Cradley Heath,Cradley Heath Railway Station,52.471,-2.0822
+Keynsham,Keynsham Railway Station,51.4175,-2.4977
+Elland,Brighouse Railway Station,53.6975,-1.7795
+Neath,Neath Railway Station,51.6628,-3.8033
+Chorley,Chorley Railway Station,53.6535,-2.632
+Sandy,Sandy Railway Station,52.1278,-0.2842
+Stranraer,Stranraer Railway Station,54.9032,-5.021
+Dalkeith,Eskbank Railway Station,55.8845,-3.1073
+Newtown,Newtown Railway Station,52.5122,-3.308
+Prestatyn,Prestatyn Railway Station,53.3353,-3.4055
+Haltwhistle,Haltwhistle Railway Station,54.9706,-2.4578
+Llandudno,Llandudno Railway Station,53.3226,-3.8271
+Llangefni,Llangefni Railway Station,53.2591,-4.3117
+Brynmawr,Ebbw Vale Town Railway Station,51.7891,-3.1994
+Willenhall,Willenhall Railway Station,52.5847,-2.0606
+Wadebridge,Bodmin Parkway Railway Station,50.444,-4.726
+Milngavie,Milngavie Railway Station,55.9418,-4.3145
+Wombwell,Wombwell Railway Station,53.5102,-1.411
+Bellshill,Bellshill Railway Station,55.8163,-4.025
+Bargoed,Bargoed Railway Station,51.6885,-3.2244
+Ystrad Mynach,Ystrad Mynach Railway Station,51.6406,-3.2414
+Elgin,Elgin Railway Station,57.6477,-3.3126
+Holyhead,Holyhead Railway Station,53.3107,-4.6312
+Stowmarket,Stowmarket Railway Station,52.1901,0.9967
+Arbroath,Arbroath Railway Station,56.562,-2.5849
+Ruthin,Ruthin Railway Station,53.113,-3.3017
+Tenby,Tenby Railway Station,51.6728,-4.6986
+Forres,Forres Railway Station,57.6152,-3.6133
+Inverurie,Inverurie Railway Station,57.2853,-2.3761
+Dingwall,Dingwall Railway Station,57.5959,-4.4337
+Stonehaven,Stonehaven Railway Station,56.9653,-2.2026
+Kintore,Kintore Railway Station,57.2393,-2.2729
+Ellon,Ellon Railway Station,57.366,-2.0715
+Abergele,Abergele and Pensarn Station,53.2941,-3.5829
+Port Glasgow,Port Glasgow Railway Station,55.9373,-4.6897
+Largs,Largs Railway Station,55.7923,-4.8604
+Bishopbriggs,Bishopbriggs Railway Station,55.903,-4.2167
+Kilsyth,Croy Railway Station,55.972,-4.0662
+Cumbernauld,Croy Railway Station,55.9752,-3.9879
+Colwyn Bay,Colwyn Bay Railway Station,53.291,-3.7272
+Barrhead,Barrhead Railway Station,55.8024,-4.3905
+Johnstone,Johnstone Railway Station,55.8349,-4.5033
+Llandudno Junction,Llandudno Junction Railway Station,53.2838,-3.8043
+Alloa,Alloa Railway Station,56.1169,-3.7921
+Linlithgow,Linlithgow Railway Station,55.9769,-3.5942
+Llanelli,Llanelli Railway Station,51.6807,-4.1591
+Kilwinning,Kilwinning Railway Station,55.6545,-4.7081
+Kilbirnie,Kilwinning Railway Station,55.7347,-4.7064
+Greenock,Greenock West Railway Station,55.9465,-4.7558
+Dalry,Dalry Railway Station,55.7081,-4.7064
+Ardrossan,Ardrossan Harbour Railway Station,55.6404,-4.8129
+Saltcoats,Saltcoats Railway Station,55.6331,-4.7873
+Thornliebank,Thornliebank Railway Station,55.8064,-4.3209
+Dalmeny,Dalmeny Railway Station,55.9918,-3.3801
+Kirknewton,Kirknewton Railway Station,55.893,-3.4159
+Coatbridge,Coatbridge Sunnyside Railway Station,55.8543,-4.0381
+Giffnock,Giffnock Railway Station,55.8041,-4.2864
+Troon,Troon Railway Station,55.5412,-4.6516
+Newtongrange,Newtongrange Railway Station,55.8651,-3.0671
+Beith,Beith Town Railway Station,55.7383,-4.6529
+New Cumnock,New Cumnock Railway Station,55.4034,-4.1845
+Lochwinnoch,Lochwinnoch Railway Station,55.7871,-4.638
+Kilmarnock,Kilmarnock Railway Station,55.6128,-4.4955
+Dunlop,Dunlop Railway Station,55.7084,-4.5879
+Nitshill,Nitshill Railway Station,55.8105,-4.3655
+Stevenston,Stevenston Railway Station,55.6542,-4.7543
+Muirhead,Muirhead Railway Station,55.8875,-4.1545
+Kirkconnel,Kirkconnel Railway Station,55.3877,-3.9982
+Airdrie,Airdrie Railway Station,55.8641,-3.9789
+Uddingston,Uddingston Railway Station,55.8233,-4.0843
+Stewarton,Stewarton Railway Station,55.6753,-4.5234
+Maybole,Maybole Railway Station,55.3549,-4.6843
+Holytown,Holytown Railway Station,55.8184,-3.9772
+Howwood,Howwood Railway Station,55.8091,-4.5866
+Kilmaurs,Kilmaurs Railway Station,55.6426,-4.5353
+Neilston,Neilston Railway Station,55.7857,-4.487
+Barassie,Barassie Railway Station,55.5533,-4.6549
+Dalmuir,Dalmuir Railway Station,55.9084,-4.4207
+Carfin,Carfin Railway Station,55.8096,-3.9244
+Drumry,Drumry Railway Station,55.9055,-4.3955
+Kennishead,Kennishead Railway Station,55.8117,-4.2871
+Whitecraigs,Whitecraigs Railway Station,55.7903,-4.314
+Larkhall,Larkhall Railway Station,55.7325,-3.9758
+Blantyre,Blantyre Railway Station,55.7974,-4.089
+Kilpatrick,Kilpatrick Railway Station,55.9165,-4.439
+Clydebank,Clydebank Railway Station,55.8967,-4.4052
+Clarkston,Clarkston Railway Station,55.7893,-4.2727
+Carmyle,Carmyle Railway Station,55.8396,-4.1594
+Anniesland,Anniesland Railway Station,55.8926,-4.3132
+Garscadden,Garscadden Railway Station,55.8828,-4.3499
+Baillieston,Baillieston Railway Station,55.8415,-4.1115
+Motherwell,Motherwell Railway Station,55.791,-3.9898
+Drumchapel,Drumchapel Railway Station,55.9051,-4.3674
+Bellgrove,Bellgrove Railway Station,55.8566,-4.2228
+Drumgelloch,Drumgelloch Railway Station,55.8876,-4.0274
+Scotstounhill,Scotstounhill Railway Station,55.8785,-4.3514
+Priesthill & Darnley,Priesthill & Darnley Railway Station,55.8272,-4.3372
+Crossmyloof,Crossmyloof Railway Station,55.8316,-4.2822
+Hillington East,Hillington East Railway Station,55.8549,-4.3543
+Newton,Newton Railway Station,55.8108,-4.1535
+Kildonan,Kildonan Railway Station,55.7929,-4.0838
+Langside,Langside Railway Station,55.8275,-4.2757
+Pollokshields West,Pollokshields West Railway Station,55.8461,-4.2852
+Hillfoot,Hillfoot Railway Station,55.941,-4.3152
+Cardonald,Cardonald Railway Station,55.8463,-4.3215
+Hairmyres,Hairmyres Railway Station,55.7727,-4.1772
+Blairhill,Blairhill Railway Station,55.8651,-3.9198
+Maryhill,Maryhill Railway Station,55.8979,-4.2848
+Kelvindale,Kelvindale Railway Station,55.8909,-4.3083
+High Street,High Street Railway Station,55.8589,-4.2444
+Lanark,Lanark Railway Station,55.6723,-3.7776
+Mount Florida,Mount Florida Railway Station,55.8263,-4.2592
+Pollokshields East,Pollokshields East Railway Station,55.8352,-4.2595
+Barnhill,Barnhill Railway Station,55.8835,-4.1788
+Springburn,Springburn Railway Station,55.8824,-4.2278
+Croy,Croy Railway Station,55.9752,-3.9879
+Cambuslang,Cambuslang Railway Station,55.8199,-4.174
+Kirkhill,Kirkhill Railway Station,55.8269,-4.2023
+Garrowhill,Garrowhill Railway Station,55.8599,-4.1344
+Bridgeton,Bridgeton Railway Station,55.8483,-4.2185
+Shawlands,Shawlands Railway Station,55.8281,-4.2876
+Kings Park,Kings Park Railway Station,55.8194,-4.2187
+Crookston,Crookston Railway Station,55.8414,-4.3494
+Exhibition Centre,Exhibition Centre Railway Station,55.8626,-4.2839
+Croftfoot,Croftfoot Railway Station,55.8228,-4.2233
+Bishopton,Bishopton Railway Station,55.9031,-4.5004
+Westerton,Westerton Railway Station,55.9058,-4.342
+Hyndland,Hyndland Railway Station,55.8777,-4.3083
+Mosspark,Mosspark Railway Station,55.8459,-4.3377
+Crosshill,Crosshill Railway Station,55.8333,-4.2601
+Dalmarnock,Dalmarnock Railway Station,55.8416,-4.2174
+Charing Cross,Charing Cross Railway Station,55.8667,-4.2703
+Jordanhill,Jordanhill Railway Station,55.8811,-4.3275
+Cartsdyke,Cartsdyke Railway Station,55.9411,-4.6934
+Argyle Street,Argyle Street Railway Station,55.8587,-4.2581
+Pollokshaws West,Pollokshaws West Railway Station,55.8278,-4.2966
+Coatbridge Central,Coatbridge Central Railway Station,55.8624,-4.0281
