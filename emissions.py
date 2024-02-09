@@ -1,5 +1,5 @@
 from flying_distance import *
-from land_distance import *
+from bus_distance import *
 import numpy as np
 import random
 

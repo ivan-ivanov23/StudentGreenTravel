@@ -29,18 +29,23 @@ def determine_postcode():
     scotland = []
     # empty array of postcodes for the rest of the UK
     rest = []
+    # empty array of postcodes for aberdeen
+    aberdeen = []
     postcodes = create_address_df()
+
     for postcode in postcodes:
         # Account for incorrect postcodes
-        if not isinstance(postcode, float):
+        if not isinstance(postcode, float) :
             # If the first one or two characters of the postcode are in the scot_postcodes list
             if postcode[:2] in scot_postcodes or postcode[:1] == 'G':
+                if postcode[:2] == 'AB':
+                    aberdeen.append(postcode)
                 scotland.append(postcode)
             else:
                 rest.append(postcode)
         else:
             continue
 
-    return scotland, rest
+    return scotland, rest, aberdeen
 
 

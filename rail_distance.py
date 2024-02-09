@@ -1,15 +1,11 @@
-# This file calculates the distance between the postcode and the closest bus station, 
-# and the distance between the bus station and Aberdeen bus station.
-# At the end of the dictionary that is printed, the distance between the Aberdeen bus station and the university is printed.
-
 import pandas as pd
 import numpy as np
 from geopy.distance import geodesic
 
-# Coordinates of Aberdeen airport and university (taken from Google)
+# Coordinates of Aberdeen railway station and university (taken from Google)
 aberdeen_uni = (-2.0999, 57.1645)
+aberdeen_rail_station = (-2.0983252205325833, 57.14372498503623)
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
-aberdeen_bus_stop = (-2.095330457035445, 57.14450856576696)
 
 # Read ukpostcodes.csv
 postcodes = pd.read_csv('data/ukpostcodes.csv')
@@ -23,17 +19,17 @@ latitude_array = postcodes['latitude'].values
 longitude_array = postcodes['longitude'].values
 
 # Create a dictionary to store postcode coordinates 
-postcode_coord_dict = dict(zip(postcode_array, zip(latitude_array, longitude_array)))
+postcode_coords = dict(zip(postcode_array, zip(latitude_array, longitude_array)))
 
 # Read in the airpo csv file
-stops = pd.read_csv("data/Scotland_Bus_Stations.csv")
+stations = pd.read_csv("data/stations.csv")
 # Convert DataFrame columns to numpy arrays for faster processing
-stop_name_array = stops['StationName'].values
-stop_latitude_array = stops['Latitude'].values
-stop_longitude_array = stops['Longitude'].values
+station_name_array = stations['Station'].values
+station_latitude_array = stations['Lat'].values
+station_longitude_array = stations['Long'].values
 
 # Create a dictionary to store stop coordinates and type
-stop_coord_dict = dict(zip(stop_name_array, zip(stop_longitude_array, stop_latitude_array)))
+station_coords = dict(zip(station_name_array, zip(station_longitude_array, station_latitude_array)))
 # Convert to numpy array for faster processing
 
 
@@ -65,7 +61,7 @@ def closest_stop(postcode, postcode_coords, stops_dict):
         return 'Aberdeen', 0
 
 
-def land_travel(postcode_coords, stops_dict, addresses):
+def rail_travel(postcode_coords, stops_dict, addresses):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
     # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
     data = {}
@@ -81,7 +77,7 @@ def land_travel(postcode_coords, stops_dict, addresses):
             # If the closest airport is not Aberdeen (default value for invalid postcodes) and the postcode is not from Scotland or London
             if closest_stop_name != 'Aberdeen':
                 # Calculate the distance between the two stops
-                travel_distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_bus_stop).km
+                travel_distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_rail_station).km
                 # Distance between Aberdeen bus station and university
                 # travel_distance2 = 2.28
                 # travel_distance = travel_distance1 + travel_distance2
@@ -96,5 +92,4 @@ def land_travel(postcode_coords, stops_dict, addresses):
         
 
     return data, invalid_postcodes
-
 
