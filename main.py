@@ -1,13 +1,12 @@
 import threading
 import time
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import random
 from itertools import cycle
 from split_postcodes import determine_postcode
-from emissions import bus_emissions, plane_emissions
-from flying_distance import travel, postcode_coord_dict, airport_coord_dict
-from bus_distance import land_travel, postcode_coord_dict, stop_coord_dict
-from rail_distance import rail_travel, postcode_coords, station_coords
-from total_distance import total_distance, create_heatmap
+from land_distance import postcode_coord_dict, stop_coord_dict, land_travel
 
 def loading_message(stop_event):
     # Cycle of loading states
@@ -29,55 +28,53 @@ def loading_message(stop_event):
             loading_states = cycle(["Loading.", "Loading..", "Loading...", "Loading...."])
 
 def main():
-    stop_event = threading.Event()  # Event to signal the loading thread to stop
+    # stop_event = threading.Event()  # Event to signal the loading thread to stop
 
-    # Create a thread to display the loading message
-    loading_thread = threading.Thread(target=loading_message, args=(stop_event,))
-    loading_thread.start()
+    # # Create a thread to display the loading message
+    # loading_thread = threading.Thread(target=loading_message, args=(stop_event,))
+    # loading_thread.start()
 
-    # Call the determine_postcode function to get the postcodes for Scotland and the rest of the UK
-    scotland, rest = determine_postcode()
-    # Stop main function if there are no postcodes
+    # Call the determine_postcode function to get the postcodes for Scotland, Aberdeen, and the rest of the UK
+    scotland, rest, aberdeen = determine_postcode()
 
-    # Call the land_travel function and pass the postcode coordinates, stop coordinates, and the rest of the postcodes to it
-    # The [0] index is used to get the dictionary with postcodes as keys and closest stops/airports as values
-    # If the [1] index is used, the list of invalid postcodes is returned
-    land = land_travel(postcode_coord_dict, stop_coord_dict, scotland)[0]
-    # Call the travel function and pass the postcode coordinates, airport coordinates, and the rest of the postcodes to it
-    fly = travel(postcode_coord_dict, airport_coord_dict, rest)[0]
-    # Call the rail_travel function and pass the postcode coordinates, stop coordinates, and the rest of the postcodes to it
-    rail = rail_travel(postcode_coords, station_coords, rest)[0]
-    print(rail)
+    # For Scotland
+    # 46% of postcodes travel by car
+    # 46% of postcodes travel by bus
+    # 8% of postcodes travel by train
+    # 0% of postcodes travel by plane
+    # Create lists of postcodes for each method of transport
+    #scotland_car = random.sample(scotland, int(len(scotland) * 0.46))
+    scotland_bus = random.sample(scotland, int(len(scotland) * 0.46))
+    scotland_rail = random.sample(scotland, int(len(scotland) * 0.08))
+
+    # Use the bus_travel function to get the closest bus stop to each postcode in Scotland
+   # scotland_bus_data = land_travel(postcode_coord_dict, stop_coord_dict, scotland_bus)[0]
+ 
+    # For the rest of the UK
+    # 25% of postcodes travel by car
+    # 25% of postcodes travel by rail
+    # 50% of postcodes travel by plane
+    rest_bus = random.sample(rest, int(len(rest) * 0.25))
+    rest_rail = random.sample(rest, int(len(rest) * 0.25))
+    rest_plane = random.sample(rest, int(len(rest) * 0.50))
+
+    # Use the bus_travel function to get the closest bus stop to each postcode in the rest of the UK
+    rest_bus_data = land_travel(postcode_coord_dict, stop_coord_dict, rest_bus)
+    #print(rest_bus_data)
     
 
-    # Call the total_distance function and pass the land and fly dictionaries to it
-    total_distances_plane = total_distance(fly)
-    #total_distances_bus = total_distance(land)
-    
-    # Create a heatmap of the UK showing the total distance travelled by bus and plane by country
-    #create_heatmap(total_distances_bus, total_distances_plane)
 
-    # Call the bus_emissions function and pass the land dictionary and the emission factors to it
-    #bus = bus_emissions(land)
-    # Call the plane_emissions function and pass the fly dictionary and the emission factors to it
-    plane = plane_emissions(fly)
 
-    # Print the results
-    # print('\nBus: ', bus)
-    # print('===========================================================================================================================')
-    # print('Plane: ', plane)
 
-    # Save the results to separate dataframes
-    #bus_df = pd.DataFrame(bus.items(), columns=['Postcode', 'Emissions'])
-    plane_df = pd.DataFrame(plane.items(), columns=['Postcode', 'Emissions'])
+
 
     
-    # Signal the loading thread to stop
-    stop_event.set()
-    # Wait for the loading thread to stop
-    loading_thread.join()
+    # # Signal the loading thread to stop
+    # stop_event.set()
+    # # Wait for the loading thread to stop
+    # loading_thread.join()
 
-    return  plane_df
+    # return  total_bus, total_train
 
 if __name__ == '__main__':
     main()

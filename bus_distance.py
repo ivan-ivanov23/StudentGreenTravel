@@ -54,7 +54,7 @@ def closest_stop(postcode, postcode_coords, stops_dict):
     """Returns the closest bus stop to the postcode"""
     if 'AB' not in postcode:
         # Calculate the distance between the given postcode and only bus stops in the area
-        distances = calculate_distances((postcode_coords[postcode][1], postcode_coords[postcode][0]), np.array(list(stops_dict.values())))
+        distances = calculate_distances(postcode_coords[postcode], np.array(list(stops_dict.values())))
         # Find the index of the closest bus stop
         closest_stop_index = np.nanargmin(distances)
         # Find the name of the closest bus stop
@@ -65,7 +65,7 @@ def closest_stop(postcode, postcode_coords, stops_dict):
         return 'Aberdeen', 0
 
 
-def land_travel(postcode_coords, stops_dict, addresses):
+def bus_travel(postcode_coords, stops_dict, addresses):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
     # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
     data = {}
