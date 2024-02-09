@@ -1,1 +1,0 @@
-# This file is intended to calculate distances for islands like Orkney and Shetland.
