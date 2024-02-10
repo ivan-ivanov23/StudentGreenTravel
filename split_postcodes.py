@@ -9,22 +9,6 @@ from itertools import islice
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
 wales_postcodes = ['CF', 'LL', 'NP', 'SA', 'SY']
 
-# # Function to check for incorrect postcodes
-# def check_postcodes(postcodes):
-#     # Read ukpostcodes.csv
-#     postcodes = pd.read_csv('data/ukpostcodes.csv')
-#     # Drop index column
-#     # Trim the postcode column
-#     postcodes['postcode'] = postcodes['postcode'].str.replace(' ', '')
-#     # Convert DataFrame columns to numpy arrays for faster processing
-#     postcode_array = postcodes['postcode'].values
-
-#     # Check if the postcodes in the file are in the ukpostcodes.csv file
-#     for postcode in postcodes:
-#         if postcode not in postcode_array:
-#             # Remove the incorrect row
-#             postcodes = postcodes[postcodes.postcode != postcode]
-#     return postcodes
 
 def create_address_df():
     # Open a file dialog to select the address file
@@ -41,12 +25,7 @@ def create_address_df():
         return addresses.iloc[:, 1]
     # If the user didn't select a file, then return an empty dataframe
     else:
-        return pd.DataFrame()
-    
-# ad = create_address_df()
-# print(ad)
-    
-
+        return pd.DataFrame()    
         
 
 def determine_postcode():
