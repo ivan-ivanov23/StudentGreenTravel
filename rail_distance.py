@@ -10,7 +10,9 @@ scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY
 # Read ukpostcodes.csv
 postcodes = pd.read_csv('data/ukpostcodes.csv')
 # Drop index column
-postcodes = postcodes.drop(columns=['id'])
+#postcodes = postcodes.drop(columns=['id'])
+# Drop rows with missing values
+postcodes = postcodes.dropna()
 # Trim the postcode column
 postcodes['postcode'] = postcodes['postcode'].str.replace(' ', '')
 # Convert DataFrame columns to numpy arrays for faster processing
@@ -23,6 +25,8 @@ postcode_coords = dict(zip(postcode_array, zip(latitude_array, longitude_array))
 
 # Read in the airpo csv file
 stations = pd.read_csv("data/stations.csv")
+# Drop rows with missing values
+stations = stations.dropna()
 # Convert DataFrame columns to numpy arrays for faster processing
 station_name_array = stations['Station'].values
 station_latitude_array = stations['Lat'].values
@@ -40,28 +44,29 @@ def calculate_distances(coords1, coords2_array):
     for coords2 in coords2_array:
         # If any of the two are nan
         if np.isnan(coords2).any() or np.isnan(coords1).any():
+            # Calcualte distance between coords1 and Aberdeen
             continue
         else:
             # Find distance in km
             distances.append(geodesic(coords1, coords2).km)
     return np.array(distances)
 
-def closest_stop(postcode, postcode_coords, stops_dict):
+def closest_stop(postcode, postcode_coords, stations_dict):
     """Returns the closest bus stop to the postcode"""
     if 'AB' not in postcode:
         # Calculate the distance between the given postcode and railway stations in the area
-        distances = calculate_distances((postcode_coords[postcode][1], postcode_coords[postcode][0]), np.array(list(stops_dict.values())))
+        distances = calculate_distances((postcode_coords[postcode][1], postcode_coords[postcode][0]), np.array(list(stations_dict.values())))
         # Find the index of the closest bus stop
         closest_stop_index = np.nanargmin(distances)
         # Find the name of the closest bus stop
-        closest_stop_name = list(stops_dict.keys())[closest_stop_index]
+        closest_stop_name = list(stations_dict.keys())[closest_stop_index]
         # Return the name of the closest bus stop and the distance to it
         return closest_stop_name, distances[closest_stop_index]
     else:
         return 'Aberdeen', 0
 
 
-def rail_travel(postcode_coords, stops_dict, addresses):
+def rail_travel(postcode_coords, stations_dict, addresses):
     """Returns a dictionary with postcodes as keys and closest airports as values"""
     # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
     data = {}
@@ -72,7 +77,7 @@ def rail_travel(postcode_coords, stops_dict, addresses):
     for postcode in addresses:
         # Find the closest airport to the postcode
         if postcode in postcode_coords:
-            closest_stop_name, distance = closest_stop(postcode, postcode_coords, stops_dict)
+            closest_stop_name, distance = closest_stop(postcode, postcode_coords, stations_dict)
             
             # If the closest airport is not Aberdeen (default value for invalid postcodes) and the postcode is not from Scotland or London
             if closest_stop_name != 'Aberdeen':

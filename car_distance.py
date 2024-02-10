@@ -32,7 +32,7 @@ def car_travel(postcode_coords, addresses):
         if postcode in postcode_coords:
             # If the postcode is not from Aberdeen
             if postcode[:2] != 'AB':
-                distance = geodesic(aberdeen_uni, postcode_coords[postcode]).km
+                distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_uni).km
                 car_data[postcode] = round(distance, 2)
             else:
                 car_data[postcode] = 0
