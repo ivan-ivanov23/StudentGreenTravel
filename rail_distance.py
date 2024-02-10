@@ -49,7 +49,7 @@ def calculate_distances(coords1, coords2_array):
 def closest_stop(postcode, postcode_coords, stops_dict):
     """Returns the closest bus stop to the postcode"""
     if 'AB' not in postcode:
-        # Calculate the distance between the given postcode and only bus stops in the area
+        # Calculate the distance between the given postcode and railway stations in the area
         distances = calculate_distances((postcode_coords[postcode][1], postcode_coords[postcode][0]), np.array(list(stops_dict.values())))
         # Find the index of the closest bus stop
         closest_stop_index = np.nanargmin(distances)

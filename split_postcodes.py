@@ -3,6 +3,7 @@
 import pandas as pd
 import random
 from tkinter.filedialog import askopenfile
+from itertools import islice
 
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
 wales_postcodes = ['CF', 'LL', 'NP', 'SA', 'SY']
@@ -53,18 +54,7 @@ def determine_postcode():
     return scotland, wales, north_ireland, england
 
 
-scotland, wales, north_ireland, england = determine_postcode()
-
-# print('Scotland: ', scotland)
-# print('===============================================================================================================')
-# print('Wales: ', wales)
-# print('===============================================================================================================')
-# print('Northern Ireland: ', north_ireland)
-# print('===============================================================================================================')
-# print('England: ', england)
-
-# username = int(input("Enter username:"))
-# print(username)
+#scotland, wales, north_ireland, england = determine_postcode()
 
 # Initial menu to ask if you are working with Scottish or Rest of UK addresses
 def menu(scotland, wales, north_ireland, england):
@@ -74,44 +64,37 @@ def menu(scotland, wales, north_ireland, england):
         percent_bus = int(input('Enter what % of Scottish students travel by bus:'))
         percent_car = int(input('Enter what % of Scottish students travel by car:'))
         percent_rail = int(input('Enter what % of Scottish students travel by rail:'))
-        if percent_bus + percent_car + percent_rail != 100:
-            # Call the menu function again if the percentages don't add up to 100
-            print('The percentages do not add up to 100. Try again!')
-            print('==================================================')
-            menu(scotland, wales, north_ireland, england)
-        # randomly divide 'scotland' into 3 parts based on the percentages and make sure they don't overlap
-        bus = random.sample(scotland, int(len(scotland) * (percent_bus / 100)))
-        # remove the elements of bus from scotland using set difference
-        scotland = list(set(scotland) - set(bus))
-        car = random.sample(scotland, int(len(scotland) * (percent_car / 100)))
-        scotland = list(set(scotland) - set(car))
-        rail = random.sample(scotland, int(len(scotland) * (percent_rail / 100)))
-        scotland = list(set(scotland) - set(rail))
+        # if percent_bus + percent_car + percent_rail != 100:
+        #     # Call the menu function again if the percentages don't add up to 100
+        #     print('The percentages do not add up to 100. Try again!')
+        #     print('==================================================')
+        #     menu(scotland, wales, north_ireland, england)
+        # Source: https://stackoverflow.com/questions/38861457/splitting-a-list-into-uneven-groups
+        seclist = [percent_bus, percent_car, percent_rail]
+        it = iter(scotland)
+        # randomly divide 'scotland' into 3 parts based on the percentages and make sure they don't overlap with islice
+        bus, car, rail = [list(islice(it, 0, i)) for i in seclist]
 
         print('==================================================')
         print('2. Split rest-of-UK postcodes')
         percent_plane_uk = int(input('Enter what % of Non-Scottish students travel by plane:'))
         percent_car_uk = int(input('Enter what % of Non-Scottish students travel by car:'))
         percent_rail_uk = int(input('Enter what % of Non-Scottish students travel by rail:'))
-        if percent_plane_uk + percent_car_uk + percent_rail_uk != 100:
-            print('The percentages do not add up to 100. Try again!')
-            percent_plane_uk = int(input('Enter what % of students travel by plane:'))
-            percent_car_uk = int(input('Enter what % of students travel by car:'))
-            percent_rail_uk = int(input('Enter what % of students travel by rail:'))
+        # if percent_plane_uk + percent_car_uk + percent_rail_uk != 100:
+        #     print('The percentages do not add up to 100. Try again!')
+        #     percent_plane_uk = int(input('Enter what % of students travel by plane:'))
+        #     percent_car_uk = int(input('Enter what % of students travel by car:'))
+        #     percent_rail_uk = int(input('Enter what % of students travel by rail:'))
         # combine 'wales', 'north_ireland', and 'england' into one list
         uk = wales + north_ireland + england
-        # randomly divide 'uk' into 3 parts based on the percentages and make sure they don't overlap for car, train and plane
-        car_uk = random.sample(uk, int(len(uk) * (percent_car_uk / 100)))
-        # remove the elements of car_uk from uk using set difference
-        uk = list(set(uk) - set(car_uk))
-        rail_uk = random.sample(uk, int(len(uk) * (percent_rail_uk / 100)))
-        uk = list(set(uk) - set(rail_uk))
-        plane_uk = random.sample(uk, int(len(uk) * (percent_plane_uk / 100)))
-        uk = list(set(uk) - set(plane_uk))
-            
+        # randomly divide 'uk' into 3 parts based on the percentages
+        seclist_uk = [percent_plane_uk, percent_car_uk, percent_rail_uk]
+        it_uk = iter(uk)
+        plane_uk, car_uk, rail_uk = [list(islice(it_uk, 0, i)) for i in seclist_uk]
+                       
         
         start = False
 
     return bus, car, rail, car_uk, rail_uk, plane_uk
 
-bus_scotland, car_scotland, rail_scotland, car_uk, rail_uk, plane_uk = menu(scotland, wales, north_ireland, england)
+#bus_scotland, car_scotland, rail_scotland, car_uk, rail_uk, plane_uk = menu(scotland, wales, north_ireland, england)
