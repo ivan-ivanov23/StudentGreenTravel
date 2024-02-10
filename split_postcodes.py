@@ -92,7 +92,9 @@ def menu(scotland, wales, north_ireland, england):
         # randomly divide 'uk' into 3 parts based on the percentages
         seclist_uk = [p_plane_eng, p_car_eng, p_rail_eng]
 
+        # Iterator to split the list into 3 parts
         it_england = iter(england)
+        # randomly divide 'england' into 3 parts based on the percentages and make sure they don't overlap with islice
         plane_eng, car_eng, rail_eng = [list(islice(it_england, 0, i)) for i in seclist_uk]
 
         # List of lists to store the postcodes for each transport method
@@ -103,10 +105,13 @@ def menu(scotland, wales, north_ireland, england):
         p_car_wales = int(len(wales) * (percent_car_uk / 100))
         p_rail_wales = int(len(wales) * (percent_rail_uk / 100))
 
+        # randomly divide 'wales' into 3 parts based on the percentages
         seclist_wales = [p_plane_wales, p_car_wales, p_rail_wales]
         it_wales = iter(wales)
+        # randomly divide 'wales' into 3 parts based on the percentages and make sure they don't overlap with islice
         plane_wales, car_wales, rail_wales = [list(islice(it_wales, 0, i)) for i in seclist_wales]
 
+        # List of lists to store the postcodes for each transport method
         transport_wales = [plane_wales, car_wales, rail_wales]
 
         # Northern Ireland
@@ -114,15 +119,16 @@ def menu(scotland, wales, north_ireland, england):
         p_car_ni = int(len(north_ireland) * (percent_car_uk / 100))
         p_rail_ni = int(len(north_ireland) * (percent_rail_uk / 100))
 
+        # randomly divide 'north_ireland' into 3 parts based on the percentages
         seclist_ni = [p_plane_ni, p_car_ni, p_rail_ni]
         it_ni = iter(north_ireland)
+        # randomly divide 'north_ireland' into 3 parts based on the percentages and make sure they don't overlap with islice
         plane_ni, car_ni, rail_ni = [list(islice(it_ni, 0, i)) for i in seclist_ni]
 
-        transport_ni = [plane_ni, car_ni, rail_ni]
-
-
-                       
+        # List of lists to store the postcodes for each transport method
+        transport_ni = [plane_ni, car_ni, rail_ni]                
         
+        # Stop the loop
         start = False
 
     return transport_scot, transport_eng, transport_wales, transport_ni

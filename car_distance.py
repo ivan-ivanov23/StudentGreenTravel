@@ -21,19 +21,20 @@ all_postcodes = dict(zip(postcode_array, zip(latitude_array, longitude_array)))
 
 # Function to calculate distance from postcode to uni of Aberdeen
 def car_travel(postcode_coords, addresses):
-     # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
+     # Dictionary to store postcode and distance to the university
     car_data = {}
     # List to store invalid postcodes
     invalid_postcodes = []
 
     # For postcode in column 2 of address file
     for postcode in addresses:
-        # Find the closest airport to the postcode
+        # Find the distance between the given postcode and the university
         if postcode in postcode_coords:
-            # If the postcode is not from Aberdeen
+            # If the postcode is not from Aberdeen, calculate the distance to the university
             if postcode[:2] != 'AB':
                 distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_uni).km
                 car_data[postcode] = round(distance, 2)
+
             else:
                 car_data[postcode] = 0
         else:
