@@ -1,8 +1,6 @@
 # This file is for splitting the postcodes into two dataframes: one for Scotland and one for the rest of the UK.
 
 import pandas as pd
-import random
-import sys
 from tkinter.filedialog import askopenfile
 from itertools import islice
 
