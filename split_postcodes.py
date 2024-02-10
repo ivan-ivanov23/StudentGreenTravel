@@ -54,7 +54,6 @@ def determine_postcode():
     return scotland, wales, north_ireland, england
 
 
-#scotland, wales, north_ireland, england = determine_postcode()
 
 # Initial menu to ask if you are working with Scottish or Rest of UK addresses
 def menu(scotland, wales, north_ireland, england):
@@ -97,4 +96,4 @@ def menu(scotland, wales, north_ireland, england):
 
     return bus, car, rail, car_uk, rail_uk, plane_uk
 
-#bus_scotland, car_scotland, rail_scotland, car_uk, rail_uk, plane_uk = menu(scotland, wales, north_ireland, england)
+
