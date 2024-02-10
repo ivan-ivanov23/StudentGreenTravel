@@ -38,6 +38,7 @@ total_distance_plane_uk = 0
 
 # Extract distances from the dictionaries and convert them to numpy arrays (THESE ARE ONLY DISTANCES BETWEEN THE POSTCODES AND THE STOPS/STATIONS/AIRPORTS)
 """NEED TO THINK ABOUT FIRST AND FINAL LEG OF JOURNEY, AND HOW TO CALCULATE THAT"""
+"""NEED TO MODIFY split_postcodes.py TO DIVIDE UK INTRO ENGLAND, WALES, AND NORTHERN IRELAND"""
 rail_scotland_distances = np.array([value[2] for value in scotland_rail_data.values()])
 rail_uk_distances = np.array([value[2] for value in uk_rail_data.values()])
 bus_scotland_distances = np.array([value[2] for value in scotland_bus_data.values()])
