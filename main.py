@@ -136,10 +136,10 @@ def main():
 
 
     """=================================Initialize Total distances=================================="""
-    total_distance_rail_scotland, total_distance_rail_eng, total_distance_rail_wales, total_distance_rail_ni = 0
+    total_distance_rail_scotland, total_distance_rail_eng, total_distance_rail_wales, total_distance_rail_ni = 0, 0, 0, 0
     total_distance_bus_scotland = 0
-    total_distance_car_scotland, total_distance_car_eng, total_distance_car_wales, total_distance_car_ni = 0
-    total_distance_plane_eng, total_distance_plane_wales, total_distance_plane_ni = 0
+    total_distance_car_scotland, total_distance_car_eng, total_distance_car_wales, total_distance_car_ni = 0, 0, 0, 0
+    total_distance_plane_eng, total_distance_plane_wales, total_distance_plane_ni = 0, 0, 0
 
     """"=================================Converting to NumPy arrays=================================="""	
 
