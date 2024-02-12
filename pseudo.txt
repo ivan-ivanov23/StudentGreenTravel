@@ -1,0 +1,32 @@
+def select_country():
+
+    Ask user which country they are working with
+    If Scotland:
+        Call select_travel_method('Scotland') 
+
+
+def select_travel_method(country:str):
+
+    print(f'You have selected {country}')
+
+    Ask user for which travel methodology they want to enter assumtions for final leg of journey - Bus, rail or plane?
+    If Bus:
+        Call final_leg function as you pass it 'bus' or any other and a list with postcodes for the corresponding travel method
+        (these lists are available in main.py)
+        Bus = True
+    If rail:
+        Same as above
+        Rail = True
+    If plane:
+        Same as above 
+        Plane = True
+
+    If Bus, Rail, Plane == True, go back to select_country()
+    Use return word with nothing? 
+
+
+def final_leg(method:str, list_of_postocodes_for_method: list):
+
+    Perform calculations as in final_leg.py
+    Save results for current method
+    Go back to select_travel_method() use return key word with nothing to it
