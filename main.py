@@ -232,6 +232,73 @@ def main():
     plt.title('Total distances travelled by students')
     plt.show()
 
+    """=================================Emissions=================================="""
+
+    emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach': 0.027181, 'taxi': 0.148615,
+           'ferry': 0.02555, 'plane': 0.03350}
+    
+    # Calculate the emissions for each mode of transport
+    # Emissions = distance * emission factor
+    # Emissions are in kgCO2e
+    rail_emissions_scotland = total_distance_rail_scotland * emission_factors['rail']
+    bus_emissions_scotland = total_distance_bus_scotland * emission_factors['bus']
+    car_emissions_scotland = total_distance_car_scotland * emission_factors['car']
+    taxi_emissions_scotland = total_distance_taxi_scotland * emission_factors['taxi']
+    walk_emissions_scotland = 0
+    # Total emissions
+    total_emissions_scotland = rail_emissions_scotland + bus_emissions_scotland + car_emissions_scotland + taxi_emissions_scotland + walk_emissions_scotland
+
+    rail_emissions_england = total_distance_rail_eng * emission_factors['rail']
+    plane_emissions_england = total_distance_plane_eng * emission_factors['plane']
+    car_emissions_england = total_distance_car_eng * emission_factors['car']
+    taxi_emissions_england = total_distance_taxi_eng * emission_factors['taxi']
+    walk_emissions_england = 0
+    # Total emissions
+    total_emissions_england = rail_emissions_england + plane_emissions_england + car_emissions_england + taxi_emissions_england + walk_emissions_england
+
+    rail_emissions_wales = total_distance_rail_wales * emission_factors['rail']
+    plane_emissions_wales = total_distance_plane_wales * emission_factors['plane']
+    car_emissions_wales = total_distance_car_wales * emission_factors['car']
+    taxi_emissions_wales = total_distance_taxi_wales * emission_factors['taxi']
+    walk_emissions_wales = 0
+    # Total emissions
+    total_emissions_wales = rail_emissions_wales + plane_emissions_wales + car_emissions_wales + taxi_emissions_wales + walk_emissions_wales
+
+    rail_emissions_ni = total_distance_rail_ni * emission_factors['rail']
+    plane_emissions_ni = total_distance_plane_ni * emission_factors['plane']
+    car_emissions_ni = total_distance_car_ni * emission_factors['car']
+    taxi_emissions_ni = total_distance_taxi_ni * emission_factors['taxi']
+    walk_emissions_ni = 0
+
+    # Total emissions
+    total_emissions_ni = rail_emissions_ni + plane_emissions_ni + car_emissions_ni + taxi_emissions_ni + walk_emissions_ni
+
+    # Create a dataframe to store the separate emissions
+    total_emissions = pd.DataFrame({'Scotland': [rail_emissions_scotland, bus_emissions_scotland, car_emissions_scotland, taxi_emissions_scotland, walk_emissions_scotland],
+                                    'England': [rail_emissions_england, plane_emissions_england, car_emissions_england, taxi_emissions_england, walk_emissions_england],
+                                    'Wales': [rail_emissions_wales, plane_emissions_wales, car_emissions_wales, taxi_emissions_wales, walk_emissions_wales],
+                                    'Northern Ireland': [rail_emissions_ni, plane_emissions_ni, car_emissions_ni, taxi_emissions_ni, walk_emissions_ni]},
+                                    index=['Rail', 'Plane', 'Car', 'Taxi', 'Walk'])
+    
+    # Create a heatmap to visualise the total emissions with reversed green to red colour scheme
+    sns.heatmap(total_emissions, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total emissions (kgCO2e)'})
+    plt.title('Total emissions from student travel')
+    plt.show()
+
+    # Dataframe to store the total emissions
+    total_emissions = pd.DataFrame({'Scotland': [total_emissions_scotland],
+                                    'England': [total_emissions_england],
+                                    'Wales': [total_emissions_wales],
+                                    'Northern Ireland': [total_emissions_ni]},
+                                    index=['Total emissions'])
+    
+    # Create a bar chart to visualise the total emissions
+    total_emissions.plot(kind='bar')
+    plt.ylabel('Total emissions (kgCO2e)')
+    plt.title('Total emissions from student travel')
+    plt.show()
+
+
 
 
 if __name__ == '__main__':
