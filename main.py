@@ -221,11 +221,11 @@ def main():
     """=================================Visualisation==================================""" 
 
     # Create a dataframe to store the total distances
-    total_distances = pd.DataFrame({'Scotland': [total_distance_rail_scotland, total_distance_bus_scotland, total_distance_car_scotland, total_distance_taxi_scotland, total_walk_scotland],
-                                    'England': [total_distance_rail_eng, total_distance_plane_eng, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
-                                    'Wales': [total_distance_rail_wales, total_distance_plane_wales, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
-                                    'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]},
-                                    index=['Rail', 'Plane', 'Car', 'Taxi', 'Walk'])
+    total_distances = pd.DataFrame({'Scotland': [total_distance_rail_scotland, 0, total_distance_bus_scotland, total_distance_car_scotland, total_distance_taxi_scotland, total_walk_scotland],
+                                    'England': [total_distance_rail_eng, total_distance_plane_eng,  0, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
+                                    'Wales': [total_distance_rail_wales, total_distance_plane_wales,  0, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
+                                    'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni,  0, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]},
+                                    index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
 
     # Create a heatmap to visualise the total distances with reversed green to red colour scheme
     sns.heatmap(total_distances, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total distance (km)'})
