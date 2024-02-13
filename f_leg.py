@@ -64,11 +64,6 @@ def fleg_assumptions(students: list, country : str, mode_of_transport: str, hub_
     it = iter(students)
     car1, taxi1, bus1, walk1 = [list(islice(it, 0, i)) for i in seclist]
 
-    # print(f"Car: {car1}")
-    # print(f"Taxi: {taxi1}")
-    # print(f"Bus: {bus1}")
-    # print(f"Walk: {walk1}")
-
     # Calculate the total distance for each mode of transport
     total_car = len(car1)
     total_taxi = len(taxi1)
