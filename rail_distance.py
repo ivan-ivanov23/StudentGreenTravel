@@ -77,7 +77,7 @@ def rail_travel(postcode_coords, stations_dict, addresses):
             
             if closest_stop_name != 'Aberdeen':
                 # Calculate the distance between the two stations
-                travel_distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_rail_station).km
+                travel_distance = geodesic(postcode_coords[postcode], aberdeen_rail_station).km
 
             else:
                 # For default value, set the distance to 0

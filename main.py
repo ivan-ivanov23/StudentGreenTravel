@@ -274,11 +274,11 @@ def main():
     total_emissions_ni = rail_emissions_ni + plane_emissions_ni + car_emissions_ni + taxi_emissions_ni + walk_emissions_ni
 
     # Create a dataframe to store the separate emissions
-    total_emissions = pd.DataFrame({'Scotland': [rail_emissions_scotland, bus_emissions_scotland, car_emissions_scotland, taxi_emissions_scotland, walk_emissions_scotland],
-                                    'England': [rail_emissions_england, plane_emissions_england, car_emissions_england, taxi_emissions_england, walk_emissions_england],
-                                    'Wales': [rail_emissions_wales, plane_emissions_wales, car_emissions_wales, taxi_emissions_wales, walk_emissions_wales],
-                                    'Northern Ireland': [rail_emissions_ni, plane_emissions_ni, car_emissions_ni, taxi_emissions_ni, walk_emissions_ni]},
-                                    index=['Rail', 'Plane', 'Car', 'Taxi', 'Walk'])
+    total_emissions = pd.DataFrame({'Scotland': [rail_emissions_scotland, 0, bus_emissions_scotland, car_emissions_scotland, taxi_emissions_scotland, walk_emissions_scotland],
+                                    'England': [rail_emissions_england, plane_emissions_england, 0, car_emissions_england, taxi_emissions_england, walk_emissions_england],
+                                    'Wales': [rail_emissions_wales, plane_emissions_wales, 0, car_emissions_wales, taxi_emissions_wales, walk_emissions_wales],
+                                    'Northern Ireland': [rail_emissions_ni, plane_emissions_ni, 0, car_emissions_ni, taxi_emissions_ni, walk_emissions_ni]},
+                                    index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
     
     # Create a heatmap to visualise the total emissions with reversed green to red colour scheme
     sns.heatmap(total_emissions, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total emissions (kgCO2e)'})

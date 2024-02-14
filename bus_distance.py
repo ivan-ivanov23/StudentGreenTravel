@@ -77,7 +77,7 @@ def bus_travel(postcode_coords, stops_dict, addresses):
             # If the closest stop is not Aberdeen, calculate the distance to it
             if closest_stop_name != 'Aberdeen':
                 # Calculate the distance between the two stops
-                travel_distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_bus_stop).km
+                travel_distance = geodesic(postcode_coords[postcode], aberdeen_bus_stop).km
     
             else:
                 # For default value, set the distance to 0
