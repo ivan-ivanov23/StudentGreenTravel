@@ -4,13 +4,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from itertools import islice
 from split_postcodes import determine_postcode, menu
-from rail_distance import postcode_coords, station_coords, rail_travel
-from bus_distance import bus_travel, stop_coord_dict, postcode_coord_dict
-from car_distance import car_travel, all_postcodes
-from flying_distance import travel, airport_coord_dict, postcode_coord_dict
-from f_leg import select_country
+from travel_class import *
+from final_leg import select_country
 
 def main():
+    travel = Travel()
     """=================================Postcode splitting=================================="""
     # Divide postcodes into Scottish and rest-of-UK postcodes
     scotland, wales, north_ireland, england = determine_postcode()
@@ -38,28 +36,40 @@ def main():
     """=================================Distance calculations=================================="""
 
     # Call the rail_travel function to get the closest stop to each postcode
-    scotland_rail_data = rail_travel(postcode_coords, station_coords, rail_scotland)[0]
+    # scotland_rail_data = rail_travel(postcode_coords, station_coords, rail_scotland)[0]
+    scotland_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_scotland)[0]
     # print(scotland_rail_data)
 
-    eng_rail_data = rail_travel(postcode_coords, station_coords, rail_eng)[0]
+    # eng_rail_data = rail_travel(postcode_coords, station_coords, rail_eng)[0]
+    eng_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_eng)[0]
     # print(eng_rail_data)
-    wales_rail_data = rail_travel(postcode_coords, station_coords, rail_wales)[0]
-    ni_rail_data = rail_travel(postcode_coords, station_coords, rail_ni)[0]
+    # wales_rail_data = rail_travel(postcode_coords, station_coords, rail_wales)[0]
+    wales_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_wales)[0]
+    # ni_rail_data = rail_travel(postcode_coords, station_coords, rail_ni)[0]
+    ni_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_ni)[0]
 
 
     # Call bus_travel function to get the closest stop to each postcode
-    scotland_bus_data = bus_travel(postcode_coord_dict, stop_coord_dict, bus_scotland)[0]
+    # scotland_bus_data = bus_travel(postcode_coord_dict, stop_coord_dict, bus_scotland)[0]
+    scotland_bus_data = travel.land_travel(ukpostcode_coords, stops_dict, bus_scotland)[0]
 
     # Call travel function to get the closest airport to each postcode for the rest of the UK
-    eng_flying_data = travel(postcode_coord_dict, airport_coord_dict, plane_eng)[0]
-    wales_flying_data = travel(postcode_coord_dict, airport_coord_dict, plane_wales)[0]
-    ni_flying_data = travel(postcode_coord_dict, airport_coord_dict, plane_ni)[0]
+    # eng_flying_data = travel(postcode_coord_dict, airport_coord_dict, plane_eng)[0]
+    eng_flying_data = travel.air_travel(ukpostcode_coords, airports_dict, plane_eng)[0]
+    # wales_flying_data = travel(postcode_coord_dict, airport_coord_dict, plane_wales)[0]
+    wales_flying_data = travel.air_travel(ukpostcode_coords, airports_dict, plane_wales)[0]
+    # ni_flying_data = travel(postcode_coord_dict, airport_coord_dict, plane_ni)[0]
+    ni_flying_data = travel.air_travel(ukpostcode_coords, airports_dict, plane_ni)[0]
 
     # Call car_travel function to get the distance to the university for each postcode
-    scotland_car_data = car_travel(all_postcodes, car_scotland)[0]
-    eng_car_data = car_travel(all_postcodes, car_eng)[0]
-    wales_car_data = car_travel(all_postcodes, car_wales)[0]
-    ni_car_data = car_travel(all_postcodes, car_ni)[0]
+    # scotland_car_data = car_travel(all_postcodes, car_scotland)[0]
+    scotland_car_data = travel.car_travel(ukpostcode_coords, car_scotland)[0]
+    # eng_car_data = car_travel(all_postcodes, car_eng)[0]
+    eng_car_data = travel.car_travel(ukpostcode_coords, car_eng)[0]
+    # wales_car_data = car_travel(all_postcodes, car_wales)[0]
+    wales_car_data = travel.car_travel(ukpostcode_coords, car_wales)[0]
+    # ni_car_data = car_travel(all_postcodes, car_ni)[0]
+    ni_car_data = travel.car_travel(ukpostcode_coords, car_ni)[0]
 
     """=================================Initial leg of journey=================================="""
 
@@ -222,9 +232,9 @@ def main():
 
     # Create a dataframe to store the total distances
     total_distances = pd.DataFrame({'Scotland': [total_distance_rail_scotland, 0, total_distance_bus_scotland, total_distance_car_scotland, total_distance_taxi_scotland, total_walk_scotland],
-                                    'England': [total_distance_rail_eng, total_distance_plane_eng,  0, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
-                                    'Wales': [total_distance_rail_wales, total_distance_plane_wales,  0, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
-                                    'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni,  0, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]},
+                                    'England': [total_distance_rail_eng, total_distance_plane_eng,  total_distance_bus_eng, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
+                                    'Wales': [total_distance_rail_wales, total_distance_plane_wales,  total_distance_bus_wales, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
+                                    'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni,  total_distance_bus_ni, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]},
                                     index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
 
     # Create a heatmap to visualise the total distances with reversed green to red colour scheme
