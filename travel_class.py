@@ -11,27 +11,9 @@ aberdeen_airport = (57.2019004822, -2.1977798939)
 gatwick_airport = (51.15380339080233, -0.18165520746018157)
 aberdeen_rail_station = (-2.0983252205325833, 57.14372498503623)
 
-# Read ukpostcodes.csv
-# Source: https://www.statology.org/pandas-read_csv-usecols/ 
-ukpostcodes = pd.read_csv('data/ukpostcodes.csv', usecols=['postcode', 'latitude', 'longitude'])
-ukpostcodes['postcode'] = ukpostcodes['postcode'].str.replace(' ', '')
-ukpostcode_coords = dict(zip(ukpostcodes['postcode'], zip(ukpostcodes['latitude'], ukpostcodes['longitude'])))
-
-# Read Scotland_Bus_Stations.csv
-bus_stops = pd.read_csv("data/Scotland_Bus_Stations.csv", usecols=['StationName', 'Latitude', 'Longitude'])
-stops_dict = dict(zip(bus_stops['StationName'], zip(bus_stops['Latitude'], bus_stops['Longitude'])))
-
-# Read Railway Stations
-rail_stations = pd.read_csv("data/stations.csv", usecols=['Station', 'Lat', 'Long'])
-stations_dict = dict(zip(rail_stations['Station'], zip(rail_stations['Lat'], rail_stations['Long'])))
-
-# Read airports
-airports = pd.read_csv("data/GBairports.csv", usecols=['Unnamed: 0', 'Latitude', 'Longitude'])
-airports_dict = dict(zip(airports['Unnamed: 0'], zip(airports['Latitude'], airports['Longitude'])))
-
 class Travel:
     
-    def __init__(self):
+    def __init__(self, bus_stops, rail_stations, airports, ukpostcodes):
         # Student postcodes
         self.postcodes = None
         # Stops, stations or airports with coordinates
@@ -160,22 +142,3 @@ class Travel:
             
     
     
-    
-
-# # Create an instance of the Travel class
-# travel = Travel()
-
-# # Read the addresses from the file
-# addresses = pd.read_excel('data/Test.xlsx', engine='openpyxl')
-# # Trim the postcode column
-# addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
-# # Drop NaN values
-# addresses = addresses.dropna()
-
-# # Call the closest_hub method to find the closest bus stop to the postcode
-# closest_stop = travel.closest_hub('G775AE', ukpostcode_coords, airports_dict)
-# print(closest_stop)
-
-# # Call the car_travel method to find the distance between the given postcode and the university
-# car_distance = travel.car_travel(ukpostcode_coords, addresses.iloc[:, 1])
-# print(car_distance)

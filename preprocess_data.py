@@ -1,10 +1,25 @@
-# This file is for splitting the postcodes into two dataframes: one for Scotland and one for the rest of the UK.
-
+import pandas as pd
 import pandas as pd
 from tkinter.filedialog import askopenfile
 from itertools import islice
-import time
-from random import sample
+
+# Read ukpostcodes.csv
+# Source: https://www.statology.org/pandas-read_csv-usecols/ 
+ukpostcodes = pd.read_csv('data/ukpostcodes.csv', usecols=['postcode', 'latitude', 'longitude'])
+ukpostcodes['postcode'] = ukpostcodes['postcode'].str.replace(' ', '')
+ukpostcode_coords = dict(zip(ukpostcodes['postcode'], zip(ukpostcodes['latitude'], ukpostcodes['longitude'])))
+
+# Read Scotland_Bus_Stations.csv
+bus_stops = pd.read_csv("data/Scotland_Bus_Stations.csv", usecols=['StationName', 'Latitude', 'Longitude'])
+stops_dict = dict(zip(bus_stops['StationName'], zip(bus_stops['Latitude'], bus_stops['Longitude'])))
+
+# Read Railway Stations
+rail_stations = pd.read_csv("data/stations.csv", usecols=['Station', 'Lat', 'Long'])
+stations_dict = dict(zip(rail_stations['Station'], zip(rail_stations['Lat'], rail_stations['Long'])))
+
+# Read airports
+airports = pd.read_csv("data/GBairports.csv", usecols=['Unnamed: 0', 'Latitude', 'Longitude'])
+airports_dict = dict(zip(airports['Unnamed: 0'], zip(airports['Latitude'], airports['Longitude'])))
 
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
 eng_postcodes = ['AL', 'B', 'BA', 'BB', 'BD', 'BH', 'BL', 'BN', 'BR', 'BS', 'CA', 'CB', 'CF', 'CH', 'CM', 'CO', 'CR', 'CT', 'CV', 'CW', 'DA', 'DE', 'DH', 'DL', 'DN', 'DT', 'DY', 'E', 'EC', 'EN', 'EX', 'FY', 'GL', 'GU', 'HA', 'HD', 'HG', 'HP', 'HR', 'HU', 'HX', 'IG', 'IP', 'KT', 'L', 'LA', 'LD', 'LE', 'LN', 'LS', 'LU', 'M', 'ME', 'MK', 'N', 'NE', 'NG', 'NN', 'NP', 'NR', 'NW', 'OL', 'OX', 'PE', 'PL', 'PO', 'PR', 'RG', 'RH', 'RM', 'S', 'SE', 'SG', 'SK', 'SL', 'SM', 'SN', 'SO', 'SP', 'SR', 'SS', 'ST', 'SW', 'TA', 'TF', 'TN', 'TQ', 'TR', 'TS', 'TW', 'UB', 'W', 'WA', 'WC', 'WD', 'WF', 'WN', 'WR', 'WS', 'WV', 'YO']
@@ -115,20 +130,3 @@ def menu(scotland, wales, north_ireland, england):
         start = False
 
     return transport_scot, transport_eng, transport_wales, transport_ni
-
-
-# Execute the determine_postcode function and time it
-# start_time = time.time()
-# scot, wales, ni, eng = determine_postcode()
-# print("--- %s seconds ---" % (time.time() - start_time))
-
-
-# scot_transport, eng_transport, wales_transport, ni_transport = menu(scot, wales, ni, eng)
-
-# print(scot_transport)
-# print('==================================================')
-# print(eng_transport)
-# print('==================================================')
-# print(wales_transport)
-# print('==================================================')
-# print(ni_transport)

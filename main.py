@@ -3,12 +3,12 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from itertools import islice
-from split_postcodes import determine_postcode, menu
-from travel_class import *
+from travel_class import Travel
+from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict, determine_postcode, menu
 from final_leg import select_country
 
 def main():
-    travel = Travel()
+    travel = Travel(stops_dict, stations_dict, airports_dict, ukpostcode_coords)
     """=================================Postcode splitting=================================="""
     # Divide postcodes into Scottish and rest-of-UK postcodes
     scotland, wales, north_ireland, england = determine_postcode()
@@ -262,6 +262,7 @@ def main():
     plane_emissions_england = total_distance_plane_eng * emission_factors['plane']
     car_emissions_england = total_distance_car_eng * emission_factors['car']
     taxi_emissions_england = total_distance_taxi_eng * emission_factors['taxi']
+    bus_emissions_england = total_distance_bus_eng * emission_factors['bus']
     walk_emissions_england = 0
     # Total emissions
     total_emissions_england = rail_emissions_england + plane_emissions_england + car_emissions_england + taxi_emissions_england + walk_emissions_england
@@ -270,6 +271,7 @@ def main():
     plane_emissions_wales = total_distance_plane_wales * emission_factors['plane']
     car_emissions_wales = total_distance_car_wales * emission_factors['car']
     taxi_emissions_wales = total_distance_taxi_wales * emission_factors['taxi']
+    bus_emissions_wales = total_distance_bus_wales * emission_factors['bus']
     walk_emissions_wales = 0
     # Total emissions
     total_emissions_wales = rail_emissions_wales + plane_emissions_wales + car_emissions_wales + taxi_emissions_wales + walk_emissions_wales
@@ -278,6 +280,7 @@ def main():
     plane_emissions_ni = total_distance_plane_ni * emission_factors['plane']
     car_emissions_ni = total_distance_car_ni * emission_factors['car']
     taxi_emissions_ni = total_distance_taxi_ni * emission_factors['taxi']
+    bus_emissions_ni = total_distance_bus_ni * emission_factors['bus']
     walk_emissions_ni = 0
 
     # Total emissions
@@ -285,9 +288,9 @@ def main():
 
     # Create a dataframe to store the separate emissions
     total_emissions = pd.DataFrame({'Scotland': [rail_emissions_scotland, 0, bus_emissions_scotland, car_emissions_scotland, taxi_emissions_scotland, walk_emissions_scotland],
-                                    'England': [rail_emissions_england, plane_emissions_england, 0, car_emissions_england, taxi_emissions_england, walk_emissions_england],
-                                    'Wales': [rail_emissions_wales, plane_emissions_wales, 0, car_emissions_wales, taxi_emissions_wales, walk_emissions_wales],
-                                    'Northern Ireland': [rail_emissions_ni, plane_emissions_ni, 0, car_emissions_ni, taxi_emissions_ni, walk_emissions_ni]},
+                                    'England': [rail_emissions_england, plane_emissions_england, bus_emissions_england, car_emissions_england, taxi_emissions_england, walk_emissions_england],
+                                    'Wales': [rail_emissions_wales, plane_emissions_wales, bus_emissions_wales, car_emissions_wales, taxi_emissions_wales, walk_emissions_wales],
+                                    'Northern Ireland': [rail_emissions_ni, plane_emissions_ni, bus_emissions_ni, car_emissions_ni, taxi_emissions_ni, walk_emissions_ni]},
                                     index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
     
     # Create a heatmap to visualise the total emissions with reversed green to red colour scheme
