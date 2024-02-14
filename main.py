@@ -35,40 +35,26 @@ def main():
 
     """=================================Distance calculations=================================="""
 
-    # Call the rail_travel function to get the closest stop to each postcode
-    # scotland_rail_data = rail_travel(postcode_coords, station_coords, rail_scotland)[0]
+    # Call the land_travel function to get the train travel distances for each postcode
     scotland_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_scotland)[0]
-    # print(scotland_rail_data)
-
-    # eng_rail_data = rail_travel(postcode_coords, station_coords, rail_eng)[0]
+   
     eng_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_eng)[0]
-    # print(eng_rail_data)
-    # wales_rail_data = rail_travel(postcode_coords, station_coords, rail_wales)[0]
     wales_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_wales)[0]
-    # ni_rail_data = rail_travel(postcode_coords, station_coords, rail_ni)[0]
     ni_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_ni)[0]
 
 
-    # Call bus_travel function to get the closest stop to each postcode
-    # scotland_bus_data = bus_travel(postcode_coord_dict, stop_coord_dict, bus_scotland)[0]
+    # Call the land_travel function to get the bus travel distances for each postcode
     scotland_bus_data = travel.land_travel(ukpostcode_coords, stops_dict, bus_scotland)[0]
 
-    # Call travel function to get the closest airport to each postcode for the rest of the UK
-    # eng_flying_data = travel(postcode_coord_dict, airport_coord_dict, plane_eng)[0]
+    # Call air_travel function to get the distance to Aberdeen airport for each postcode
     eng_flying_data = travel.air_travel(ukpostcode_coords, airports_dict, plane_eng)[0]
-    # wales_flying_data = travel(postcode_coord_dict, airport_coord_dict, plane_wales)[0]
     wales_flying_data = travel.air_travel(ukpostcode_coords, airports_dict, plane_wales)[0]
-    # ni_flying_data = travel(postcode_coord_dict, airport_coord_dict, plane_ni)[0]
     ni_flying_data = travel.air_travel(ukpostcode_coords, airports_dict, plane_ni)[0]
 
     # Call car_travel function to get the distance to the university for each postcode
-    # scotland_car_data = car_travel(all_postcodes, car_scotland)[0]
     scotland_car_data = travel.car_travel(ukpostcode_coords, car_scotland)[0]
-    # eng_car_data = car_travel(all_postcodes, car_eng)[0]
     eng_car_data = travel.car_travel(ukpostcode_coords, car_eng)[0]
-    # wales_car_data = car_travel(all_postcodes, car_wales)[0]
     wales_car_data = travel.car_travel(ukpostcode_coords, car_wales)[0]
-    # ni_car_data = car_travel(all_postcodes, car_ni)[0]
     ni_car_data = travel.car_travel(ukpostcode_coords, car_ni)[0]
 
     """=================================Initial leg of journey=================================="""
