@@ -99,10 +99,6 @@ def travel(postcode_coords, airports_dict, addresses):
 
     return data, invalid_postcodes
 
-# Example usage
-addresses = pd.read_excel('data/UK & Home Student Data 2022-2023.xlsx', engine='openpyxl').iloc[:, 1].dropna().str.replace(' ', '')
-data, invalid_postcodes = travel(postcode_coord_dict, airport_coord_dict, addresses)
-print(data)
 
 
 

@@ -91,10 +91,3 @@ def bus_travel(postcode_coords, stops_dict, addresses):
 
     return data, invalid_postcodes
 
-
-# Execute the function
-addresses = pd.read_excel('data/UK & Home Student Data 2022-2023.xlsx', engine='openpyxl').iloc[:, 1]
-
-bus_data, invalid_postcodes = bus_travel(postcode_coord_dict, stop_coord_dict, addresses)
-print(bus_data)
-#print(invalid_postcodes)
