@@ -3,8 +3,11 @@
 import pandas as pd
 from tkinter.filedialog import askopenfile
 from itertools import islice
+import time
+from random import sample
 
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
+eng_postcodes = ['AL', 'B', 'BA', 'BB', 'BD', 'BH', 'BL', 'BN', 'BR', 'BS', 'CA', 'CB', 'CF', 'CH', 'CM', 'CO', 'CR', 'CT', 'CV', 'CW', 'DA', 'DE', 'DH', 'DL', 'DN', 'DT', 'DY', 'E', 'EC', 'EN', 'EX', 'FY', 'GL', 'GU', 'HA', 'HD', 'HG', 'HP', 'HR', 'HU', 'HX', 'IG', 'IP', 'KT', 'L', 'LA', 'LD', 'LE', 'LN', 'LS', 'LU', 'M', 'ME', 'MK', 'N', 'NE', 'NG', 'NN', 'NP', 'NR', 'NW', 'OL', 'OX', 'PE', 'PL', 'PO', 'PR', 'RG', 'RH', 'RM', 'S', 'SE', 'SG', 'SK', 'SL', 'SM', 'SN', 'SO', 'SP', 'SR', 'SS', 'ST', 'SW', 'TA', 'TF', 'TN', 'TQ', 'TR', 'TS', 'TW', 'UB', 'W', 'WA', 'WC', 'WD', 'WF', 'WN', 'WR', 'WS', 'WV', 'YO']
 wales_postcodes = ['CF', 'LL', 'NP', 'SA', 'SY']
 
 
@@ -27,31 +30,11 @@ def create_address_df():
         
 
 def determine_postcode():
-    # Empty arrays to hold postcodes
-    scotland = []
-    england = []
-    wales = []
-    north_ireland = []
-
-    # Addresses from file
-    postcodes = create_address_df()
-
-    for postcode in postcodes:
-        # Account for incorrect postcodes
-        if not isinstance(postcode, float) :
-            # If the first one or two characters of the postcode are in the scot_postcodes list
-            if postcode[:2] in scot_postcodes or postcode[:1] == 'G':
-                scotland.append(postcode)
-            elif postcode[:2] in wales_postcodes:
-                wales.append(postcode)
-            elif postcode[:2] == 'BT':
-                north_ireland.append(postcode)
-            else:
-                england.append(postcode)
-                
-        else:
-            continue
-
+    postcodes = create_address_df().dropna()  # Drop NaN values
+    scotland = postcodes[postcodes.str[:2].isin(scot_postcodes) | (postcodes.str[:1] == 'G')]
+    england = postcodes[(postcodes.str[:2].isin(eng_postcodes) | (postcodes.str[:1].isin(eng_postcodes)))]
+    wales = postcodes[postcodes.str[:2].isin(wales_postcodes)]
+    north_ireland = postcodes[postcodes.str[:2] == 'BT']
     return scotland, wales, north_ireland, england
 
 
@@ -132,3 +115,20 @@ def menu(scotland, wales, north_ireland, england):
         start = False
 
     return transport_scot, transport_eng, transport_wales, transport_ni
+
+
+# Execute the determine_postcode function and time it
+# start_time = time.time()
+# scot, wales, ni, eng = determine_postcode()
+# print("--- %s seconds ---" % (time.time() - start_time))
+
+
+# scot_transport, eng_transport, wales_transport, ni_transport = menu(scot, wales, ni, eng)
+
+# print(scot_transport)
+# print('==================================================')
+# print(eng_transport)
+# print('==================================================')
+# print(wales_transport)
+# print('==================================================')
+# print(ni_transport)
