@@ -70,8 +70,8 @@ class Travel:
                 # Calculate the distance between the two airports
                 travel_distance1 = geodesic(airports[closest_airport_name], gatwick_airport).km
                 # Calculate the distance 2: between Gatwick (layover) and Aberdeen airport
-                travel_distance2 = geodesic(gatwick_airport, aberdeen_airport).km
-                travel_distance = travel_distance1 + travel_distance2
+                gatwick_aberdeen = 685.68  # Distance between Gatwick and Aberdeen airport in km (source: Google Maps)
+                travel_distance = travel_distance1 + gatwick_aberdeen
 
             # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is from Scotland or London
             elif closest_airport_name != 'Aberdeen' and  postcode[:2] in london_postcodes:
