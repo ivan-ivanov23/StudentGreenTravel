@@ -2,25 +2,41 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QTableView 
 from PyQt6.QtCore import QSize
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QLabel, QLineEdit
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 from main import main
-
+from tkinter.filedialog import askopenfile
+import pandas as pd
+from preprocess_data import determine_postcode
 
 
 class WelcomePage(QWidget):
+
+    file_selected = pyqtSignal(bool)
+
     def __init__(self):
         super().__init__()
 
         self.setStyleSheet("background-color: rgb(193, 225, 193);")
 
-        self.title_label = QLabel("Welcome to StudentCarbon", self)
+        self.title_label = QLabel("Welcome to StudentGreenTravel", self)
         self.title_label.setStyleSheet("font-size: 34px; font-weight: bold; color: #2d3436;")
         self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        # Buttons for menu
+        button1 = QPushButton("Emission Calculator", clicked=lambda: self.show_page(Page1()))
+        button1.setEnabled(False)
+        button2 = QPushButton("Display Routes", clicked=lambda: self.show_page(Page2()))
+        button2.setEnabled(False)
+        button3 = QPushButton("Statistics", clicked=lambda: self.show_page(Page3()))
+        button3.setEnabled(False)
+        button4 = QPushButton("Select a file", clicked=lambda: self.file_explorer())
+        
+
         self.button_layout = QVBoxLayout()
-        self.button_layout.addWidget(QPushButton("Emission Calculator", clicked=lambda: self.show_page(Page1())))
-        self.button_layout.addWidget(QPushButton("Display Routes", clicked=lambda: self.show_page(Page2())))
-        self.button_layout.addWidget(QPushButton("Statistics", clicked=lambda: self.show_page(Page3())))
+        self.button_layout.addWidget(button1)
+        self.button_layout.addWidget(button2)
+        self.button_layout.addWidget(button3)
+        self.button_layout.addWidget(button4)
         # Make the buttons fixed size
         for i in range(self.button_layout.count()):
             self.button_layout.itemAt(i).widget().setFixedHeight(60)
@@ -29,11 +45,16 @@ class WelcomePage(QWidget):
         # Center the buttons
         self.button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        # Create a label showing the file name
+        self.file_label = QLabel("", self)
+        self.file_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         self.main_layout = QVBoxLayout()
         # Add margins to the layout
         self.main_layout.setContentsMargins(100, 150, 100, 150)
         self.main_layout.addWidget(self.title_label)
         self.main_layout.addLayout(self.button_layout)
+        self.main_layout.addWidget(self.file_label)
         self.main_layout.addStretch()
 
         self.setLayout(self.main_layout)
@@ -54,61 +75,58 @@ class WelcomePage(QWidget):
             QPushButton:hover {
                 background-color: #74b9ff;
             }
+            QPushButton:disabled {
+                background-color: #b2bec3;
+            }
         """)
+        self.file_selected.connect(self.enable_buttons)
 
     def show_page(self, page):
         self.parent().setCentralWidget(page)
 
+    def file_explorer(self):
+        file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
+        # If the user selected a file, then read it using pandas
+        if file:
+        # Read address file
+            addresses = pd.read_excel(file.name, engine='openpyxl')
+            # Add the file name to the label text with the file name withouth the path
+            self.file_label.setText(f"File: {file.name.split('/')[-1]}")
+            # Style the label
+            self.file_label.setStyleSheet("font-size: 12px; font-weight: bold; color: #2d3436;")
+            self.file_selected.emit(True)
+            return addresses.iloc[:, 1]
+        # If the user didn't select a file, then return an empty dataframe
+        else:
+            self.file_selected.emit(False)
+            return None
+        
+    def enable_buttons(self, file_selected):
+        if file_selected:
+            for i in range(self.button_layout.count()):
+                self.button_layout.itemAt(i).widget().setEnabled(True)
+        else:
+            for i in range(self.button_layout.count()):
+                self.button_layout.itemAt(i).widget().setDisabled(True)
+
+            
+
 
 class Page1(QWidget):
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Emissions Calculator")
         self.setGeometry(100, 100, 800, 600)
         self.back_button = QPushButton("Back to Menu", clicked=self.back_to_menu)
-        # create clear button that will clear the table
-        self.clear_button = QPushButton("Clear", clicked=self.clear_table)
-        # Add search bar
-        self.search_bar = QLineEdit()
-        self.search_bar.setPlaceholderText("Search for a postcode")
-        self.search_bar.setFixedHeight(40)
-        self.search_bar.setFixedWidth(200)
-        self.search_bar.setStyleSheet("border: 1px solid black; border-radius: 5px; padding: 5px;")
-        self.search_bar.textChanged.connect(self.search_table)
+
+        # Add the buttons to the layout
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.back_button)
+        self.setLayout(self.layout)
 
 
-        self.setLayout(QVBoxLayout())
-        
-
-        self.button = QPushButton("Calculate Emissions")
-        self.button.clicked.connect(self.calculate_emissions)
-        self.layout().addWidget(self.button)
-        self.layout().addWidget(self.search_bar)
-
-        self.table = QTableWidget()
-        # Make it non-editable 
-        self.table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-        # Set the table to stretch to the size of the window
-        self.table.horizontalHeader().setStretchLastSection(True)
-        # Pad the table with some space
-        self.table.setContentsMargins(10, 10, 10, 10)
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["Postcode", "Emissions"])
-        # Set the headers to stretch to the size of the window and be bold
-        self.table.horizontalHeader().setStyleSheet("font-weight: bold;")
-        # Add borders to the table
-        self.table.setStyleSheet("border: 1px solid black;")
-        # make the index column a bit wider
-        self.table.verticalHeader().setMinimumWidth(50)
-        self.layout().addWidget(self.table)
-        self.layout().addWidget(self.back_button)
-        # Add the clear button to the layout next to the back button
-        self.layout().addWidget(self.clear_button)
-        # Make the back button and clear button be smaller and be next to each other
-        self.back_button.setFixedWidth(100)
-        self.clear_button.setFixedWidth(100)
-        self.back_button.setFixedHeight(40)
-        self.clear_button.setFixedHeight(40)
+    
 
 
         # Style the buttons
@@ -127,45 +145,10 @@ class Page1(QWidget):
             }
         """)
 
-    def search_table(self):
-        # Get the text from the search bar
-        text = self.search_bar.text()
-        # If the text is empty, then show all the rows
-        if text == "":
-            for i in range(self.table.rowCount()):
-                self.table.setRowHidden(i, False)
-        else:
-            # If the text is not empty, then hide all the rows that don't contain the text
-            for i in range(self.table.rowCount()):
-                if text.lower() in self.table.item(i, 0).text().lower():
-                    self.table.setRowHidden(i, False)
-                else:
-                    self.table.setRowHidden(i, True)
-
-
-    def clear_table(self):
-        self.table.clearContents()
-        # reset the table to have no rows
-        self.table.setRowCount(0)
-
-    def calculate_emissions(self):
-        bus, plane = main()
-        total_rows = len(bus) + len(plane)
-        self.table.setRowCount(total_rows)
-        
-        for i, (postcode, emissions) in enumerate(bus.values):
-            self.table.setItem(i, 0, QTableWidgetItem(postcode))
-            self.table.setItem(i, 1, QTableWidgetItem(str(emissions)))
-
-        for i, (postcode, emissions) in enumerate(plane.values):
-            self.table.setItem(i + len(bus), 0, QTableWidgetItem(postcode))
-            self.table.setItem(i + len(bus), 1, QTableWidgetItem(str(emissions)))
-
-        self.table.sortItems(1, Qt.SortOrder.DescendingOrder)
-
 
 
     def back_to_menu(self):
+        # Go back to menu but keep the selected file
         self.parent().setCentralWidget(WelcomePage())
 
 
