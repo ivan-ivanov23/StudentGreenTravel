@@ -289,10 +289,12 @@ def main():
                                     'England': [total_emissions_england],
                                     'Wales': [total_emissions_wales],
                                     'Northern Ireland': [total_emissions_ni]},
-                                    index=['Total emissions'])
+                                    index=['Country'])
     
     # Create a bar chart to visualise the total emissions
     total_emissions.plot(kind='bar')
+    # Rotate the x-axis labels for better readability
+    plt.xticks(rotation=0)
     plt.ylabel('Total emissions (kgCO2e)')
     plt.title('Total emissions from student travel')
     plt.show()
