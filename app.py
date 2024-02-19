@@ -189,165 +189,21 @@ class Page1(QWidget):
 
         # Add the grid to the layout
         layout.addLayout(grid)
-    
-        
-        # second_label = QLabel("Select the travel assumptions for the final leg of the journey.\nFrom Aberdeen transport hub to the University of Aberdeen", self)
-        # second_label.setStyleSheet("background-color: #2d3436; color: #ffffff;")
-        # layout.addWidget(second_label)
-
-        # # A new grid for the second label
-        # grid2 = QGridLayout()
-        # # Stretch the rows
-        # grid2.setRowStretch(0, 1)
-
-        # # Scotland
-        # scotland_label2 = QRadioButton("Scotland", self)
-        # grid2.addWidget(scotland_label2, 0, 0)
-
-        # car_scot_label2 = QLabel("Car %", self)
-        # grid2.addWidget(car_scot_label2, 1, 0)
-        # self.car_scot2 = QComboBox(self)
-        # for i in range(101):
-        #     self.car_scot2.addItem(str(i))
-        # grid2.addWidget(self.car_scot2, 1, 1)
-
-        # taxi_scot_label2 = QLabel("Taxi %", self)
-        # grid2.addWidget(taxi_scot_label2, 2, 0)
-        # self.taxi_scot2 = QComboBox(self)
-        # for i in range(101):
-        #     self.taxi_scot2.addItem(str(i))
-        # grid2.addWidget(self.taxi_scot2, 2, 1)
-
-        # bus_scot_label2 = QLabel("Bus %", self)
-        # grid2.addWidget(bus_scot_label2, 3, 0)
-        # self.bus_scot2 = QComboBox(self)
-        # for i in range(101):
-        #     self.bus_scot2.addItem(str(i))
-        # grid2.addWidget(self.bus_scot2, 3, 1)
-
-        # walk_scot_label2 = QLabel("Walk %", self)
-        # grid2.addWidget(walk_scot_label2, 4, 0)
-        # self.walk_scot2 = QComboBox(self)
-        # for i in range(101):
-        #     self.walk_scot2.addItem(str(i))
-        # grid2.addWidget(self.walk_scot2, 4, 1)
-
-        # # England
-        # uk_label2 = QRadioButton("England", self)
-        # grid2.addWidget(uk_label2, 0, 2)
-        
-        # car_uk_label2 = QLabel("Car %", self)
-        # grid2.addWidget(car_uk_label2, 1, 2)
-        # self.car_uk2 = QComboBox(self)
-        # for i in range(101):
-        #     self.car_uk2.addItem(str(i))
-        # grid2.addWidget(self.car_uk2, 1, 3)
-        
-        # taxi_uk_label2 = QLabel("Taxi %", self)
-        # grid2.addWidget(taxi_uk_label2, 2, 2)
-        # self.taxi_uk2 = QComboBox(self)
-        # for i in range(101):
-        #     self.taxi_uk2.addItem(str(i))
-        # grid2.addWidget(self.taxi_uk2, 2, 3)
-
-        # bus_uk_label2 = QLabel("Bus %", self)
-        # grid2.addWidget(bus_uk_label2, 3, 2)
-        # self.bus_uk2 = QComboBox(self)
-        # for i in range(101):
-        #     self.bus_uk2.addItem(str(i))
-        # grid2.addWidget(self.bus_uk2, 3, 3)
-
-        # walk_uk_label2 = QLabel("Walk %", self)
-        # grid2.addWidget(walk_uk_label2, 4, 2)
-        # self.walk_uk2 = QComboBox(self)
-        # for i in range(101):
-        #     self.walk_uk2.addItem(str(i))
-        # grid2.addWidget(self.walk_uk2, 4, 3)
-
-        # # Wales
-        # wales_label2 = QRadioButton("Wales", self)
-        # grid2.addWidget(wales_label2, 0, 4)
-
-        # car_wales_label2 = QLabel("Car %", self)
-        # grid2.addWidget(car_wales_label2, 1, 4)
-        # self.car_wales2 = QComboBox(self)
-        # for i in range(101):
-        #     self.car_wales2.addItem(str(i))
-        # grid2.addWidget(self.car_wales2, 1, 5)
-
-        # taxi_wales_label2 = QLabel("Taxi %", self)
-        # grid2.addWidget(taxi_wales_label2, 2, 4)
-        # self.taxi_wales2 = QComboBox(self)
-        # for i in range(101):
-        #     self.taxi_wales2.addItem(str(i))
-        # grid2.addWidget(self.taxi_wales2, 2, 5)
-
-        # bus_wales_label2 = QLabel("Bus %", self)
-        # grid2.addWidget(bus_wales_label2, 3, 4)
-        # self.bus_wales2 = QComboBox(self)
-        # for i in range(101):
-        #     self.bus_wales2.addItem(str(i))
-        # grid2.addWidget(self.bus_wales2, 3, 5)
-
-        # walk_wales_label2 = QLabel("Walk %", self)
-        # grid2.addWidget(walk_wales_label2, 4, 4)
-        # self.walk_wales2 = QComboBox(self)
-        # for i in range(101):
-        #     self.walk_wales2.addItem(str(i))
-        # grid2.addWidget(self.walk_wales2, 4, 5)
-
-        # # North Ireland
-        # ni_label2 = QRadioButton("Northern Ireland", self)
-        # grid2.addWidget(ni_label2, 0, 6)
-
-        # car_ni_label2 = QLabel("Car %", self)
-        # grid2.addWidget(car_ni_label2, 1, 6)
-        # self.car_ni2 = QComboBox(self)
-        # for i in range(101):
-        #     self.car_ni2.addItem(str(i))
-        # grid2.addWidget(self.car_ni2, 1, 7)
-        
-        # taxi_ni_label2 = QLabel("Taxi %", self)
-        # grid2.addWidget(taxi_ni_label2, 2, 6)
-        # self.taxi_ni2 = QComboBox(self)
-        # for i in range(101):
-        #     self.taxi_ni2.addItem(str(i))
-        # grid2.addWidget(self.taxi_ni2, 2, 7)
-
-        # bus_ni_label2 = QLabel("Bus %", self)
-        # grid2.addWidget(bus_ni_label2, 3, 6)
-        # self.bus_ni2 = QComboBox(self)
-        # for i in range(101):
-        #     self.bus_ni2.addItem(str(i))
-        # grid2.addWidget(self.bus_ni2, 3, 7)
-
-        # walk_ni_label2 = QLabel("Walk %", self)
-        # grid2.addWidget(walk_ni_label2, 4, 6)
-        # self.walk_ni2 = QComboBox(self)
-        # for i in range(101):
-        #     self.walk_ni2.addItem(str(i))
-        # grid2.addWidget(self.walk_ni2, 4, 7)
-
-        # # Make grid2 elements inaccesible
-        # # for i in range(grid2.count()):
-        # #     grid2.itemAt(i).widget().setEnabled(False)
-
-
-
-        # # Add the grid to the layout
-        # layout.addLayout(grid2)
 
         
         layout.addStretch(1)
 
         
-        button_layout = QHBoxLayout()
+        self.button_layout = QHBoxLayout()
         # add back button
-        back_button = QPushButton("Back to Menu", clicked=self.back_to_menu)
-        submit_button = QPushButton("Submit travel methods", clicked=self.check_combo)
-        button_layout.addWidget(back_button)
-        button_layout.addWidget(submit_button)
-        layout.addLayout(button_layout)
+        self.back_button = QPushButton("Back to Menu", clicked=self.back_to_menu)
+        self.next_button = QPushButton("Next", clicked=lambda: self.show_page(Page2()))
+        self.next_button.setEnabled(False)
+        self.submit_button = QPushButton("Submit", clicked=self.check_combo)
+        self.button_layout.addWidget(self.back_button)
+        self.button_layout.addWidget(self.submit_button)
+        self.button_layout.addWidget(self.next_button)
+        layout.addLayout(self.button_layout)
 
         self.setLayout(layout)
         
@@ -415,7 +271,11 @@ class Page1(QWidget):
             }                        
         """)
 
+        # Connect the signals
+        self.hundred_percent.connect(self.enable)
 
+    def show_page(self, page):
+        self.parent().setCentralWidget(page)
 
     def back_to_menu(self):
         # Go back to menu but keep the selected file
@@ -429,7 +289,6 @@ class Page1(QWidget):
         uk = sum([int(self.plane_uk.currentText()), int(self.car_uk.currentText()), int(self.rail_uk.currentText())])
 
         if scot == 100 and uk == 100:
-            self.hundred_percent.emit(True)
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
@@ -439,10 +298,11 @@ class Page1(QWidget):
             msg.exec()
             # take the returns from the file explorer function without running it again
             scotland, wales, north_ireland, england = self.main_window.get_country_data()
+            self.hundred_percent.emit(True)
             # call the menu function
             travel_scotland, travel_england, travel_wales, travel_north_ireland = menu(scotland, wales, north_ireland, england, int(self.bus_scot.currentText()), int(self.car_scot.currentText()), int(self.rail_scot.currentText()), int(self.plane_uk.currentText()), int(self.car_uk.currentText()), int(self.rail_uk.currentText()))
             # call the main function
-            main(travel_scotland, travel_england, travel_wales, travel_north_ireland)
+            #main(travel_scotland, travel_england, travel_wales, travel_north_ireland)
         else:
             self.hundred_percent.emit(False)
             # Show a message box with the error
@@ -455,9 +315,8 @@ class Page1(QWidget):
 
     def enable(self, hundred_percent):
         if hundred_percent:
-            self.submit_button.setEnabled(True)
-        else:
-            self.submit_button.setEnabled(False)
+            # Enable the next button
+            self.next_button.setEnabled(True)
 
 
 class Page2(QWidget):
