@@ -7,13 +7,8 @@ from travel_class import Travel
 from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict, determine_postcode, menu
 from final_leg import select_country
 
-def main():
+def main(transport_scot, transport_eng, transport_wales, transport_ni):
     travel = Travel(stops_dict, stations_dict, airports_dict, ukpostcode_coords)
-    """=================================Postcode splitting=================================="""
-    # Divide postcodes into Scottish and rest-of-UK postcodes
-    scotland, wales, north_ireland, england = determine_postcode()
-    # Split postcodes into travel methods according to user input
-    transport_scot, transport_eng, transport_wales, transport_ni = menu(scotland, wales, north_ireland, england)
 
     """=================================Transport methods=================================="""
 

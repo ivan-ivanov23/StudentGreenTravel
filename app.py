@@ -1,10 +1,10 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QGridLayout, QComboBox
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QGridLayout, QComboBox, QMessageBox, QStyle
 from PyQt6.QtCore import Qt, pyqtSignal, QSize
 from main import main
 from tkinter.filedialog import askopenfile
 import pandas as pd
-from preprocess_data import determine_postcode
+from preprocess_data import menu, determine_postcode
 
 
 class WelcomePage(QWidget):
@@ -13,26 +13,31 @@ class WelcomePage(QWidget):
 
     def __init__(self):
         super().__init__()
+        self.scotland = None
+        self.wales = None
+        self.north_ireland = None
+        self.england = None
 
         self.title_label = QLabel("Welcome to StudentGreenTravel", self)
         self.title_label.setStyleSheet("font-size: 34px; font-weight: bold; color: #2d3436;")
         self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Buttons for menu
-        button1 = QPushButton("Emission Calculator", clicked=lambda: self.show_page(Page1()))
+        button1 = QPushButton("Emission Calculator", clicked=lambda: self.show_page(Page1(self)))
         #button1.setEnabled(False)
         button2 = QPushButton("Display Routes", clicked=lambda: self.show_page(Page2()))
         button2.setEnabled(False)
         button3 = QPushButton("Statistics", clicked=lambda: self.show_page(Page3()))
         button3.setEnabled(False)
         button4 = QPushButton("Select a file", clicked=lambda: self.file_explorer())
-        
+    
 
         self.button_layout = QVBoxLayout()
         self.button_layout.addWidget(button1)
         self.button_layout.addWidget(button2)
         self.button_layout.addWidget(button3)
         self.button_layout.addWidget(button4)
+
         # Make the buttons fixed size
         for i in range(self.button_layout.count()):
             self.button_layout.itemAt(i).widget().setFixedHeight(60)
@@ -84,16 +89,20 @@ class WelcomePage(QWidget):
         if file:
         # Read address file
             addresses = pd.read_excel(file.name, engine='openpyxl')
+            addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
             # Add the file name to the label text with the file name withouth the path
             self.file_label.setText(f"File: {file.name.split('/')[-1]}")
             # Style the label
             self.file_label.setStyleSheet("font-size: 12px; font-weight: bold; color: #2d3436;")
             self.file_selected.emit(True)
-            return addresses.iloc[:, 1]
+            self.scotland, self.wales, self.north_ireland, self.england = determine_postcode(addresses.iloc[:, 1])
         # If the user didn't select a file, then return an empty dataframe
         else:
             self.file_selected.emit(False)
-            return None
+        
+    def get_country_data(self):
+        return self.scotland, self.wales, self.north_ireland, self.england
+
         
     def enable_buttons(self, file_selected):
         if file_selected:
@@ -105,11 +114,15 @@ class WelcomePage(QWidget):
 
             
 
-
+# class Page1 that inherits from MainWidget
 class Page1(QWidget):
-    def __init__(self):
+
+    hundred_percent = pyqtSignal(bool)
+
+    def __init__(self, WelcomePage):
         super().__init__()
         self.setWindowTitle("Emissions Calculator")
+        self.main_window = WelcomePage
 
         layout = QVBoxLayout()
         grid = QGridLayout()
@@ -173,6 +186,8 @@ class Page1(QWidget):
         layout.addLayout(grid)
         # add back button
         back_button = QPushButton("Back to Menu", clicked=self.back_to_menu)
+        submit_button = QPushButton("Submit travel methods", clicked=self.check_combo)
+        layout.addWidget(submit_button)
         layout.addWidget(back_button)
         self.setLayout(layout)
         
@@ -196,6 +211,9 @@ class Page1(QWidget):
             QPushButton:hover {
                 background-color: #74b9ff;
             }
+            QPushButton:disabled {
+                background-color: #b2bec3;
+            }
             QLabel {
                 font-size: 16px;
                 font-weight: bold;
@@ -218,9 +236,43 @@ class Page1(QWidget):
         # Go back to menu but keep the selected file
         self.parent().setCentralWidget(WelcomePage())
 
-    def get(self):
-        text = self.input.text()
-        print(text)
+    def show_country_data(self):
+        print(self.main_window.scotland, self.main_window.wales, self.main_window.north_ireland, self.main_window.england)
+
+    def check_combo(self):
+        scot = sum([int(self.bus_scot.currentText()), int(self.car_scot.currentText()), int(self.rail_scot.currentText())])
+        uk = sum([int(self.plane_uk.currentText()), int(self.car_uk.currentText()), int(self.rail_uk.currentText())])
+
+        if scot == 100 and uk == 100:
+            self.hundred_percent.emit(True)
+            # Show a message that the data has been submitted
+            msg = QMessageBox()
+            msg.setWindowTitle("Success")
+            msg.setText("The data has been submitted!")
+            # Add a success icon to the message box
+            msg.setIcon(QMessageBox.Icon.Information)
+            msg.exec()
+            # take the returns from the file explorer function without running it again
+            scotland, wales, north_ireland, england = self.main_window.get_country_data()
+            # call the menu function
+            travel_scotland, travel_england, travel_wales, travel_north_ireland = menu(scotland, wales, north_ireland, england, int(self.bus_scot.currentText()), int(self.car_scot.currentText()), int(self.rail_scot.currentText()), int(self.plane_uk.currentText()), int(self.car_uk.currentText()), int(self.rail_uk.currentText()))
+            # call the main function
+            main(travel_scotland, travel_england, travel_wales, travel_north_ireland)
+        else:
+            self.hundred_percent.emit(False)
+            # Show a message box with the error
+            msg = QMessageBox()
+            msg.setWindowTitle("Error")
+            msg.setText("The sum of the percentages for each country must be 100!\nPlease try again.")
+            # Add a warning icon to the message box
+            msg.setIcon(QMessageBox.Icon.Warning)
+            msg.exec()
+
+    def enable(self, hundred_percent):
+        if hundred_percent:
+            self.submit_button.setEnabled(True)
+        else:
+            self.submit_button.setEnabled(False)
 
 
 class Page2(QWidget):
@@ -252,7 +304,7 @@ class Page3(QWidget):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("StudentCarbon: Domestic Relocation Emissions Estimator")
+        self.setWindowTitle("StudentGreenTravel: Domestic Relocation Emissions Estimator")
         self.setMinimumSize(QSize(800, 600))
         # Max size is size of screen, so no need to set
 

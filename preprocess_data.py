@@ -44,8 +44,8 @@ def create_address_df():
         return pd.DataFrame()    
         
 
-def determine_postcode():
-    postcodes = create_address_df().dropna()  # Drop NaN values
+def determine_postcode(postcodes):
+    # postcodes = create_address_df().dropna()  # Drop NaN values
     scotland = postcodes[postcodes.str[:2].isin(scot_postcodes) | (postcodes.str[:1] == 'G')]
     england = postcodes[(postcodes.str[:2].isin(eng_postcodes) | (postcodes.str[:1].isin(eng_postcodes)))]
     wales = postcodes[postcodes.str[:2].isin(wales_postcodes)]
@@ -55,13 +55,14 @@ def determine_postcode():
 
 
 # Initial menu to ask if you are working with Scottish or Rest of UK addresses
-def menu(scotland, wales, north_ireland, england):
+def menu(scotland, wales, north_ireland, england, pbus, pcar, prail, pplane, pcaruk, prailuk):
     start = True
     while start:
-        print('1. Split Scottish postcodes')
-        percent_bus = int(input('Enter what % of Scottish students travel by bus:'))
-        percent_car = int(input('Enter what % of Scottish students travel by car:'))
-        percent_rail = int(input('Enter what % of Scottish students travel by rail:'))
+        # Scotland
+        percent_bus = pbus
+        percent_car = pcar
+        percent_rail = prail
+
 
         # Calculate the number of postcodes for each transport method
         p_bus_scotland = int(len(scotland) * (percent_bus / 100))
@@ -77,11 +78,10 @@ def menu(scotland, wales, north_ireland, england):
         # List of lists to store the postcodes for each transport method
         transport_scot = [bus, car, rail]
 
-        print('==================================================')
-        print('2. Split rest-of-UK postcodes')
-        percent_plane_uk = int(input('Enter what % of Non-Scottish students travel by plane:'))
-        percent_car_uk = int(input('Enter what % of Non-Scottish students travel by car:'))
-        percent_rail_uk = int(input('Enter what % of Non-Scottish students travel by rail:'))
+        # UK
+        percent_plane_uk = pplane
+        percent_car_uk = pcaruk
+        percent_rail_uk = prailuk
 
         # Calculate the number of postcodes for each transport method
         p_plane_eng = int(len(england) * (percent_plane_uk / 100))
