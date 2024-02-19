@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QGridLayout, QComboBox, QMessageBox, QStyle
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QGridLayout, QComboBox, QMessageBox, QHBoxLayout, QRadioButton
 from PyQt6.QtCore import Qt, pyqtSignal, QSize
 from main import main
 from tkinter.filedialog import askopenfile
@@ -24,7 +24,7 @@ class WelcomePage(QWidget):
 
         # Buttons for menu
         button1 = QPushButton("Emission Calculator", clicked=lambda: self.show_page(Page1(self)))
-        #button1.setEnabled(False)
+        button1.setEnabled(False)
         button2 = QPushButton("Display Routes", clicked=lambda: self.show_page(Page2()))
         button2.setEnabled(False)
         button3 = QPushButton("Statistics", clicked=lambda: self.show_page(Page3()))
@@ -130,10 +130,13 @@ class Page1(QWidget):
         grid.setRowStretch(0, 1)
 
         main_label = QLabel("Select percentages of students travelling by each transport method", self)
+        main_label.setStyleSheet("background-color: #2d3436; color: #ffffff;")
         layout.addWidget(main_label)
         # Add stretch to the first row
         grid.setRowStretch(0, 1)
-
+            
+        
+        # Scotland
         scotland_label = QLabel("Scotland", self)
         grid.addWidget(scotland_label, 0, 0)
 
@@ -183,12 +186,169 @@ class Page1(QWidget):
             self.rail_uk.addItem(str(i))
         grid.addWidget(self.rail_uk, 3, 3)
 
+
+        # Add the grid to the layout
         layout.addLayout(grid)
+    
+        
+        # second_label = QLabel("Select the travel assumptions for the final leg of the journey.\nFrom Aberdeen transport hub to the University of Aberdeen", self)
+        # second_label.setStyleSheet("background-color: #2d3436; color: #ffffff;")
+        # layout.addWidget(second_label)
+
+        # # A new grid for the second label
+        # grid2 = QGridLayout()
+        # # Stretch the rows
+        # grid2.setRowStretch(0, 1)
+
+        # # Scotland
+        # scotland_label2 = QRadioButton("Scotland", self)
+        # grid2.addWidget(scotland_label2, 0, 0)
+
+        # car_scot_label2 = QLabel("Car %", self)
+        # grid2.addWidget(car_scot_label2, 1, 0)
+        # self.car_scot2 = QComboBox(self)
+        # for i in range(101):
+        #     self.car_scot2.addItem(str(i))
+        # grid2.addWidget(self.car_scot2, 1, 1)
+
+        # taxi_scot_label2 = QLabel("Taxi %", self)
+        # grid2.addWidget(taxi_scot_label2, 2, 0)
+        # self.taxi_scot2 = QComboBox(self)
+        # for i in range(101):
+        #     self.taxi_scot2.addItem(str(i))
+        # grid2.addWidget(self.taxi_scot2, 2, 1)
+
+        # bus_scot_label2 = QLabel("Bus %", self)
+        # grid2.addWidget(bus_scot_label2, 3, 0)
+        # self.bus_scot2 = QComboBox(self)
+        # for i in range(101):
+        #     self.bus_scot2.addItem(str(i))
+        # grid2.addWidget(self.bus_scot2, 3, 1)
+
+        # walk_scot_label2 = QLabel("Walk %", self)
+        # grid2.addWidget(walk_scot_label2, 4, 0)
+        # self.walk_scot2 = QComboBox(self)
+        # for i in range(101):
+        #     self.walk_scot2.addItem(str(i))
+        # grid2.addWidget(self.walk_scot2, 4, 1)
+
+        # # England
+        # uk_label2 = QRadioButton("England", self)
+        # grid2.addWidget(uk_label2, 0, 2)
+        
+        # car_uk_label2 = QLabel("Car %", self)
+        # grid2.addWidget(car_uk_label2, 1, 2)
+        # self.car_uk2 = QComboBox(self)
+        # for i in range(101):
+        #     self.car_uk2.addItem(str(i))
+        # grid2.addWidget(self.car_uk2, 1, 3)
+        
+        # taxi_uk_label2 = QLabel("Taxi %", self)
+        # grid2.addWidget(taxi_uk_label2, 2, 2)
+        # self.taxi_uk2 = QComboBox(self)
+        # for i in range(101):
+        #     self.taxi_uk2.addItem(str(i))
+        # grid2.addWidget(self.taxi_uk2, 2, 3)
+
+        # bus_uk_label2 = QLabel("Bus %", self)
+        # grid2.addWidget(bus_uk_label2, 3, 2)
+        # self.bus_uk2 = QComboBox(self)
+        # for i in range(101):
+        #     self.bus_uk2.addItem(str(i))
+        # grid2.addWidget(self.bus_uk2, 3, 3)
+
+        # walk_uk_label2 = QLabel("Walk %", self)
+        # grid2.addWidget(walk_uk_label2, 4, 2)
+        # self.walk_uk2 = QComboBox(self)
+        # for i in range(101):
+        #     self.walk_uk2.addItem(str(i))
+        # grid2.addWidget(self.walk_uk2, 4, 3)
+
+        # # Wales
+        # wales_label2 = QRadioButton("Wales", self)
+        # grid2.addWidget(wales_label2, 0, 4)
+
+        # car_wales_label2 = QLabel("Car %", self)
+        # grid2.addWidget(car_wales_label2, 1, 4)
+        # self.car_wales2 = QComboBox(self)
+        # for i in range(101):
+        #     self.car_wales2.addItem(str(i))
+        # grid2.addWidget(self.car_wales2, 1, 5)
+
+        # taxi_wales_label2 = QLabel("Taxi %", self)
+        # grid2.addWidget(taxi_wales_label2, 2, 4)
+        # self.taxi_wales2 = QComboBox(self)
+        # for i in range(101):
+        #     self.taxi_wales2.addItem(str(i))
+        # grid2.addWidget(self.taxi_wales2, 2, 5)
+
+        # bus_wales_label2 = QLabel("Bus %", self)
+        # grid2.addWidget(bus_wales_label2, 3, 4)
+        # self.bus_wales2 = QComboBox(self)
+        # for i in range(101):
+        #     self.bus_wales2.addItem(str(i))
+        # grid2.addWidget(self.bus_wales2, 3, 5)
+
+        # walk_wales_label2 = QLabel("Walk %", self)
+        # grid2.addWidget(walk_wales_label2, 4, 4)
+        # self.walk_wales2 = QComboBox(self)
+        # for i in range(101):
+        #     self.walk_wales2.addItem(str(i))
+        # grid2.addWidget(self.walk_wales2, 4, 5)
+
+        # # North Ireland
+        # ni_label2 = QRadioButton("Northern Ireland", self)
+        # grid2.addWidget(ni_label2, 0, 6)
+
+        # car_ni_label2 = QLabel("Car %", self)
+        # grid2.addWidget(car_ni_label2, 1, 6)
+        # self.car_ni2 = QComboBox(self)
+        # for i in range(101):
+        #     self.car_ni2.addItem(str(i))
+        # grid2.addWidget(self.car_ni2, 1, 7)
+        
+        # taxi_ni_label2 = QLabel("Taxi %", self)
+        # grid2.addWidget(taxi_ni_label2, 2, 6)
+        # self.taxi_ni2 = QComboBox(self)
+        # for i in range(101):
+        #     self.taxi_ni2.addItem(str(i))
+        # grid2.addWidget(self.taxi_ni2, 2, 7)
+
+        # bus_ni_label2 = QLabel("Bus %", self)
+        # grid2.addWidget(bus_ni_label2, 3, 6)
+        # self.bus_ni2 = QComboBox(self)
+        # for i in range(101):
+        #     self.bus_ni2.addItem(str(i))
+        # grid2.addWidget(self.bus_ni2, 3, 7)
+
+        # walk_ni_label2 = QLabel("Walk %", self)
+        # grid2.addWidget(walk_ni_label2, 4, 6)
+        # self.walk_ni2 = QComboBox(self)
+        # for i in range(101):
+        #     self.walk_ni2.addItem(str(i))
+        # grid2.addWidget(self.walk_ni2, 4, 7)
+
+        # # Make grid2 elements inaccesible
+        # # for i in range(grid2.count()):
+        # #     grid2.itemAt(i).widget().setEnabled(False)
+
+
+
+        # # Add the grid to the layout
+        # layout.addLayout(grid2)
+
+        
+        layout.addStretch(1)
+
+        
+        button_layout = QHBoxLayout()
         # add back button
         back_button = QPushButton("Back to Menu", clicked=self.back_to_menu)
         submit_button = QPushButton("Submit travel methods", clicked=self.check_combo)
-        layout.addWidget(submit_button)
-        layout.addWidget(back_button)
+        button_layout.addWidget(back_button)
+        button_layout.addWidget(submit_button)
+        layout.addLayout(button_layout)
+
         self.setLayout(layout)
         
         
@@ -216,18 +376,43 @@ class Page1(QWidget):
             }
             QLabel {
                 font-size: 16px;
-                font-weight: bold;
                 border: none;
+                height: 20px;
+            }
+            QLabel:disabled {
+                background-color: #b2bec3;
             }
             QComboBox {
                 background-color: #74b9ff;
                 color: #ffffff;
-                font-weight: bold;
-                height: 40px;
+                height: 20px;
                 border: none;
-                border-radius: 5px;
                 margin: 5px 0;
-            }                                       
+                padding: 5px;
+            }
+            QComboBox:disabled {
+                background-color: #b2bec3;
+            }
+            QScrollBar:vertical {
+                border: 2px solid #2d3436;
+                background: #dfe6e9;
+                width: 15px;
+                margin: 22px 0;
+            }
+            QScrollBar::handle:vertical {
+                background: #2d3436;
+                min-height: 30px;
+            }
+            QScrollBar::add-line:vertical {
+                height: 20px;
+                subcontrol-position: bottom;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-line:vertical {
+                height: 20px;
+                subcontrol-position: top;
+                subcontrol-origin: margin;
+            }                        
         """)
 
 
