@@ -15,7 +15,7 @@ plane_students_ni = [ "YI", "ZJ", "AK", "BL", "CM", "DN", "EO", "FP", "GQ", "HR"
 # country is a string representing the country which the students are from
 # mode_of_transport is a string representing the mode of transport the students use to travel from home to Aberdeen
 # hub_uni is a float representing the distance from the airport or bus/rail station to the university
-def fleg_assumptions(students: list, country : str, mode_of_transport: str, hub_uni: float):
+def fleg_assumptions(students: list, country : str, mode_of_transport: str, hub_uni: float, car: int = 0, taxi: int = 0, bus: int = 0, walk: int = 0):
 
     car = 0
     taxi = 0
@@ -26,33 +26,34 @@ def fleg_assumptions(students: list, country : str, mode_of_transport: str, hub_
 
     print(f"Currently working with students from: {country} with transport mode: {mode_of_transport}")
 
-    if mode_of_transport == "bus/rail":
+    #if mode_of_transport == "bus/rail":
 
-        while car + taxi + bus + walk != 100:
-            print('Please make sure the percentages add up to 100')
-            try:
-                car = int(input(f"Enter what % of students from {country} travel from Aberdeen bus/rail station to university by car: "))
-                taxi = int(input(f"Enter what % of students from {country} travel from Aberdeen bus/rail to university by taxi: "))
-                bus = int(input(f"Enter what % of students from {country} travel from Aberdeen bus/rail to university by bus: "))
-                walk =  int(input(f"Enter what % of students from {country} travel from Aberdeen bus/rail to university by walking: "))
-            except ValueError:
-                print("Invalid input. Please enter a number")
+    #     while car + taxi + bus + walk != 100:
+    #         print('Please make sure the percentages add up to 100')
+    #         try:
+    #             car = int(input(f"Enter what % of students from {country} travel from Aberdeen bus/rail station to university by car: "))
+    #             taxi = int(input(f"Enter what % of students from {country} travel from Aberdeen bus/rail to university by taxi: "))
+    #             bus = int(input(f"Enter what % of students from {country} travel from Aberdeen bus/rail to university by bus: "))
+    #             walk =  int(input(f"Enter what % of students from {country} travel from Aberdeen bus/rail to university by walking: "))
+    #         except ValueError:
+    #             print("Invalid input. Please enter a number")
 
-        print("==================================================================================================================================")
+    #     print("==================================================================================================================================")
 
-    elif mode_of_transport == "plane":
+    # elif mode_of_transport == "plane":
 
-        while car + taxi + bus + walk != 100:
-            print('Please make sure the percentages add up to 100')
-            try:
-                car = int(input(f"Enter what % of students from {country} travel from Aberdeen airport to university by car: "))
-                taxi = int(input(f"Enter what % of students from {country} travel from Aberdeen airport to university by taxi: "))
-                bus = int(input(f"Enter what % of students from {country} travel from Aberdeen airport to university by bus: "))
-                walk =  int(input(f"Enter what % of students from {country} travel from Aberdeen airport to university by walking: "))
-            except ValueError:
-                print("Invalid input. Please enter a number")
-        print("==================================================================================================================================")
+    #     while car + taxi + bus + walk != 100:
+    #         print('Please make sure the percentages add up to 100')
+    #         try:
+    #             car = int(input(f"Enter what % of students from {country} travel from Aberdeen airport to university by car: "))
+    #             taxi = int(input(f"Enter what % of students from {country} travel from Aberdeen airport to university by taxi: "))
+    #             bus = int(input(f"Enter what % of students from {country} travel from Aberdeen airport to university by bus: "))
+    #             walk =  int(input(f"Enter what % of students from {country} travel from Aberdeen airport to university by walking: "))
+    #         except ValueError:
+    #             print("Invalid input. Please enter a number")
+    #     print("==================================================================================================================================")
 
+    
     # Calculate the number of students for each mode of transport
     p_car = int((car / 100) * num_students)
     p_taxi = int((taxi / 100) * num_students)
@@ -95,11 +96,11 @@ def fleg_assumptions(students: list, country : str, mode_of_transport: str, hub_
         fleg_assumptions(students, country, mode_of_transport, hub_uni)
 
 
-def select_country(bus_rail_students, plane_students, country: str):
+def select_country(bus_rail_students, plane_students, country: str, pcar, ptaxi, pbus, pwalk):
     station_uni = 3.0
     airport_uni = 8.1
     if country == "Scotland":
-        bus_rail = fleg_assumptions(bus_rail_students, country, "bus/rail", station_uni)
+        bus_rail = fleg_assumptions(bus_rail_students, country, "bus/rail", station_uni, pcar, ptaxi, pbus, pwalk)
         return bus_rail
     else:
     # Calculate the distance for each mode of transport for each country

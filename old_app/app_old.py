@@ -1,12 +1,12 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QGridLayout, QComboBox, QMessageBox, QHBoxLayout, QRadioButton
 from PyQt6.QtCore import Qt, pyqtSignal, QSize
-from main import main
+from PyQt6.QtGui import QFont
+#from main import main
 from tkinter.filedialog import askopenfile
 import pandas as pd
 from preprocess_data import menu, determine_postcode
 from final_leg import select_country
-
 
 class WelcomePage(QWidget):
 
@@ -28,7 +28,7 @@ class WelcomePage(QWidget):
         button1.setEnabled(False)
         button2 = QPushButton("Display Routes", clicked=lambda: self.show_page(Page2()))
         button2.setEnabled(False)
-        button3 = QPushButton("Statistics", clicked=lambda: self.show_page(Page3()))
+        button3 = QPushButton("Statistics", clicked=lambda: self.show_page(Page2()))
         button3.setEnabled(False)
         button4 = QPushButton("Select a file", clicked=lambda: self.file_explorer())
     
@@ -58,27 +58,6 @@ class WelcomePage(QWidget):
         self.setLayout(self.main_layout)
 
 
-
-
-        # Set the stylesheet for the welcome page buttons
-        self.setStyleSheet("""
-            QPushButton {
-                background-color: #0984e3;
-                color: #ffffff;
-                font-weight: bold;
-                height: 40px;
-                border: none;
-                border-radius: 5px;
-                margin: 5px 0;
-                font-size: 16px;
-            }
-            QPushButton:hover {
-                background-color: #74b9ff;
-            }
-            QPushButton:disabled {
-                background-color: #b2bec3;
-            }
-        """)
         self.file_selected.connect(self.enable_buttons)
 
     def show_page(self, page):
@@ -112,6 +91,7 @@ class WelcomePage(QWidget):
         else:
             for i in range(self.button_layout.count()):
                 self.button_layout.itemAt(i).widget().setDisabled(True)
+
 
             
 
@@ -213,70 +193,7 @@ class Page1(QWidget):
         layout.addLayout(self.button_layout)
 
         self.setLayout(layout)
-        
-        
-        self.setStyleSheet("""
-            QWidget {
-                border: 2px solid #2d3436;
-                border-radius: 5px;
-                padding: 2px;
-                background-color: #dfe6e9;
-            }
-            QPushButton {
-                background-color: #0984e3;
-                color: #ffffff;
-                font-weight: bold;
-                height: 40px;
-                border: none;
-                border-radius: 5px;
-                margin: 5px 0;
-            }
-            QPushButton:hover {
-                background-color: #74b9ff;
-            }
-            QPushButton:disabled {
-                background-color: #b2bec3;
-            }
-            QLabel {
-                font-size: 16px;
-                border: none;
-                height: 20px;
-            }
-            QLabel:disabled {
-                background-color: #b2bec3;
-            }
-            QComboBox {
-                background-color: #74b9ff;
-                color: #ffffff;
-                height: 20px;
-                border: none;
-                margin: 5px 0;
-                padding: 5px;
-            }
-            QComboBox:disabled {
-                background-color: #b2bec3;
-            }
-            QScrollBar:vertical {
-                border: 2px solid #2d3436;
-                background: #dfe6e9;
-                width: 15px;
-                margin: 22px 0;
-            }
-            QScrollBar::handle:vertical {
-                background: #2d3436;
-                min-height: 30px;
-            }
-            QScrollBar::add-line:vertical {
-                height: 20px;
-                subcontrol-position: bottom;
-                subcontrol-origin: margin;
-            }
-            QScrollBar::sub-line:vertical {
-                height: 20px;
-                subcontrol-position: top;
-                subcontrol-origin: margin;
-            }                        
-        """)
+    
 
         # Connect the signals
         self.hundred_percent.connect(self.enable)
@@ -332,250 +249,227 @@ class Page1(QWidget):
 class Page2(QWidget):
 
     # Signal to enable the show results button
-    all_selected = pyqtSignal(bool)
+    grids = []
 
     def __init__(self, Page1):
         super().__init__()
         # Have a reference to the previous page for the back button
         self.page1 = Page1
-        self.back_button = QPushButton("Previous", clicked=self.back_to_previous)
-        self.submit_button = QPushButton("Submit", clicked=self.check_combo)
-        self.show_results_button = QPushButton("Results")
+        self.setUpMainWindow("Scotland")
+        self.setUpMainWindow("England")
+        self.setUpMainWindow("Wales")
+        self.setUpMainWindow("Northern Ireland")
+        self.addGrids()
+        self.addButtons()
+        self.show()
+
+    def setUpMainWindow(self, country: str):
+        """Create and arrange widgets in the main windows"""
+        instruction_label = QLabel("Select the travel assumptions for the final leg of the journey.\nFrom Aberdeen transport hub to the University of Aberdeen")
+        # instruction_label.setFont(QFont("Arial", 14))
+        instruction_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        # Create a QVBoxLayout to arrange elements
+        self.main_layout = QVBoxLayout()
+        # Add the instruction label
+        self.main_layout.addWidget(instruction_label)
+
+        # Create a elements for Scotland
+        # Labels
+        scot_label = QLabel(country)
+        # scot_label.setFont(QFont("Arial", 14))
+        # Style the label to be with a blue background
+        # scot_label.setStyleSheet("background-color: #e6f7ff; border: 1px solid #4da6ff; border-radius: 5px; padding: 5px;")
+        scot_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        land_label = QLabel("Assumptions for land travelling students")
+        # Background color must be different blue from the main label
+        # land_label.setStyleSheet("background-color: #cce6ff; border: 1px solid #4da6ff; border-radius: 5px; padding: 5px;")
+        # land_label.setFont(QFont("Arial", 12))
+        # Add appropriate background color different from the main label
+        
+        land_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        air_label = QLabel("Assumptions for air travelling students")
+        # air_label.setFont(QFont("Arial", 12))
+        # air_label.setStyleSheet("background-color: #cce6ff; border: 1px solid #4da6ff; border-radius: 5px; padding: 5px;")
+        air_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        scot_car = QLabel("Car")
+        # scot_car.setFont(QFont("Arial", 11))
+        scot_car.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        
+        uk_car = QLabel("Car")
+        # uk_car.setFont(QFont("Arial", 11))
+        uk_car.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        scot_taxi = QLabel("Taxi")
+        # scot_taxi.setFont(QFont("Arial", 11))
+        scot_taxi.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        uk_taxi = QLabel("Taxi")
+        # uk_taxi.setFont(QFont("Arial", 11))
+        uk_taxi.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        
+        scot_bus = QLabel("Bus")
+        # scot_bus.setFont(QFont("Arial", 11))
+        scot_bus.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        uk_bus = QLabel("Bus")
+        # uk_bus.setFont(QFont("Arial", 11))
+        uk_bus.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        scot_walk = QLabel("Walk")
+        # scot_walk.setFont(QFont("Arial", 11))
+        scot_walk.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        uk_walk = QLabel("Walk")
+        # uk_walk.setFont(QFont("Arial", 11))
+        uk_walk.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        # Combo boxes
+        self.scot_car_box = QComboBox()
+        self.scot_taxi_box = QComboBox()
+        self.scot_bus_box = QComboBox()
+        self.scot_walk_box = QComboBox()
+
+        self.uk_car_box = QComboBox()
+        self.uk_taxi_box = QComboBox()
+        self.uk_bus_box = QComboBox()
+        self.uk_walk_box = QComboBox()
+
+
+        combos = []
+        combos.append(self.scot_car_box)
+        combos.append(self.scot_taxi_box)
+        combos.append(self.scot_bus_box)
+        combos.append(self.scot_walk_box)
+        combos.append(self.uk_car_box)
+        combos.append(self.uk_taxi_box)
+        combos.append(self.uk_bus_box)
+        combos.append(self.uk_walk_box)
+
+        # Values for combo boxes
+        values = [str(i) for i in range(101)]
+        for combo_box in combos:
+            combo_box.addItems(values)
+            # Set fixed width
+            combo_box.setFixedSize(QSize(50, 20))
+
+        # Grid for Scotland
+        if country == "Scotland":
+            self.scot_grid = QGridLayout()
+            self.scot_grid.setVerticalSpacing(2)
+            # Shrink space between columns
+            self.scot_grid.setHorizontalSpacing(10)
+
+
+            # Scot label must take 4 columns
+            self.scot_grid.addWidget(scot_label, 0, 0, 1, 4)
+            self.scot_grid.addWidget(land_label, 1, 0)
+            self.scot_grid.addWidget(scot_car, 2, 0)
+            self.scot_grid.addWidget(scot_taxi, 3, 0)
+            self.scot_grid.addWidget(scot_bus, 4, 0)
+            self.scot_grid.addWidget(scot_walk, 5, 0)
+            self.scot_grid.addWidget(self.scot_car_box, 2, 1)
+            self.scot_grid.addWidget(self.scot_taxi_box, 3, 1)
+            self.scot_grid.addWidget(self.scot_bus_box, 4, 1)
+            self.scot_grid.addWidget(self.scot_walk_box, 5, 1)
+
+            # Set grid row width to be smaller
+            self.scot_grid.setRowStretch(0, 1)
+
+
+            self.grids.append(self.scot_grid)
+
+        else:
+            self.grid = QGridLayout()
+            # Shrink the label rows
+            self.grid.setVerticalSpacing(2)
+            # Shrink space between columns
+            self.grid.setHorizontalSpacing(50)
+
+
+            self.grid.addWidget(scot_label, 0, 0, 1, 4)
+            self.grid.addWidget(land_label, 1, 0)
+            self.grid.addWidget(air_label, 1, 2)
+            self.grid.addWidget(scot_car, 2, 0)
+            self.grid.addWidget(scot_taxi, 3, 0)
+            self.grid.addWidget(scot_bus, 4, 0)
+            self.grid.addWidget(scot_walk, 5, 0)
+            self.grid.addWidget(self.scot_car_box, 2, 1)
+            self.grid.addWidget(self.scot_taxi_box, 3, 1)
+            self.grid.addWidget(self.scot_bus_box, 4, 1)
+            self.grid.addWidget(self.scot_walk_box, 5, 1)
+
+            self.grid.addWidget(uk_car, 2, 2)
+            self.grid.addWidget(uk_taxi, 3, 2)
+            self.grid.addWidget(uk_bus, 4, 2)
+            self.grid.addWidget(uk_walk, 5, 2)
+
+            self.grid.addWidget(self.uk_car_box, 2, 3)
+            self.grid.addWidget(self.uk_taxi_box, 3, 3)
+            self.grid.addWidget(self.uk_bus_box, 4, 3)
+            self.grid.addWidget(self.uk_walk_box, 5, 3)
+
+
+            self.grids.append(self.grid)
+
+
+    def addGrids(self):
+        for i in self.grids:
+            self.main_layout.addLayout(i)
+            self.setLayout(self.main_layout)
+        self.main_layout.addStretch(1)
+
+    def addButtons(self):
+        self.submit_button = QPushButton("Submit", clicked=self.checkCombos)
+        self.show_results_button = QPushButton("Results", clicked=self.showResults)
         self.show_results_button.setEnabled(False)
 
 
         # Button layout
         self.button_layout = QHBoxLayout()
-        self.button_layout.addWidget(self.back_button)
         self.button_layout.addWidget(self.submit_button)
         self.button_layout.addWidget(self.show_results_button)
 
-        # Main layout
-        layout = QVBoxLayout()
+        self.main_layout.addLayout(self.button_layout)
 
-        # Label for the second page
-        second_label = QLabel("Select the travel assumptions for the final leg of the journey.\nFrom Aberdeen transport hub to the University of Aberdeen", self)
-        second_label.setStyleSheet("background-color: #2d3436; color: #ffffff;")
-        layout.addWidget(second_label)
+    def checkCombos(self):
+        # Check if the sum of the values in the combo boxes for each country is equal to 100
+        # If true, enable the show results button
+        # If false, disable the show results button
+        scot_values = [int(self.scot_car_box.currentText()), int(self.scot_taxi_box.currentText()), int(self.scot_bus_box.currentText()), int(self.scot_walk_box.currentText())]
+        eng_values = [int(self.uk_car_box.currentText()), int(self.uk_taxi_box.currentText()), int(self.uk_bus_box.currentText()), int(self.uk_walk_box.currentText())]
+        wales_values = [int(self.uk_car_box.currentText()), int(self.uk_taxi_box.currentText()), int(self.uk_bus_box.currentText()), int(self.uk_walk_box.currentText())]
+        ni_values = [int(self.uk_car_box.currentText()), int(self.uk_taxi_box.currentText()), int(self.uk_bus_box.currentText()), int(self.uk_walk_box.currentText())]
 
-        # A new grid for the second label
-        grid2 = QGridLayout()
-        # Stretch the rows
-        grid2.setRowStretch(0, 1)
+        if sum(scot_values) == 100 and sum(eng_values) == 100 and sum(wales_values) == 100 and sum(ni_values) == 100:
+            # Enable the show results button
+            self.show_results_button.setEnabled(True)
 
-        # Scotland combo boxes
-        scotland_label2 = QRadioButton("Scotland", self)
-        grid2.addWidget(scotland_label2, 0, 0)
+            # Show a success message
+            msg = QMessageBox()
+            msg.setWindowTitle("Success")
+            msg.setText("All values are valid")
+            msg.exec()
 
-        car_scot_label2 = QLabel("Car %", self)
-        grid2.addWidget(car_scot_label2, 1, 0)
-        self.car_scot2 = QComboBox(self)
-        for i in range(101):
-            self.car_scot2.addItem(str(i))
-        grid2.addWidget(self.car_scot2, 1, 1)
+        else:
+            # Disable the show results button, show an error message
+            self.show_results_button.setEnabled(False)
 
-        taxi_scot_label2 = QLabel("Taxi %", self)
-        grid2.addWidget(taxi_scot_label2, 2, 0)
-        self.taxi_scot2 = QComboBox(self)
-        for i in range(101):
-            self.taxi_scot2.addItem(str(i))
-        grid2.addWidget(self.taxi_scot2, 2, 1)
+            msg = QMessageBox()
+            msg.setWindowTitle("Error")
+            msg.setText("The sum of the values must be equal to 100")
+            msg.exec()
 
-        bus_scot_label2 = QLabel("Bus %", self)
-        grid2.addWidget(bus_scot_label2, 3, 0)
-        self.bus_scot2 = QComboBox(self)
-        for i in range(101):
-            self.bus_scot2.addItem(str(i))
-        grid2.addWidget(self.bus_scot2, 3, 1)
-
-        walk_scot_label2 = QLabel("Walk %", self)
-        grid2.addWidget(walk_scot_label2, 4, 0)
-        self.walk_scot2 = QComboBox(self)
-        for i in range(101):
-            self.walk_scot2.addItem(str(i))
-        grid2.addWidget(self.walk_scot2, 4, 1)
-
-        # England combo boxes
-        eng_label2 = QRadioButton("England", self)
-        grid2.addWidget(eng_label2, 0, 2)
-        
-        car_eng_label2 = QLabel("Car %", self)
-        grid2.addWidget(car_eng_label2, 1, 2)
-        self.car_eng2 = QComboBox(self)
-        for i in range(101):
-            self.car_eng2.addItem(str(i))
-        grid2.addWidget(self.car_eng2, 1, 3)
-        
-        taxi_eng_label2 = QLabel("Taxi %", self)
-        grid2.addWidget(taxi_eng_label2, 2, 2)
-        self.taxi_eng2 = QComboBox(self)
-        for i in range(101):
-            self.taxi_eng2.addItem(str(i))
-        grid2.addWidget(self.taxi_eng2, 2, 3)
-
-        bus_eng_label2 = QLabel("Bus %", self)
-        grid2.addWidget(bus_eng_label2, 3, 2)
-        self.bus_eng2 = QComboBox(self)
-        for i in range(101):
-            self.bus_eng2.addItem(str(i))
-        grid2.addWidget(self.bus_eng2, 3, 3)
-
-        walk_eng_label2 = QLabel("Walk %", self)
-        grid2.addWidget(walk_eng_label2, 4, 2)
-        self.walk_eng2 = QComboBox(self)
-        for i in range(101):
-            self.walk_eng2.addItem(str(i))
-        grid2.addWidget(self.walk_eng2, 4, 3)
- 
-        # Wales combo boxes
-        wales_label2 = QRadioButton("Wales", self)
-        grid2.addWidget(wales_label2, 0, 4)
-
-        car_wales_label2 = QLabel("Car %", self)
-        grid2.addWidget(car_wales_label2, 1, 4)
-        self.car_wales2 = QComboBox(self)
-        for i in range(101):
-            self.car_wales2.addItem(str(i))
-        grid2.addWidget(self.car_wales2, 1, 5)
-
-        taxi_wales_label2 = QLabel("Taxi %", self)
-        grid2.addWidget(taxi_wales_label2, 2, 4)
-        self.taxi_wales2 = QComboBox(self)
-        for i in range(101):
-            self.taxi_wales2.addItem(str(i))
-        grid2.addWidget(self.taxi_wales2, 2, 5)
-
-        bus_wales_label2 = QLabel("Bus %", self)
-        grid2.addWidget(bus_wales_label2, 3, 4)
-        self.bus_wales2 = QComboBox(self)
-        for i in range(101):
-            self.bus_wales2.addItem(str(i))
-        grid2.addWidget(self.bus_wales2, 3, 5)
-
-        walk_wales_label2 = QLabel("Walk %", self)
-        grid2.addWidget(walk_wales_label2, 4, 4)
-        self.walk_wales2 = QComboBox(self)
-        for i in range(101):
-            self.walk_wales2.addItem(str(i))
-        grid2.addWidget(self.walk_wales2, 4, 5)
-
-        # North Ireland combo boxes
-        ni_label2 = QRadioButton("Northern Ireland", self)
-        grid2.addWidget(ni_label2, 0, 6)
-
-        car_ni_label2 = QLabel("Car %", self)
-        grid2.addWidget(car_ni_label2, 1, 6)
-        self.car_ni2 = QComboBox(self)
-        for i in range(101):
-            self.car_ni2.addItem(str(i))
-        grid2.addWidget(self.car_ni2, 1, 7)
-        
-        taxi_ni_label2 = QLabel("Taxi %", self)
-        grid2.addWidget(taxi_ni_label2, 2, 6)
-        self.taxi_ni2 = QComboBox(self)
-        for i in range(101):
-            self.taxi_ni2.addItem(str(i))
-        grid2.addWidget(self.taxi_ni2, 2, 7)
-
-        bus_ni_label2 = QLabel("Bus %", self)
-        grid2.addWidget(bus_ni_label2, 3, 6)
-        self.bus_ni2 = QComboBox(self)
-        for i in range(101):
-            self.bus_ni2.addItem(str(i))
-        grid2.addWidget(self.bus_ni2, 3, 7)
-
-        walk_ni_label2 = QLabel("Walk %", self)
-        grid2.addWidget(walk_ni_label2, 4, 6)
-        self.walk_ni2 = QComboBox(self)
-        for i in range(101):
-            self.walk_ni2.addItem(str(i))
-        grid2.addWidget(self.walk_ni2, 4, 7)
-
-
-        # Add the grid to the layout
-        layout.addLayout(grid2)
-        layout.addStretch(1)
-        layout.addLayout(self.button_layout)
-
-        # Set the layout for the page
-        self.setLayout(layout)
-        # Style the page
-        self.setStyleSheet("""
-            QWidget {
-                border: 2px solid #2d3436;
-                border-radius: 5px;
-                padding: 2px;
-                background-color: #dfe6e9;
-            }
-            QPushButton {
-                background-color: #0984e3;
-                color: #ffffff;
-                font-weight: bold;
-                height: 40px;
-                border: none;
-                border-radius: 5px;
-                margin: 5px 0;
-            }
-            QPushButton:hover {
-                background-color: #74b9ff;
-            }
-            QPushButton:disabled {
-                background-color: #b2bec3;
-            }
-            QLabel {
-                font-size: 16px;
-                border: none;
-                height: 20px;
-            }
-            QLabel:disabled {
-                background-color: #b2bec3;
-            }
-            QComboBox {
-                background-color: #74b9ff;
-                color: #ffffff;
-                height: 20px;
-                border: none;
-                margin: 5px 0;
-                padding: 5px;
-            }
-            QComboBox:disabled {
-                background-color: #b2bec3;
-            }
-            QScrollBar:vertical {
-                border: 2px solid #2d3436;
-                background: #dfe6e9;
-                width: 15px;
-                margin: 22px 0;
-            }
-            QScrollBar::handle:vertical {
-                background: #2d3436;
-                min-height: 30px;
-            }
-            QScrollBar::add-line:vertical {
-                height: 20px;
-                subcontrol-position: bottom;
-                subcontrol-origin: margin;
-            }
-            QScrollBar::sub-line:vertical {
-                height: 20px;
-                subcontrol-position: top;
-                subcontrol-origin: margin;
-            }                        
-        """)
-
-        # Connect the signals 
-        self.all_selected.connect(self.enable)
-
-    def back_to_previous(self):
-        """Go back to the previous page"""
-        self.parent().setCentralWidget(Page1(self))
-
-    def check_combo(self):
-        """Check if the sum of the percentages for each country is 100. If it is, then call the select_country function. If not, show a message box with an error."""
-        scotland = sum([int(self.car_scot2.currentText()), int(self.taxi_scot2.currentText()), int(self.bus_scot2.currentText()), int(self.walk_scot2.currentText())])
-        england = sum([int(self.car_eng2.currentText()), int(self.taxi_eng2.currentText()), int(self.bus_eng2.currentText()), int(self.walk_eng2.currentText())])
-        wales = sum([int(self.car_wales2.currentText()), int(self.taxi_wales2.currentText()), int(self.bus_wales2.currentText()), int(self.walk_wales2.currentText())])
-        ni = sum([int(self.car_ni2.currentText()), int(self.taxi_ni2.currentText()), int(self.bus_ni2.currentText()), int(self.walk_ni2.currentText())])
+    def showResults(self):
+        # Get the values from the combo boxes and calculate the distance
+        scot_values = [int(self.scot_car_box.currentText()), int(self.scot_taxi_box.currentText()), int(self.scot_bus_box.currentText()), int(self.scot_walk_box.currentText())]
+        eng_values = [int(self.uk_car_box.currentText()), int(self.uk_taxi_box.currentText()), int(self.uk_bus_box.currentText()), int(self.uk_walk_box.currentText())]
+        wales_values = [int(self.uk_car_box.currentText()), int(self.uk_taxi_box.currentText()), int(self.uk_bus_box.currentText()), int(self.uk_walk_box.currentText())]
+        ni_values = [int(self.uk_car_box.currentText()), int(self.uk_taxi_box.currentText()), int(self.uk_bus_box.currentText()), int(self.uk_walk_box.currentText())]
 
         bus_scotland = self.page1.travel_scotland[0]
         rail_scotland = self.page1.travel_scotland[1]
@@ -591,7 +485,7 @@ class Page2(QWidget):
         rail_ni = self.page1.travel_north_ireland[2]
         plane_ni = self.page1.travel_north_ireland[0]
 
-        if scotland == 100 and england == 100 and wales == 100 and ni == 100:
+        if sum(scot_values) == 100 and sum(eng_values) == 100 and sum(wales_values) == 100 and sum(ni_values) == 100:
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
@@ -599,16 +493,20 @@ class Page2(QWidget):
             # Add a success icon to the message box
             msg.setIcon(QMessageBox.Icon.Information)
             msg.exec()
-            self.all_selected.emit(True)
+            #self.all_selected.emit(True)
             # call the select_country function for each country
-            # scot_fleg = select_country(scot_bus_rail, [], "Scotland", int(self.car_scot2.currentText()), int(self.taxi_scot2.currentText()), int(self.bus_scot2.currentText()), int(self.walk_scot2.currentText()))
+            print(int(self.scot_car_box.currentText()))
+            print(int(self.scot_taxi_box.currentText()))
+            print(int(self.scot_bus_box.currentText()))
+            print(int(self.scot_walk_box.currentText())) 
+            scot_fleg = select_country(scot_bus_rail, [], "Scotland", int(self.scot_car_box.currentText()), int(self.scot_taxi_box.currentText()), int(self.scot_bus_box.currentText()), int(self.scot_walk_box.currentText()))
             # eng_bus_rail, eng_plane = select_country(rail_england, plane_england, "England", int(self.car_eng2.currentText()), int(self.taxi_eng2.currentText()), int(self.bus_eng2.currentText()), int(self.walk_eng2.currentText()))
             # wales_bus_rail, wales_plane = select_country(rail_wales, plane_wales, "Wales", int(self.car_wales2.currentText()), int(self.taxi_wales2.currentText()), int(self.bus_wales2.currentText()), int(self.walk_wales2.currentText()))
             # ni_bus_rail, ni_plane = select_country(rail_ni, plane_ni, "Northern Ireland", int(self.car_ni2.currentText()), int(self.taxi_ni2.currentText()), int(self.bus_ni2.currentText()), int(self.walk_ni2.currentText()))
-            # print(scot_fleg)
+            print(scot_fleg)
 
         else:
-            self.all_selected.emit(False)
+            #self.all_selected.emit(False)
             # Show a message box with the error
             msg = QMessageBox()
             msg.setWindowTitle("Error")
