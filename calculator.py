@@ -53,7 +53,7 @@ class Calculator(QWidget):
         self.setLayout(self.stackedLayout)
 
         self.show()
-
+    """==============================================Pages=============================================="""
     def setUpMainWindow(self):
         """Create and arrange widgets in the MainWindow"""
         # Main layout
@@ -597,7 +597,7 @@ class Calculator(QWidget):
         layout.addStretch(1)
         self.stack4.setLayout(layout)
 
-
+    """==============================================Methods for pages=============================================="""
     def open_file(self):
         file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
         # If the user selected a file, then read it using pandas
