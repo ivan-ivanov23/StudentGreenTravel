@@ -3,16 +3,22 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt, pyqtSignal, QSize
 from tkinter.filedialog import askopenfile
 import pandas as pd
+from preprocess_data import menu, determine_postcode
 
 # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm 
 
 class Calculator(QWidget):
 
     file_selected = pyqtSignal(bool)
+    hundred_percent = pyqtSignal(bool)
 
     def __init__(self):
         super().__init__()
         self.initializeUI()
+        self.scotland = None
+        self.wales = None
+        self.north_ireland = None
+        self.england = None
 
     def initializeUI(self):
         """Set up application GUI"""
@@ -141,15 +147,22 @@ class Calculator(QWidget):
         # Back button
         back = QPushButton("Back")
         back.clicked.connect(self.go_to_page1)
-        next_button = QPushButton("Next")
-        next_button.clicked.connect(self.go_to_page3)
+        submit = QPushButton("Submit")
+        submit.clicked.connect(self.check_combo_page2)
+        self.next_button2 = QPushButton("Next")
+        self.next_button2.setEnabled(False)
+        self.next_button2.clicked.connect(self.go_to_page3)
         button_layout.addWidget(back)
-        button_layout.addWidget(next_button)
+        button_layout.addWidget(submit)
+        button_layout.addWidget(self.next_button2)
 
         # Add the grid and button to the main layout of the page
         self.layout2.addLayout(grid)
         self.layout2.addStretch(1)
         self.layout2.addLayout(button_layout)
+
+        # Connect the signal to the function
+        self.hundred_percent.connect(self.enable_page2)
 
         # Return a widget with the layout
         widget = QWidget()
@@ -583,6 +596,7 @@ class Calculator(QWidget):
             addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
             # Add the file name to the label text with the file name withouth the path
             self.file_label.setText(f"File: {file.name.split('/')[-1]}")
+            self.scotland, self.wales, self.north_ireland, self.england = determine_postcode(addresses.iloc[:, 1])
             # Style the label
             #self.file_label.setStyleSheet("font-size: 12px; font-weight: bold; color: #2d3436;")
             # Emit signal that a file has been selected
@@ -613,150 +627,45 @@ class Calculator(QWidget):
     def display(self, i):
         self.Stack.setCurrentIndex(i)
 
+    def check_combo_page2(self):
+        """Check if the sum of the percentages for each country is 100. If it is, then call the menu function. If not, show a message box with an error.""" 
+        scot = sum([int(self.combo_bus_scot.currentText()), int(self.combo_car_scot.currentText()), int(self.combo_rail_scot.currentText())])
+        uk = sum([int(self.plane_uk.currentText()), int(self.car_uk.currentText()), int(self.rail_uk.currentText())])
+
+        if scot == 100 and uk == 100:
+            # Show a message that the data has been submitted
+            msg = QMessageBox()
+            msg.setWindowTitle("Success")
+            msg.setText("The data has been submitted!")
+            # Add a success icon to the message box
+            msg.setIcon(QMessageBox.Icon.Information)
+            msg.exec()
+            # take the returns from the file explorer function without running it again
+            scotland, wales, north_ireland, england = self.get_country_data()
+            #print(scotland)
+            self.hundred_percent.emit(True)
+            # call the menu function
+           
+            self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni = menu(scotland, wales, north_ireland, england, int(self.combo_bus_scot.currentText()), int(self.combo_car_scot.currentText()), int(self.combo_rail_scot.currentText()), int(self.plane_uk.currentText()), int(self.car_uk.currentText()), int(self.rail_uk.currentText()))
+        else:
+            self.hundred_percent.emit(False)
+            # Show a message box with the error
+            msg = QMessageBox()
+            msg.setWindowTitle("Error")
+            msg.setText("The sum of the percentages for each country must be 100!\nPlease try again.")
+            # Add a warning icon to the message box
+            msg.setIcon(QMessageBox.Icon.Warning)
+            msg.exec()
+
+    def enable_page2(self, hundred_percent):
+        if hundred_percent:
+            # For elements in stacked layout page2, enable them
+            for i in self.stackedLayout.itemAt(1).widget().children():
+                i.setEnabled(True)
+
+    def get_country_data(self):
+        return self.scotland, self.wales, self.north_ireland, self.england
 
 app = QApplication(sys.argv)
 window = Calculator()
 sys.exit(app.exec())
-
-
-# def setUpThirdPage(self):
-#     label = QLabel("Select the travel assumptions for the final leg of the journey.\nFrom Aberdeen transport hub to the University of Aberdeen")
-
-#     # Button layout
-#     button_layout = QHBoxLayout()
-
-#     # Vbox layout to hold the grids with combo boxes
-#     grid_holder = QVBoxLayout()
-#     grid_holder.addStretch(0)
-
-#     # Scotland and UK labels
-#     scot_label = QLabel("Scotland")
-#     land_label = QLabel("Assumptions for land travelling students")
-#     air_label = QLabel("Assumptions for air travelling students")
-#     eng_label = QLabel("England")
-#     wales_label = QLabel("Wales")
-#     ni_label = QLabel("Northern Ireland")
-
-#     car = QLabel("Car")
-#     taxi = QLabel("Taxi")
-#     bus = QLabel("Bus")
-#     walk = QLabel("Walk")
-
-#         # Combo boxes
-#     scot_car_box = QComboBox()
-#     scot_taxi_box = QComboBox()
-#     scot_bus_box = QComboBox()
-#     scot_walk_box = QComboBox()
-
-#     eng_car_box = QComboBox()
-#     eng_taxi_box = QComboBox()
-#     eng_bus_box = QComboBox()
-#     eng_walk_box = QComboBox()
-
-#     wales_car_box = QComboBox()
-#     wales_taxi_box = QComboBox()
-#     wales_bus_box = QComboBox()
-#     wales_walk_box = QComboBox()
-
-#     ni_car_box = QComboBox()
-#     ni_taxi_box = QComboBox()
-#     ni_bus_box = QComboBox()
-#     ni_walk_box = QComboBox()
-
-
-#     combos = []
-#     combos.append(scot_car_box)
-#     combos.append(scot_taxi_box)
-#     combos.append(scot_bus_box)
-#     combos.append(scot_walk_box)
-#     combos.append(eng_car_box)
-#     combos.append(eng_taxi_box)
-#     combos.append(eng_bus_box)
-#     combos.append(eng_walk_box)
-#     combos.append(wales_car_box)
-#     combos.append(wales_taxi_box)
-#     combos.append(wales_bus_box)
-#     combos.append(wales_walk_box)
-#     combos.append(ni_car_box)
-#     combos.append(ni_taxi_box)
-#     combos.append(ni_bus_box)
-#     combos.append(ni_walk_box)
-
-#     # Values for combo boxes
-    # values = [str(i) for i in range(101)]
-    # for combo_box in combos:
-    #     combo_box.addItems(values)
-    #     # Set fixed width
-    #     combo_box.setFixedSize(QSize(50, 20))
-
-#     # Scotland
-#     scot_grid = QGridLayout()
-#     scot_grid.setVerticalSpacing(2)
-#     scot_grid.setHorizontalSpacing(10)
-
-#     scot_grid.addWidget(scot_label, 0, 0, 1, 4)
-#     scot_grid.addWidget(land_label, 1, 0)
-#     scot_grid.addWidget(car, 2, 0)
-#     scot_grid.addWidget(taxi, 3, 0)
-#     scot_grid.addWidget(bus, 4, 0)
-#     scot_grid.addWidget(walk, 5, 0)
-#     scot_grid.addWidget(scot_car_box, 2, 1)
-#     scot_grid.addWidget(scot_taxi_box, 3, 1)
-#     scot_grid.addWidget(scot_bus_box, 4, 1)
-#     scot_grid.addWidget(scot_walk_box, 5, 1)
-
-#     scot_grid.setRowStretch(0, 1)
-
-#     # Add the scottish grid to the grid holder
-#     grid_holder.addLayout(scot_grid)
-
-#     # England
-#     eng_grid = QGridLayout()
-#     # Shrink the label rows
-#     eng_grid.setVerticalSpacing(2)
-#     # Shrink space between columns
-#     eng_grid.setHorizontalSpacing(50)
-
-
-#     eng_grid.addWidget(eng_label, 0, 0, 1, 4)
-#     eng_grid.addWidget(land_label, 1, 0)
-#     eng_grid.addWidget(air_label, 1, 2)
-#     eng_grid.addWidget(car, 2, 0)
-#     eng_grid.addWidget(taxi, 3, 0)
-#     eng_grid.addWidget(bus, 4, 0)
-#     eng_grid.addWidget(walk, 5, 0)
-#     eng_grid.addWidget(eng_car_box, 2, 1)
-#     eng_grid.addWidget(eng_taxi_box, 3, 1)
-#     eng_grid.addWidget(eng_bus_box, 4, 1)
-#     eng_grid.addWidget(eng_walk_box, 5, 1)
-
-#     eng_grid.addWidget(car, 2, 2)
-#     eng_grid.addWidget(taxi, 3, 2)
-#     eng_grid.addWidget(bus, 4, 2)
-#     eng_grid.addWidget(walk, 5, 2)
-
-#     eng_grid.addWidget(eng_car_box, 2, 3)
-#     eng_grid.addWidget(eng_taxi_box, 3, 3)
-#     eng_grid.addWidget(eng_bus_box, 4, 3)
-#     eng_grid.addWidget(eng_walk_box, 5, 3)
-
-#     grid_holder.addLayout(eng_grid)
-
-#     # Back button
-#     back = QPushButton("Back")
-#     back.clicked.connect(self.go_to_page2)
-#     next_button = QPushButton("Results")
-#     next_button.clicked.connect(self.go_to_results)
-#     button_layout.addWidget(back)
-#     button_layout.addWidget(next_button)
-
-#     self.layout3.addWidget(label)
-#     self.layout3.addLayout(grid_holder)
-#     self.layout3.addStretch(1)
-#     self.layout3.addLayout(button_layout)
-
-
-
-#     widget = QWidget()
-#     widget.setLayout(self.layout3)
-#     return widget
