@@ -7,6 +7,17 @@ from preprocess_data import menu, determine_postcode
 
 # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm 
 
+"""
+Info:
+
+- main page is the menu that is first shown (page1)
+- page2 is the second page where the user selects the percentages of students travelling by each transport method
+  for Scotland and the rest of the UK
+- page3 is the third page where the user selects the travel assumptions for the final leg of the journey 
+  from Aberdeen transport hub to the University of Aberdeen
+
+"""
+
 class Calculator(QWidget):
 
     file_selected = pyqtSignal(bool)
