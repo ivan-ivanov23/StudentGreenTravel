@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from itertools import islice
 from travel_class import Travel
-from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict, determine_postcode, menu
+from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict
 from final_leg import select_country
 
 def main(transport_scot, transport_eng, transport_wales, transport_ni):

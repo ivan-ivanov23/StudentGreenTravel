@@ -51,8 +51,11 @@ class Page3(QWidget):
 
         # Back button
         self.back = QPushButton("Back")
+        self.submit = QPushButton("Submit")
         self.result_button = QPushButton("Results")
+        self.result_button.setDisabled(True)
         button_layout.addWidget(self.back)
+        button_layout.addWidget(self.submit)
         button_layout.addWidget(self.result_button)
 
         self.layout3.addWidget(label)
@@ -87,17 +90,13 @@ class Page3(QWidget):
         scot_bus_box = QComboBox()
         scot_walk_box = QComboBox()
         
-        combos = []
-        combos.append(scot_car_box)
-        combos.append(scot_taxi_box)
-        combos.append(scot_bus_box)
-        combos.append(scot_walk_box)
+        self.scot_combos = {'car': scot_car_box, 'taxi': scot_taxi_box, 'bus': scot_bus_box, 'walk': scot_walk_box}
 
 
         # Values for combo boxes
         values = [str(i) for i in range(101)]
         # Add % string to the end of each value
-        for combo_box in combos:
+        for key, combo_box in self.scot_combos.items():
             combo_box.addItems(values)
             # Set fixed width
             combo_box.setFixedSize(QSize(50, 20))
@@ -125,98 +124,92 @@ class Page3(QWidget):
         """UI for England""" 
         layout = QVBoxLayout()
         country = QLabel("England")
-        eng_grid_left = QGridLayout()
+        eng_grid_top = QGridLayout()
         # Reduce space between labels and combo box columns
-        eng_grid_left.setHorizontalSpacing(20)
-        eng_grid_left.setVerticalSpacing(2)
-        eng_grid_left.setRowStretch(0, 1)
+        eng_grid_top.setHorizontalSpacing(20)
+        eng_grid_top.setVerticalSpacing(2)
+        eng_grid_top.setRowStretch(0, 1)
         # Align the labels to the right
-        eng_grid_left.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        eng_grid_top.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        eng_grid_right = QGridLayout()
+        eng_grid_bottom = QGridLayout()
         # Reduce space between labels and combo box columns
-        eng_grid_right.setHorizontalSpacing(20)
-        eng_grid_right.setVerticalSpacing(2)
-        eng_grid_right.setRowStretch(0, 1)
+        eng_grid_bottom.setHorizontalSpacing(20)
+        eng_grid_bottom.setVerticalSpacing(2)
+        eng_grid_bottom.setRowStretch(0, 1)
         # Align the labels to the right
-        eng_grid_right.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        eng_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 
-        car_left = QLabel("Car")
-        taxi_left = QLabel("Taxi")
-        bus_left = QLabel("Bus")
-        walk_left = QLabel("Walk")
+        car_top = QLabel("Car")
+        taxi_top = QLabel("Taxi")
+        bus_top = QLabel("Bus")
+        walk_top = QLabel("Walk")
 
-        car_right = QLabel("Car")
-        taxi_right = QLabel("Taxi")
-        bus_right = QLabel("Bus")
-        walk_right = QLabel("Walk")
+        car_bottom = QLabel("Car")
+        taxi_bottom = QLabel("Taxi")
+        bus_bottom = QLabel("Bus")
+        walk_bottom = QLabel("Walk")
       
         # Combo boxes for left side
-        eng_car_box_left = QComboBox()
-        eng_taxi_box_left = QComboBox()
-        eng_bus_box_left = QComboBox()
-        eng_walk_box_left = QComboBox()
+        eng_car_box_top = QComboBox()
+        eng_taxi_box_top = QComboBox()
+        eng_bus_box_top = QComboBox()
+        eng_walk_box_top = QComboBox()
 
         # Combo boxes for right side
-        eng_car_box_right = QComboBox()
-        eng_taxi_box_right = QComboBox()
-        eng_bus_box_right = QComboBox()
-        eng_walk_box_right = QComboBox()
+        eng_car_box_bottom = QComboBox()
+        eng_taxi_box_bottom = QComboBox()
+        eng_bus_box_bottom = QComboBox()
+        eng_walk_box_bottom = QComboBox()
         
-        combos = []
-        combos.append(eng_car_box_left)
-        combos.append(eng_taxi_box_left)
-        combos.append(eng_bus_box_left)
-        combos.append(eng_walk_box_left)
-        combos.append(eng_car_box_right)
-        combos.append(eng_taxi_box_right)
-        combos.append(eng_bus_box_right)
-        combos.append(eng_walk_box_right)
-
+        self.eng_combos = {'car_land': eng_car_box_top, 'taxi_land': eng_taxi_box_top, 'bus_land': eng_bus_box_top, 
+                           'walk_land': eng_walk_box_top, 'car_air': eng_car_box_bottom, 'taxi_air': eng_taxi_box_bottom, 
+                           'bus_air': eng_bus_box_bottom, 'walk_air': eng_walk_box_bottom}
+     
 
         # Values for combo boxes
         values = [str(i) for i in range(101)]
         # Add % string to the end of each value
-        for combo_box in combos:
+        for key, combo_box in self.eng_combos.items():
             combo_box.addItems(values)
             # Set fixed width
             combo_box.setFixedSize(QSize(50, 20))
 
         # Left side
-        eng_grid_left.addWidget(car_left, 0, 0)
-        eng_grid_left.addWidget(taxi_left, 1, 0)
-        eng_grid_left.addWidget(bus_left, 2, 0)
-        eng_grid_left.addWidget(walk_left, 3, 0)
-        eng_grid_left.addWidget(eng_car_box_left, 0, 1)
-        eng_grid_left.addWidget(eng_taxi_box_left, 1, 1)
-        eng_grid_left.addWidget(eng_bus_box_left, 2, 1)
-        eng_grid_left.addWidget(eng_walk_box_left, 3, 1)
+        eng_grid_top.addWidget(car_top, 0, 0)
+        eng_grid_top.addWidget(taxi_top, 1, 0)
+        eng_grid_top.addWidget(bus_top, 2, 0)
+        eng_grid_top.addWidget(walk_top, 3, 0)
+        eng_grid_top.addWidget(eng_car_box_top, 0, 1)
+        eng_grid_top.addWidget(eng_taxi_box_top, 1, 1)
+        eng_grid_top.addWidget(eng_bus_box_top, 2, 1)
+        eng_grid_top.addWidget(eng_walk_box_top, 3, 1)
 
         # Right side
-        eng_grid_right.addWidget(car_right, 0, 0)
-        eng_grid_right.addWidget(taxi_right, 1, 0)
-        eng_grid_right.addWidget(bus_right, 2, 0)
-        eng_grid_right.addWidget(walk_right, 3, 0)
-        eng_grid_right.addWidget(eng_car_box_right, 0, 1)
-        eng_grid_right.addWidget(eng_taxi_box_right, 1, 1)
-        eng_grid_right.addWidget(eng_bus_box_right, 2, 1)
-        eng_grid_right.addWidget(eng_walk_box_right, 3, 1)
+        eng_grid_bottom.addWidget(car_bottom, 0, 0)
+        eng_grid_bottom.addWidget(taxi_bottom, 1, 0)
+        eng_grid_bottom.addWidget(bus_bottom, 2, 0)
+        eng_grid_bottom.addWidget(walk_bottom, 3, 0)
+        eng_grid_bottom.addWidget(eng_car_box_bottom, 0, 1)
+        eng_grid_bottom.addWidget(eng_taxi_box_bottom, 1, 1)
+        eng_grid_bottom.addWidget(eng_bus_box_bottom, 2, 1)
+        eng_grid_bottom.addWidget(eng_walk_box_bottom, 3, 1)
 
 
         # Create a group box for the grid layout
-        england_group_left = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
-        england_group_left.setLayout(eng_grid_left)
+        england_group_top = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
+        england_group_top.setLayout(eng_grid_top)
 
         # Create a group box for the grid layout
-        england_group_right = QGroupBox("Adjust percentages for each travel method from airport to university.")
-        england_group_right.setLayout(eng_grid_right)
+        england_group_bottom = QGroupBox("Adjust percentages for top travel method from airport to university.")
+        england_group_bottom.setLayout(eng_grid_bottom)
 
 
 
         layout.addWidget(country)
-        layout.addWidget(england_group_left)
-        layout.addWidget(england_group_right)
+        layout.addWidget(england_group_top)
+        layout.addWidget(england_group_bottom)
         layout.addStretch(1)
             
         self.stack2.setLayout(layout)
@@ -225,98 +218,93 @@ class Page3(QWidget):
         """UI for Wales""" 
         layout = QVBoxLayout()
         country = QLabel("Wales")
-        wales_grid_left = QGridLayout()
+        wales_grid_top = QGridLayout()
         # Reduce space between labels and combo box columns
-        wales_grid_left.setHorizontalSpacing(20)
-        wales_grid_left.setVerticalSpacing(2)
-        wales_grid_left.setRowStretch(0, 1)
+        wales_grid_top.setHorizontalSpacing(20)
+        wales_grid_top.setVerticalSpacing(2)
+        wales_grid_top.setRowStretch(0, 1)
         # Align the labels to the right
-        wales_grid_left.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        wales_grid_top.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        wales_grid_right = QGridLayout()
+        wales_grid_bottom = QGridLayout()
         # Reduce space between labels and combo box columns
-        wales_grid_right.setHorizontalSpacing(20)
-        wales_grid_right.setVerticalSpacing(2)
-        wales_grid_right.setRowStretch(0, 1)
+        wales_grid_bottom.setHorizontalSpacing(20)
+        wales_grid_bottom.setVerticalSpacing(2)
+        wales_grid_bottom.setRowStretch(0, 1)
         # Align the labels to the right
-        wales_grid_right.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        wales_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 
-        car_left = QLabel("Car")
-        taxi_left = QLabel("Taxi")
-        bus_left = QLabel("Bus")
-        walk_left = QLabel("Walk")
+        car_top = QLabel("Car")
+        taxi_top = QLabel("Taxi")
+        bus_top = QLabel("Bus")
+        walk_top = QLabel("Walk")
 
-        car_right = QLabel("Car")
-        taxi_right = QLabel("Taxi")
-        bus_right = QLabel("Bus")
-        walk_right = QLabel("Walk")
+        car_bottom = QLabel("Car")
+        taxi_bottom = QLabel("Taxi")
+        bus_bottom = QLabel("Bus")
+        walk_bottom = QLabel("Walk")
       
         # Combo boxes for left side
-        wales_car_box_left = QComboBox()
-        wales_taxi_box_left = QComboBox()
-        wales_bus_box_left = QComboBox()
-        wales_walk_box_left = QComboBox()
+        wales_car_box_top = QComboBox()
+        wales_taxi_box_top = QComboBox()
+        wales_bus_box_top = QComboBox()
+        wales_walk_box_top = QComboBox()
 
         # Combo boxes for right side
-        wales_car_box_right = QComboBox()
-        wales_taxi_box_right = QComboBox()
-        wales_bus_box_right = QComboBox()
-        wales_walk_box_right = QComboBox()
+        wales_car_box_bottom = QComboBox()
+        wales_taxi_box_bottom = QComboBox()
+        wales_bus_box_bottom = QComboBox()
+        wales_walk_box_bottom = QComboBox()
         
-        combos = []
-        combos.append(wales_car_box_left)
-        combos.append(wales_taxi_box_left)
-        combos.append(wales_bus_box_left)
-        combos.append(wales_walk_box_left)
-        combos.append(wales_car_box_right)
-        combos.append(wales_taxi_box_right)
-        combos.append(wales_bus_box_right)
-        combos.append(wales_walk_box_right)
+        # Dictionary to store the combo boxes
+        self.wales_combos = {'car_land': wales_car_box_top, 'taxi_land': wales_taxi_box_top, 'bus_land': wales_bus_box_top,
+                                'walk_land': wales_walk_box_top, 'car_air': wales_car_box_bottom, 'taxi_air': wales_taxi_box_bottom,
+                                'bus_air': wales_bus_box_bottom, 'walk_air': wales_walk_box_bottom}
 
 
         # Values for combo boxes
         values = [str(i) for i in range(101)]
         # Add % string to the end of each value
-        for combo_box in combos:
+        for key, combo_box in self.wales_combos.items():
             combo_box.addItems(values)
             # Set fixed width
             combo_box.setFixedSize(QSize(50, 20))
 
         # Left side
-        wales_grid_left.addWidget(car_left, 0, 0)
-        wales_grid_left.addWidget(taxi_left, 1, 0)
-        wales_grid_left.addWidget(bus_left, 2, 0)
-        wales_grid_left.addWidget(walk_left, 3, 0)
-        wales_grid_left.addWidget(wales_car_box_left, 0, 1)
-        wales_grid_left.addWidget(wales_taxi_box_left, 1, 1)
-        wales_grid_left.addWidget(wales_bus_box_left, 2, 1)
-        wales_grid_left.addWidget(wales_walk_box_left, 3, 1)
+        wales_grid_top.addWidget(car_top, 0, 0)
+        wales_grid_top.addWidget(taxi_top, 1, 0)
+        wales_grid_top.addWidget(bus_top, 2, 0)
+        wales_grid_top.addWidget(walk_top, 3, 0)
+        wales_grid_top.addWidget(wales_car_box_top, 0, 1)
+        wales_grid_top.addWidget(wales_taxi_box_top, 1, 1)
+        wales_grid_top.addWidget(wales_bus_box_top, 2, 1)
+        wales_grid_top.addWidget(wales_walk_box_top, 3, 1)
 
         # Right side
-        wales_grid_right.addWidget(car_right, 0, 0)
-        wales_grid_right.addWidget(taxi_right, 1, 0)
-        wales_grid_right.addWidget(bus_right, 2, 0)
-        wales_grid_right.addWidget(walk_right, 3, 0)
-        wales_grid_right.addWidget(wales_car_box_right, 0, 1)
-        wales_grid_right.addWidget(wales_taxi_box_right, 1, 1)
-        wales_grid_right.addWidget(wales_bus_box_right, 2, 1)
-        wales_grid_right.addWidget(wales_walk_box_right, 3, 1)
+        wales_grid_bottom.addWidget(car_bottom, 0, 0)
+        wales_grid_bottom.addWidget(taxi_bottom, 1, 0)
+        wales_grid_bottom.addWidget(bus_bottom, 2, 0)
+        wales_grid_bottom.addWidget(walk_bottom, 3, 0)
+        wales_grid_bottom.addWidget(wales_car_box_bottom, 0, 1)
+        wales_grid_bottom.addWidget(wales_taxi_box_bottom, 1, 1)
+        wales_grid_bottom.addWidget(wales_bus_box_bottom, 2, 1)
+        wales_grid_bottom.addWidget(wales_walk_box_bottom, 3, 1)
 
 
         # Create a group box for the grid layout
-        wales_group_left = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
-        wales_group_left.setLayout(wales_grid_left)
+        wales_group_top = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
+        wales_group_top.setLayout(wales_grid_top)
 
         # Create a group box for the grid layout
-        wales_group_right = QGroupBox("Adjust percentages for each travel method from airport to university.")
-        wales_group_right.setLayout(wales_grid_right)
+        wales_group_bottom = QGroupBox("Adjust percentages for each travel method from airport to university.")
+        wales_group_bottom.setLayout(wales_grid_bottom)
 
 
 
         layout.addWidget(country)
-        layout.addWidget(wales_group_left)
-        layout.addWidget(wales_group_right)
+        layout.addWidget(wales_group_top)
+        layout.addWidget(wales_group_bottom)
         layout.addStretch(1)
     
         self.stack3.setLayout(layout)
@@ -325,100 +313,105 @@ class Page3(QWidget):
         """UI for Northern Ireland""" 
         layout = QVBoxLayout()
         country = QLabel("Northern Ireland")
-        ni_grid_left = QGridLayout()
+        ni_grid_top = QGridLayout()
         # Reduce space between labels and combo box columns
-        ni_grid_left.setHorizontalSpacing(20)
-        ni_grid_left.setVerticalSpacing(2)
-        ni_grid_left.setRowStretch(0, 1)
+        ni_grid_top.setHorizontalSpacing(20)
+        ni_grid_top.setVerticalSpacing(2)
+        ni_grid_top.setRowStretch(0, 1)
         # Align the labels to the right
-        ni_grid_left.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        ni_grid_top.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        ni_grid_right = QGridLayout()
+        ni_grid_bottom = QGridLayout()
         # Reduce space between labels and combo box columns
-        ni_grid_right.setHorizontalSpacing(20)
-        ni_grid_right.setVerticalSpacing(2)
-        ni_grid_right.setRowStretch(0, 1)
+        ni_grid_bottom.setHorizontalSpacing(20)
+        ni_grid_bottom.setVerticalSpacing(2)
+        ni_grid_bottom.setRowStretch(0, 1)
         # Align the labels to the right
-        ni_grid_right.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        ni_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 
-        car_left = QLabel("Car")
-        taxi_left = QLabel("Taxi")
-        bus_left = QLabel("Bus")
-        walk_left = QLabel("Walk")
+        car_top = QLabel("Car")
+        taxi_top = QLabel("Taxi")
+        bus_top = QLabel("Bus")
+        walk_top = QLabel("Walk")
 
-        car_right = QLabel("Car")
-        taxi_right = QLabel("Taxi")
-        bus_right = QLabel("Bus")
-        walk_right = QLabel("Walk")
+        car_bottom = QLabel("Car")
+        taxi_bottom = QLabel("Taxi")
+        bus_bottom = QLabel("Bus")
+        walk_bottom = QLabel("Walk")
       
         # Combo boxes for left side
-        ni_car_box_left = QComboBox()
-        ni_taxi_box_left = QComboBox()
-        ni_bus_box_left = QComboBox()
-        ni_walk_box_left = QComboBox()
+        ni_car_box_top = QComboBox()
+        ni_taxi_box_top = QComboBox()
+        ni_bus_box_top = QComboBox()
+        ni_walk_box_top = QComboBox()
 
         # Combo boxes for right side
-        ni_car_box_right = QComboBox()
-        ni_taxi_box_right = QComboBox()
-        ni_bus_box_right = QComboBox()
-        ni_walk_box_right = QComboBox()
+        ni_car_box_bottom = QComboBox()
+        ni_taxi_box_bottom = QComboBox()
+        ni_bus_box_bottom = QComboBox()
+        ni_walk_box_bottom = QComboBox()
         
-        combos = []
-        combos.append(ni_car_box_left)
-        combos.append(ni_taxi_box_left)
-        combos.append(ni_bus_box_left)
-        combos.append(ni_walk_box_left)
-        combos.append(ni_car_box_right)
-        combos.append(ni_taxi_box_right)
-        combos.append(ni_bus_box_right)
-        combos.append(ni_walk_box_right)
+        self.ni_combos = {'car_land': ni_car_box_top, 'taxi_land': ni_taxi_box_top, 'bus_land': ni_bus_box_top,
+                                'walk_land': ni_walk_box_top, 'car_air': ni_car_box_bottom, 'taxi_air': ni_taxi_box_bottom,
+                                'bus_air': ni_bus_box_bottom, 'walk_air': ni_walk_box_bottom}
 
 
         # Values for combo boxes
         values = [str(i) for i in range(101)]
         # Add % string to the end of each value
-        for combo_box in combos:
+        for key, combo_box in self.ni_combos.items():
             combo_box.addItems(values)
             # Set fixed width
             combo_box.setFixedSize(QSize(50, 20))
 
         # Left side
-        ni_grid_left.addWidget(car_left, 0, 0)
-        ni_grid_left.addWidget(taxi_left, 1, 0)
-        ni_grid_left.addWidget(bus_left, 2, 0)
-        ni_grid_left.addWidget(walk_left, 3, 0)
-        ni_grid_left.addWidget(ni_car_box_left, 0, 1)
-        ni_grid_left.addWidget(ni_taxi_box_left, 1, 1)
-        ni_grid_left.addWidget(ni_bus_box_left, 2, 1)
-        ni_grid_left.addWidget(ni_walk_box_left, 3, 1)
+        ni_grid_top.addWidget(car_top, 0, 0)
+        ni_grid_top.addWidget(taxi_top, 1, 0)
+        ni_grid_top.addWidget(bus_top, 2, 0)
+        ni_grid_top.addWidget(walk_top, 3, 0)
+        ni_grid_top.addWidget(ni_car_box_top, 0, 1)
+        ni_grid_top.addWidget(ni_taxi_box_top, 1, 1)
+        ni_grid_top.addWidget(ni_bus_box_top, 2, 1)
+        ni_grid_top.addWidget(ni_walk_box_top, 3, 1)
 
         # Right side
-        ni_grid_right.addWidget(car_right, 0, 0)
-        ni_grid_right.addWidget(taxi_right, 1, 0)
-        ni_grid_right.addWidget(bus_right, 2, 0)
-        ni_grid_right.addWidget(walk_right, 3, 0)
-        ni_grid_right.addWidget(ni_car_box_right, 0, 1)
-        ni_grid_right.addWidget(ni_taxi_box_right, 1, 1)
-        ni_grid_right.addWidget(ni_bus_box_right, 2, 1)
-        ni_grid_right.addWidget(ni_walk_box_right, 3, 1)
+        ni_grid_bottom.addWidget(car_bottom, 0, 0)
+        ni_grid_bottom.addWidget(taxi_bottom, 1, 0)
+        ni_grid_bottom.addWidget(bus_bottom, 2, 0)
+        ni_grid_bottom.addWidget(walk_bottom, 3, 0)
+        ni_grid_bottom.addWidget(ni_car_box_bottom, 0, 1)
+        ni_grid_bottom.addWidget(ni_taxi_box_bottom, 1, 1)
+        ni_grid_bottom.addWidget(ni_bus_box_bottom, 2, 1)
+        ni_grid_bottom.addWidget(ni_walk_box_bottom, 3, 1)
 
 
         # Create a group box for the grid layout
-        ni_group_left = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
-        ni_group_left.setLayout(ni_grid_left)
+        ni_group_top = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
+        ni_group_top.setLayout(ni_grid_top)
 
         # Create a group box for the grid layout
-        ni_group_right = QGroupBox("Adjust percentages for each travel method from airport to university.")
-        ni_group_right.setLayout(ni_grid_right)
+        ni_group_bottom = QGroupBox("Adjust percentages for each travel method from airport to university.")
+        ni_group_bottom.setLayout(ni_grid_bottom)
 
 
 
         layout.addWidget(country)
-        layout.addWidget(ni_group_left)
-        layout.addWidget(ni_group_right)
+        layout.addWidget(ni_group_top)
+        layout.addWidget(ni_group_bottom)
         layout.addStretch(1)
         self.stack4.setLayout(layout)
 
     def display(self, i):
         self.Stack.setCurrentIndex(i)
+
+    def extract_percentages(self):
+        """Extract the percentages from the combo boxes and put them in a dictionary"""
+        scot = {key: int(combo_box.currentText()) for key, combo_box in self.scot_combos.items()}
+        eng = {key: int(combo_box.currentText()) for key, combo_box in self.eng_combos.items()}
+        wales = {key: int(combo_box.currentText()) for key, combo_box in self.wales_combos.items()}
+        ni = {key: int(combo_box.currentText()) for key, combo_box in self.ni_combos.items()}
+        return scot, eng, wales, ni
+    
+    def get_combos(self):
+        pass

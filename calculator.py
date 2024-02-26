@@ -4,6 +4,7 @@ from PyQt6.QtCore import pyqtSignal
 from tkinter.filedialog import askopenfile
 import pandas as pd
 from preprocess_data import menu, determine_postcode
+from final_leg import select_country
 from page1 import MainPage
 from page2 import Page2
 from page3 import Page3
@@ -25,6 +26,7 @@ class Calculator(QWidget):
 
     file_selected = pyqtSignal(bool)
     hundred_percent = pyqtSignal(bool)
+    hundred_percent_page3 = pyqtSignal(bool)
 
     def __init__(self):
         super().__init__()
@@ -73,6 +75,8 @@ class Calculator(QWidget):
         # Connect signals for page3
         self.page3.back.clicked.connect(self.go_to_page2)
         self.page3.result_button.clicked.connect(self.go_to_results)
+        self.hundred_percent_page3.connect(self.enable_page3)
+        self.page3.submit.clicked.connect(self.check_combo_page3)
 
         # Show the main page
         self.show()
@@ -139,6 +143,7 @@ class Calculator(QWidget):
             # call the menu function
            
             self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni = menu(scotland, wales, north_ireland, england, int(self.page2.combo_car_scot.currentText()), int(self.page2.combo_bus_scot.currentText()), int(self.page2.combo_rail_scot.currentText()), int(self.page2.plane_uk.currentText()), int(self.page2.car_uk.currentText()), int(self.page2.rail_uk.currentText()))
+            
         else:
             self.hundred_percent.emit(False)
             # Show a message box with the error
@@ -157,6 +162,70 @@ class Calculator(QWidget):
 
     def get_country_data(self):
         return self.scotland, self.wales, self.north_ireland, self.england
+    
+    def check_combo_page3(self):
+        """Check if the sum of the percentages for each country is 100. If it is, then call the menu function. If not, show a message box with an error.""" 
+        # call extract function from page3 to get the percentages for each country
+        scot, eng, wales, ni = self.page3.extract_percentages()
+        # Divide the percentages into lists for each country
+        scot = [int(i) for key, i in scot.items()]
+        eng_land = [int(i) for key, i in eng.items()][:4]
+        eng_air = [int(i) for key, i in eng.items()][4:]
+        wales_land = [int(i) for key, i in wales.items()][:4]
+        wales_air = [int(i) for key, i in wales.items()][4:]
+        ni_land = [int(i) for key, i in ni.items()][:4]
+        ni_air = [int(i) for key, i in ni.items()][4:]
+
+        # If the sum of the percentages for each country is 100, then call the menu function
+        if sum(scot) == 100 and sum(eng_land) == 100 and sum(eng_air) == 100 and sum(wales_land) == 100 and sum(wales_air) == 100 and sum(ni_land) == 100 and sum(ni_air) == 100:
+            # Show a message that the data has been submitted
+            msg = QMessageBox()
+            msg.setWindowTitle("Success")
+            msg.setText("The data has been submitted!")
+            # Add a success icon to the message box
+            msg.setIcon(QMessageBox.Icon.Information)
+            msg.exec()
+            self.hundred_percent_page3.emit(True)
+            # Combine the bus and rail postcodes for Scotland in a list to be used in the final leg function
+            scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
+            # Call the select_country function
+            # Scotland
+            scot_fleg = select_country(scot_bus_rail, [], "Scotland", scot[0], scot[1], scot[2], scot[3], 0, 0, 0, 0)
+
+            # England
+            eng_rail = self.travel_england[2]
+            eng_plane = self.travel_england[0]
+            eng_fleg_bus_rail, eng_fleg_plane = select_country(eng_rail, eng_plane, "England", eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
+
+            # Wales
+            wales_rail = self.travel_wales[2]
+            wales_plane = self.travel_wales[0]
+            wales_fleg_bus_rail, wales_fleg_plane = select_country(wales_rail, wales_plane, "Wales", wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
+
+            # Northern Ireland
+            ni_rail = self.travel_ni[2]
+            ni_plane = self.travel_ni[0]
+            ni_fleg_bus_rail, ni_fleg_plane = select_country(ni_rail, ni_plane, "Northern Ireland", ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
+
+            # NEED to Extract the total distance travelled by each mode of transport in the final leg of the journey as in main.py
+            # Sum them as in total distances part of main.py
+        else:
+            self.hundred_percent_page3.emit(False)
+            # Show a message box with the error
+            msg = QMessageBox()
+            msg.setWindowTitle("Error")
+            msg.setText("The sum of the percentages for each country must be 100!\nPlease try again.")
+            # Add a warning icon to the message box
+            msg.setIcon(QMessageBox.Icon.Warning)
+            msg.exec()
+
+    def enable_page3(self, hundred_percent_page3):
+        """Enable the result button if you get signal"""
+        if hundred_percent_page3:
+            self.page3.result_button.setEnabled(True)
+        else:
+            self.page3.result_button.setEnabled(False)
+
 
 """==============================================Run the app=============================================="""
 app = QApplication(sys.argv)
