@@ -8,6 +8,7 @@ from final_leg import select_country
 from page1 import MainPage
 from page2 import Page2
 from page3 import Page3
+from main import main
 
 # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm 
 
@@ -119,9 +120,6 @@ class Calculator(QWidget):
     def go_to_page3(self):
         self.stackedLayout.setCurrentIndex(2)
 
-    def go_to_results(self):
-        self.stackedLayout.setCurrentIndex(3)
-
 
     def check_combo_page2(self):
         """Check if the sum of the percentages for each country is 100. If it is, then call the menu function. If not, show a message box with an error.""" 
@@ -190,22 +188,22 @@ class Calculator(QWidget):
             scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
             # Call the select_country function
             # Scotland
-            scot_fleg = select_country(scot_bus_rail, [], "Scotland", scot[0], scot[1], scot[2], scot[3], 0, 0, 0, 0)
+            self.scot_fleg = select_country(scot_bus_rail, [], "Scotland", scot[0], scot[1], scot[2], scot[3], 0, 0, 0, 0)
 
             # England
             eng_rail = self.travel_england[2]
             eng_plane = self.travel_england[0]
-            eng_fleg_bus_rail, eng_fleg_plane = select_country(eng_rail, eng_plane, "England", eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
+            self.eng_fleg_bus_rail, self.eng_fleg_plane = select_country(eng_rail, eng_plane, "England", eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
 
             # Wales
             wales_rail = self.travel_wales[2]
             wales_plane = self.travel_wales[0]
-            wales_fleg_bus_rail, wales_fleg_plane = select_country(wales_rail, wales_plane, "Wales", wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
+            self.wales_fleg_bus_rail, self.wales_fleg_plane = select_country(wales_rail, wales_plane, "Wales", wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
 
             # Northern Ireland
             ni_rail = self.travel_ni[2]
             ni_plane = self.travel_ni[0]
-            ni_fleg_bus_rail, ni_fleg_plane = select_country(ni_rail, ni_plane, "Northern Ireland", ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
+            self.ni_fleg_bus_rail, self.ni_fleg_plane = select_country(ni_rail, ni_plane, "Northern Ireland", ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
 
             # NEED to Extract the total distance travelled by each mode of transport in the final leg of the journey as in main.py
             # Sum them as in total distances part of main.py
@@ -225,6 +223,37 @@ class Calculator(QWidget):
             self.page3.result_button.setEnabled(True)
         else:
             self.page3.result_button.setEnabled(False)
+
+    def go_to_results(self):
+        """Extract the final leg of the journey for each country"""
+        # Scotland
+        scot_car_fleg = self.scot_fleg[0]
+        scot_taxi_fleg = self.scot_fleg[1]
+        scot_bus_fleg = self.scot_fleg[2]
+        scot_walk_fleg = self.scot_fleg[3]
+
+        # England
+        eng_car_fleg = self.eng_fleg_bus_rail[0] + self.eng_fleg_plane[0]
+        eng_taxi_fleg = self.eng_fleg_bus_rail[1] + self.eng_fleg_plane[1]
+        eng_bus_fleg = self.eng_fleg_bus_rail[2] + self.eng_fleg_plane[2]
+        eng_walk_fleg = self.eng_fleg_bus_rail[3] + self.eng_fleg_plane[3]
+
+        # Wales
+        wales_car_fleg = self.wales_fleg_bus_rail[0] + self.wales_fleg_plane[0]
+        wales_taxi_fleg = self.wales_fleg_bus_rail[1] + self.wales_fleg_plane[1]
+        wales_bus_fleg = self.wales_fleg_bus_rail[2] + self.wales_fleg_plane[2]
+        wales_walk_fleg = self.wales_fleg_bus_rail[3] + self.wales_fleg_plane[3]
+
+        # Northern Ireland
+        ni_car_fleg = self.ni_fleg_bus_rail[0] + self.ni_fleg_plane[0]
+        ni_taxi_fleg = self.ni_fleg_bus_rail[1] + self.ni_fleg_plane[1]
+        ni_bus_fleg = self.ni_fleg_bus_rail[2] + self.ni_fleg_plane[2]
+        ni_walk_fleg = self.ni_fleg_bus_rail[3] + self.ni_fleg_plane[3]
+
+        # Call the main function
+        main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+
+
 
 
 """==============================================Run the app=============================================="""

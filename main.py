@@ -7,7 +7,7 @@ from travel_class import Travel
 from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict
 from final_leg import select_country
 
-def main(transport_scot, transport_eng, transport_wales, transport_ni):
+def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_fleg, scot_car_fleg, scot_taxi_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg):
     travel = Travel(stops_dict, stations_dict, airports_dict, ukpostcode_coords)
 
     """=================================Transport methods=================================="""
@@ -127,34 +127,34 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni):
     total_bus4 = np.sum(bus4)
 
     """=================================Final leg of journey=================================="""
-    # Scotland 
-    scot_bus_rail = bus_scotland + rail_scotland
-    scot_fleg = select_country(scot_bus_rail, [], "Scotland")
-    # Extract the total distance travelled by each mode of transport in the final leg of the journey
-    scot_car_fleg = scot_fleg[0]
-    scot_taxi_fleg = scot_fleg[1]
-    scot_bus_fleg = scot_fleg[2]
-    scot_walk_fleg = scot_fleg[3]
+    # # Scotland 
+    # scot_bus_rail = bus_scotland + rail_scotland
+    # scot_fleg = select_country(scot_bus_rail, [], "Scotland")
+    # # Extract the total distance travelled by each mode of transport in the final leg of the journey
+    # scot_car_fleg = scot_fleg[0]
+    # scot_taxi_fleg = scot_fleg[1]
+    # scot_bus_fleg = scot_fleg[2]
+    # scot_walk_fleg = scot_fleg[3]
 
-    eng_fleg_bus_rail, eng_fleg_plane = select_country(rail_eng, plane_eng, "England")
-    # Extract the total distance travelled by each mode of transport in the final leg of the journey for England
-    # It is a sum of the distances from the rail and plane dictionaries for different modes of transport
-    eng_car_fleg = eng_fleg_bus_rail[0] + eng_fleg_plane[0]
-    eng_taxi_fleg = eng_fleg_bus_rail[1] + eng_fleg_plane[1]
-    eng_bus_fleg = eng_fleg_bus_rail[2] + eng_fleg_plane[2]
-    eng_walk_fleg = eng_fleg_bus_rail[3] + eng_fleg_plane[3]
+    # eng_fleg_bus_rail, eng_fleg_plane = select_country(rail_eng, plane_eng, "England")
+    # # Extract the total distance travelled by each mode of transport in the final leg of the journey for England
+    # # It is a sum of the distances from the rail and plane dictionaries for different modes of transport
+    # eng_car_fleg = eng_fleg_bus_rail[0] + eng_fleg_plane[0]
+    # eng_taxi_fleg = eng_fleg_bus_rail[1] + eng_fleg_plane[1]
+    # eng_bus_fleg = eng_fleg_bus_rail[2] + eng_fleg_plane[2]
+    # eng_walk_fleg = eng_fleg_bus_rail[3] + eng_fleg_plane[3]
 
-    wales_fleg_bus_rail, wales_fleg_plane = select_country(rail_wales, plane_wales, "Wales")
-    wales_car_fleg = wales_fleg_bus_rail[0] + wales_fleg_plane[0]
-    wales_taxi_fleg = wales_fleg_bus_rail[1] + wales_fleg_plane[1]
-    wales_bus_fleg = wales_fleg_bus_rail[2] + wales_fleg_plane[2]
-    wales_walk_fleg = wales_fleg_bus_rail[3] + wales_fleg_plane[3]
+    # wales_fleg_bus_rail, wales_fleg_plane = select_country(rail_wales, plane_wales, "Wales")
+    # wales_car_fleg = wales_fleg_bus_rail[0] + wales_fleg_plane[0]
+    # wales_taxi_fleg = wales_fleg_bus_rail[1] + wales_fleg_plane[1]
+    # wales_bus_fleg = wales_fleg_bus_rail[2] + wales_fleg_plane[2]
+    # wales_walk_fleg = wales_fleg_bus_rail[3] + wales_fleg_plane[3]
 
-    ni_fleg_bus_rail, ni_fleg_plane = select_country(rail_ni, plane_ni, "Northern Ireland")
-    ni_car_fleg = ni_fleg_bus_rail[0] + ni_fleg_plane[0]
-    ni_taxi_fleg = ni_fleg_bus_rail[1] + ni_fleg_plane[1]
-    ni_bus_fleg = ni_fleg_bus_rail[2] + ni_fleg_plane[2]
-    ni_walk_fleg = ni_fleg_bus_rail[3] + ni_fleg_plane[3]
+    # ni_fleg_bus_rail, ni_fleg_plane = select_country(rail_ni, plane_ni, "Northern Ireland")
+    # ni_car_fleg = ni_fleg_bus_rail[0] + ni_fleg_plane[0]
+    # ni_taxi_fleg = ni_fleg_bus_rail[1] + ni_fleg_plane[1]
+    # ni_bus_fleg = ni_fleg_bus_rail[2] + ni_fleg_plane[2]
+    # ni_walk_fleg = ni_fleg_bus_rail[3] + ni_fleg_plane[3]
 
 
 
@@ -211,17 +211,18 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni):
 
     """=================================Visualisation==================================""" 
 
-    # Create a dataframe to store the total distances
-    total_distances = pd.DataFrame({'Scotland': [total_distance_rail_scotland, 0, total_distance_bus_scotland, total_distance_car_scotland, total_distance_taxi_scotland, total_walk_scotland],
-                                    'England': [total_distance_rail_eng, total_distance_plane_eng,  total_distance_bus_eng, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
-                                    'Wales': [total_distance_rail_wales, total_distance_plane_wales,  total_distance_bus_wales, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
-                                    'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni,  total_distance_bus_ni, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]},
-                                    index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
+    # # Create a dataframe to store the total distances
+    # total_distances = pd.DataFrame({'Scotland': [total_distance_rail_scotland, 0, total_distance_bus_scotland, total_distance_car_scotland, total_distance_taxi_scotland, total_walk_scotland],
+    #                                 'England': [total_distance_rail_eng, total_distance_plane_eng,  total_distance_bus_eng, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
+    #                                 'Wales': [total_distance_rail_wales, total_distance_plane_wales,  total_distance_bus_wales, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
+    #                                 'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni,  total_distance_bus_ni, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]},
+    #                                 index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
 
-    # Create a heatmap to visualise the total distances with reversed green to red colour scheme
-    sns.heatmap(total_distances, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total distance (km)'})
-    plt.title('Total distances travelled by students')
-    plt.show()
+    # # Create a heatmap to visualise the total distances with reversed green to red colour scheme
+    # sns.heatmap(total_distances, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total distance (km)'})
+    # plt.title('Total distances travelled by students')
+    # # Save the heatmap as a .png file
+    # plt.savefig('distances_heatmap.png')
 
     """=================================Emissions=================================="""
 
@@ -277,7 +278,8 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni):
     # Create a heatmap to visualise the total emissions with reversed green to red colour scheme
     sns.heatmap(total_emissions, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total emissions (kgCO2e)'})
     plt.title('Total emissions from student travel')
-    plt.show()
+    # Save the heatmap as a .png file
+    plt.savefig('emissions_heatmap.png')
 
     # Dataframe to store the total emissions
     total_emissions = pd.DataFrame({'Scotland': [total_emissions_scotland],
@@ -292,7 +294,8 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni):
     plt.xticks(rotation=0)
     plt.ylabel('Total emissions (kgCO2e)')
     plt.title('Total emissions from student travel')
-    plt.show()
+    # Save the bar chart as a .png file
+    plt.savefig('emissions_bar_chart.png')
 
 
 
