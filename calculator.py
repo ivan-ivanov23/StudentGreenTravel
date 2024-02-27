@@ -10,8 +10,6 @@ from page2 import Page2
 from page3 import Page3
 from main import main
 
-# Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm 
-
 """
 Info:
 
@@ -48,6 +46,7 @@ class Calculator(QWidget):
         self.layout3 = QVBoxLayout()
 
         # Stacked layout to hold the pages
+        # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm 
         self.stackedLayout = QStackedLayout()
 
         # Create the pages
@@ -65,7 +64,7 @@ class Calculator(QWidget):
         # Connect signals for page1
         self.page1.button1.clicked.connect(self.go_to_page2)
         self.page1.button2.clicked.connect(self.open_file)
-        self.file_selected.connect(self.enable_buttons)
+        self.file_selected.connect(self.enable_buttons1)
 
         # Connect signals for page2
         self.page2.next_button2.clicked.connect(self.go_to_page3)
@@ -105,7 +104,7 @@ class Calculator(QWidget):
             self.file_selected.emit(False)
 
 
-    def enable_buttons(self, file_selected):
+    def enable_buttons1(self, file_selected):
         if file_selected:
             self.page1.button1.setEnabled(True)
         else:
@@ -122,11 +121,22 @@ class Calculator(QWidget):
 
 
     def check_combo_page2(self):
-        """Check if the sum of the percentages for each country is 100. If it is, then call the menu function. If not, show a message box with an error.""" 
-        scot = sum([int(self.page2.combo_car_scot.currentText()), int(self.page2.combo_bus_scot.currentText()), int(self.page2.combo_rail_scot.currentText())])
-        uk = sum([int(self.page2.plane_uk.currentText()), int(self.page2.car_uk.currentText()), int(self.page2.rail_uk.currentText())])
+        """Check if the sum of the percentages for each country is 100. 
+        If it is, then call the menu function. 
+        If not, show a message box with an error.""" 
+        # Get the percentages for each country
+        scot_car = int(self.page2.combo_car_scot.currentText())
+        scot_bus = int(self.page2.combo_bus_scot.currentText())
+        scot_rail = int(self.page2.combo_rail_scot.currentText())
+        uk_plane = int(self.page2.plane_uk.currentText())
+        uk_car = int(self.page2.car_uk.currentText())
+        uk_rail = int(self.page2.rail_uk.currentText())
 
-        if scot == 100 and uk == 100:
+        # Sum the percentages for each country
+        scot_sum = sum([scot_car, scot_bus, scot_rail])
+        uk_sum = sum([uk_plane, uk_car, uk_rail])
+
+        if scot_sum == 100 and uk_sum == 100:
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
@@ -139,7 +149,6 @@ class Calculator(QWidget):
             #print(scotland)
             self.hundred_percent.emit(True)
             # call the menu function
-           
             self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni = menu(scotland, wales, north_ireland, england, int(self.page2.combo_car_scot.currentText()), int(self.page2.combo_bus_scot.currentText()), int(self.page2.combo_rail_scot.currentText()), int(self.page2.plane_uk.currentText()), int(self.page2.car_uk.currentText()), int(self.page2.rail_uk.currentText()))
             
         else:
@@ -175,8 +184,11 @@ class Calculator(QWidget):
         ni_land = [int(i) for key, i in ni.items()][:4]
         ni_air = [int(i) for key, i in ni.items()][4:]
 
-        # If the sum of the percentages for each country is 100, then call the menu function
-        if sum(scot) == 100 and sum(eng_land) == 100 and sum(eng_air) == 100 and sum(wales_land) == 100 and sum(wales_air) == 100 and sum(ni_land) == 100 and sum(ni_air) == 100:
+        # Sum of all
+        sum_all = sum(scot) + sum(eng_land) + sum(eng_air) + sum(wales_land) + sum(wales_air) + sum(ni_land) + sum(ni_air)
+
+        # If the sum of the percentages for each country is 700 (7 elements * 100), then call the menu function.
+        if sum_all == 700:
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
@@ -253,8 +265,6 @@ class Calculator(QWidget):
 
         # Call the main function
         main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
-
-
 
 
 """==============================================Run the app=============================================="""
