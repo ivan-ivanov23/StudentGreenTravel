@@ -167,6 +167,7 @@ class Calculator(QWidget):
         scot, eng, wales, ni = self.page3.extract_percentages()
         # Divide the percentages into lists for each country
         scot = [int(i) for key, i in scot.items()]
+        # [:4] for land and [4:] for air transport
         eng_land = [int(i) for key, i in eng.items()][:4]
         eng_air = [int(i) for key, i in eng.items()][4:]
         wales_land = [int(i) for key, i in wales.items()][:4]
