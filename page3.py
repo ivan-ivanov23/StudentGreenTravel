@@ -52,11 +52,11 @@ class Page3(QWidget):
         # Back button
         self.back = QPushButton("Back")
         self.submit = QPushButton("Submit")
-        self.result_button = QPushButton("Results")
-        self.result_button.setDisabled(True)
+        self.calculate_button = QPushButton("Calculate")
+        self.calculate_button.setDisabled(True)
         button_layout.addWidget(self.back)
         button_layout.addWidget(self.submit)
-        button_layout.addWidget(self.result_button)
+        button_layout.addWidget(self.calculate_button)
 
         self.layout3.addWidget(label)
         self.layout3.addLayout(hbox)

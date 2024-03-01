@@ -3,15 +3,15 @@ from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, 
 from PyQt6.QtCore import pyqtSignal
 from tkinter.filedialog import askopenfile
 import pandas as pd
-from preprocess_data import menu, determine_postcode
-from final_leg import select_country
+from preprocess_data import determine_postcode, divide_scot_addresses, divide_uk_addresses
+from final_leg import assign_scotland, assign_uk
 from page1 import MainPage
 from page2 import Page2
 from page3 import Page3
 from results_page import ResultPage
 from main import main
 import plotly.express as px
-from PyQt6.QtWebEngineWidgets import *
+import matplotlib.pyplot as plt
 
 """
 Info:
@@ -80,16 +80,17 @@ class Calculator(QWidget):
 
         # Connect signals for page3
         self.page3.back.clicked.connect(self.go_to_page2)
-        self.page3.result_button.clicked.connect(self.go_to_results)
+        self.page3.calculate_button.clicked.connect(self.go_to_results)
         self.hundred_percent_page3.connect(self.enable_page3)
         self.page3.submit.clicked.connect(self.check_combo_page3)
 
         # Connect signals for page4
         self.page4.button1.clicked.connect(self.go_to_page3)
-        self.page4.button2.clicked.connect(self.graphs)
+        self.page4.radio1.clicked.connect(self.click_radio1)
+        self.page4.radio2.clicked.connect(self.click_radio2)
 
 
-        # Show the main page
+        # Show the application
         self.show()
 
     """==============================================Methods for pages=============================================="""
@@ -116,6 +117,7 @@ class Calculator(QWidget):
 
 
     def enable_buttons1(self, file_selected):
+        """Enable the next button if a file has been selected """
         if file_selected:
             self.page1.button1.setEnabled(True)
         else:
@@ -162,9 +164,12 @@ class Calculator(QWidget):
             scotland, wales, north_ireland, england = self.get_country_data()
             #print(scotland)
             self.hundred_percent.emit(True)
-            # call the menu function
-            self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni = menu(scotland, wales, north_ireland, england, int(self.page2.combo_car_scot.currentText()), int(self.page2.combo_bus_scot.currentText()), int(self.page2.combo_rail_scot.currentText()), int(self.page2.plane_uk.currentText()), int(self.page2.car_uk.currentText()), int(self.page2.rail_uk.currentText()))
-            
+            # call the divide_address functions for each country
+            self.travel_scotland = divide_scot_addresses(scotland, scot_bus, scot_car, scot_rail)
+            self.travel_england = divide_uk_addresses(england, uk_plane, uk_car, uk_rail)
+            self.travel_wales = divide_uk_addresses(wales, uk_plane, uk_car, uk_rail)
+            self.travel_ni = divide_uk_addresses(north_ireland, uk_plane, uk_car, uk_rail)
+
         else:
             self.hundred_percent.emit(False)
             # Show a message box with the error
@@ -175,14 +180,16 @@ class Calculator(QWidget):
             msg.setIcon(QMessageBox.Icon.Warning)
             msg.exec()
 
+    def get_country_data(self):
+        """Return the data from the file explorer function"""
+        return self.scotland, self.wales, self.north_ireland, self.england
+
     def enable_page2(self, hundred_percent):
+        """Enable the next button if you get signal on page2"""
         if hundred_percent:
             self.page2.next_button2.setEnabled(True)
         else:
             self.page2.next_button2.setEnabled(False)
-
-    def get_country_data(self):
-        return self.scotland, self.wales, self.north_ireland, self.england
     
     def check_combo_page3(self):
         """Check if the sum of the percentages for each country is 100. If it is, then call the menu function. If not, show a message box with an error.""" 
@@ -215,23 +222,21 @@ class Calculator(QWidget):
             scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
             # Call the select_country function
             # Scotland
-            self.scot_fleg = select_country(scot_bus_rail, [], "Scotland", scot[0], scot[1], scot[2], scot[3], 0, 0, 0, 0)
+            self.scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
 
             # England
             eng_rail = self.travel_england[2]
             eng_plane = self.travel_england[0]
-            self.eng_fleg_bus_rail, self.eng_fleg_plane = select_country(eng_rail, eng_plane, "England", eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
-
+            self.eng_fleg_bus_rail, self.eng_fleg_plane = assign_uk(eng_rail, eng_plane, eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
             # Wales
             wales_rail = self.travel_wales[2]
             wales_plane = self.travel_wales[0]
-            self.wales_fleg_bus_rail, self.wales_fleg_plane = select_country(wales_rail, wales_plane, "Wales", wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
+            self.wales_fleg_bus_rail, self.wales_fleg_plane = assign_uk(wales_rail, wales_plane, wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
 
             # Northern Ireland
             ni_rail = self.travel_ni[2]
             ni_plane = self.travel_ni[0]
-            self.ni_fleg_bus_rail, self.ni_fleg_plane = select_country(ni_rail, ni_plane, "Northern Ireland", ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
-
+            self.ni_fleg_bus_rail, self.ni_fleg_plane = assign_uk(ni_rail, ni_plane, ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
             # NEED to Extract the total distance travelled by each mode of transport in the final leg of the journey as in main.py
             # Sum them as in total distances part of main.py
         else:
@@ -245,11 +250,11 @@ class Calculator(QWidget):
             msg.exec()
 
     def enable_page3(self, hundred_percent_page3):
-        """Enable the result button if you get signal"""
+        """Enable the result button if you get signal on page3"""
         if hundred_percent_page3:
-            self.page3.result_button.setEnabled(True)
+            self.page3.calculate_button.setEnabled(True)
         else:
-            self.page3.result_button.setEnabled(False)
+            self.page3.calculate_button.setEnabled(False)
 
     def go_to_results(self):
         """Extract the final leg of the journey for each country"""
@@ -279,18 +284,16 @@ class Calculator(QWidget):
         ni_walk_fleg = self.ni_fleg_bus_rail[3] + self.ni_fleg_plane[3]
 
         # Call the main function
-        self.emissions, self.distances = main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        self.emissions, self.distances, self.total_emissions = main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
 
-    def graphs(self):
+        # Create the heatmaps
         df = self.emissions
-
         # Exclude the Walk values
         df = df.drop('Walk', axis=0)
-
         # Round the values to 2 decimal places
         df = df.round(2)
-
         # Source: https://plotly.com/python/heatmaps/
+        # Figure to store the heatmap with the emissions
         self.fig1 = px.imshow(df, text_auto=True, aspect='auto', title='Total Emissions (kgCO2e) by Country and Mode of Transport',
                         labels=dict(x="Country", y="Transport", color="Emissions (kgCO2e)"),
                         color_continuous_scale='bupu')
@@ -298,9 +301,27 @@ class Calculator(QWidget):
         # Edit the font size and color of the values
         self.fig1.update_traces(textfont_size=16)
 
-        # Show the web view
+        # Do the same for the distances
+        df = self.distances
+        df = df.round(1)
+        # Figure to store the heatmap with the distances
+        self.fig2 = px.imshow(df, text_auto=True, aspect='auto', title='Total Distance (km) by Country and Mode of Transport',
+                        labels=dict(x="Country", y="Transport", color="Distance (km)"),
+                        color_continuous_scale='bugn')
+        
+        self.fig2.update_traces(textfont_size=16)
+        
+                
+
+    def click_radio1(self):
+        """Set the webview to show the first heatmap with the emissions data"""
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig1.to_html(include_plotlyjs='cdn'))
+
+    def click_radio2(self):
+        """Set the webview to show the second heatmap with the distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.fig2.to_html(include_plotlyjs='cdn'))
 
         
 

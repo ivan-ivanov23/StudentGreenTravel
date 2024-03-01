@@ -37,7 +37,6 @@ def create_address_df():
         addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
 
         # Call the check_postcodes function to check for incorrect postcodes
-        # addresses = check_postcodes(addresses)
         return addresses.iloc[:, 1]
     # If the user didn't select a file, then return an empty dataframe
     else:
@@ -53,80 +52,49 @@ def determine_postcode(postcodes):
     return scotland, wales, north_ireland, england
 
 
+def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
+    """The function divides the list of Scottish postcodes into 3 parts based on the percentages of each transport method."""
+    # Scotland
+    percent_bus = p_bus
+    percent_car = p_car
+    percent_rail = p_rail
 
-# Initial menu to ask if you are working with Scottish or Rest of UK addresses
-def menu(scotland, wales, north_ireland, england, pbus, pcar, prail, pplane, pcaruk, prailuk):
-    start = True
-    while start:
-        # Scotland
-        percent_bus = pbus
-        percent_car = pcar
-        percent_rail = prail
+    # Calculate the number of postcodes for each transport method
+    p_bus_scotland = int(len(scot_addresses) * (percent_bus / 100))
+    p_car_scotland = int(len(scot_addresses) * (percent_car / 100))
+    p_rail_scotland = int(len(scot_addresses) * (percent_rail / 100))
 
+    # Source: https://stackoverflow.com/questions/38861457/splitting-a-list-into-uneven-groups
+    seclist = [p_bus_scotland, p_car_scotland, p_rail_scotland]
+    it = iter(scot_addresses)
+    # randomly divide 'scotland' into 3 parts based on the percentages and make sure they don't overlap with islice
+    bus, car, rail = [list(islice(it, 0, i)) for i in seclist]
 
-        # Calculate the number of postcodes for each transport method
-        p_bus_scotland = int(len(scotland) * (percent_bus / 100))
-        p_car_scotland = int(len(scotland) * (percent_car / 100))
-        p_rail_scotland = int(len(scotland) * (percent_rail / 100))
+    # List of lists to store the postcodes for each transport method
+    transport_scot = [bus, car, rail]
 
-        # Source: https://stackoverflow.com/questions/38861457/splitting-a-list-into-uneven-groups
-        seclist = [p_bus_scotland, p_car_scotland, p_rail_scotland]
-        it = iter(scotland)
-        # randomly divide 'scotland' into 3 parts based on the percentages and make sure they don't overlap with islice
-        bus, car, rail = [list(islice(it, 0, i)) for i in seclist]
+    return transport_scot
 
-        # List of lists to store the postcodes for each transport method
-        transport_scot = [bus, car, rail]
+def divide_uk_addresses(country: list, p_plane, p_car, p_rail):
+    """The function divides the list of UK postcodes into 3 parts based on the percentages of each transport method.
+        It is used for England, Wales and Northern Ireland."""
+    percent_plane_uk = p_plane
+    percent_car_uk = p_car
+    percent_rail_uk = p_rail
 
-        # UK
-        percent_plane_uk = pplane
-        percent_car_uk = pcaruk
-        percent_rail_uk = prailuk
+    # Calculate the number of postcodes for each transport method
+    p_plane_eng = int(len(country) * (percent_plane_uk / 100))
+    p_car_eng = int(len(country) * (percent_car_uk / 100))
+    p_rail_eng = int(len(country) * (percent_rail_uk / 100))
+    # randomly divide 'uk' into 3 parts based on the percentages
+    seclist_uk = [p_plane_eng, p_car_eng, p_rail_eng]
 
-        # Calculate the number of postcodes for each transport method
-        p_plane_eng = int(len(england) * (percent_plane_uk / 100))
-        p_car_eng = int(len(england) * (percent_car_uk / 100))
-        p_rail_eng = int(len(england) * (percent_rail_uk / 100))
-        # randomly divide 'uk' into 3 parts based on the percentages
-        seclist_uk = [p_plane_eng, p_car_eng, p_rail_eng]
+    # Iterator to split the list into 3 parts
+    it = iter(country)
+    # randomly divide 'england' into 3 parts based on the percentages and make sure they don't overlap with islice
+    plane_eng, car_eng, rail_eng = [list(islice(it, 0, i)) for i in seclist_uk]
 
-        # Iterator to split the list into 3 parts
-        it_england = iter(england)
-        # randomly divide 'england' into 3 parts based on the percentages and make sure they don't overlap with islice
-        plane_eng, car_eng, rail_eng = [list(islice(it_england, 0, i)) for i in seclist_uk]
+    # List of lists to store the postcodes for each transport method
+    transport = [plane_eng, car_eng, rail_eng]
 
-        # List of lists to store the postcodes for each transport method
-        transport_eng = [plane_eng, car_eng, rail_eng]
-
-        # Wales
-        p_plane_wales = int(len(wales) * (percent_plane_uk / 100))
-        p_car_wales = int(len(wales) * (percent_car_uk / 100))
-        p_rail_wales = int(len(wales) * (percent_rail_uk / 100))
-
-        # randomly divide 'wales' into 3 parts based on the percentages
-        seclist_wales = [p_plane_wales, p_car_wales, p_rail_wales]
-        it_wales = iter(wales)
-        # randomly divide 'wales' into 3 parts based on the percentages and make sure they don't overlap with islice
-        plane_wales, car_wales, rail_wales = [list(islice(it_wales, 0, i)) for i in seclist_wales]
-
-        # List of lists to store the postcodes for each transport method
-        transport_wales = [plane_wales, car_wales, rail_wales]
-
-        # Northern Ireland
-        p_plane_ni = int(len(north_ireland) * (percent_plane_uk / 100))
-        p_car_ni = int(len(north_ireland) * (percent_car_uk / 100))
-        p_rail_ni = int(len(north_ireland) * (percent_rail_uk / 100))
-
-        # randomly divide 'north_ireland' into 3 parts based on the percentages
-        seclist_ni = [p_plane_ni, p_car_ni, p_rail_ni]
-        it_ni = iter(north_ireland)
-        # randomly divide 'north_ireland' into 3 parts based on the percentages and make sure they don't overlap with islice
-        plane_ni, car_ni, rail_ni = [list(islice(it_ni, 0, i)) for i in seclist_ni]
-
-        # List of lists to store the postcodes for each transport method
-        transport_ni = [plane_ni, car_ni, rail_ni]                
-        
-        # Stop the loop
-        start = False
-
-    return transport_scot, transport_eng, transport_wales, transport_ni
+    return transport

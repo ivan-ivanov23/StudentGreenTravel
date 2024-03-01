@@ -10,7 +10,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     travel = Travel(stops_dict, stations_dict, airports_dict, ukpostcode_coords)
 
     """=================================Transport methods=================================="""
-
+    # Extract the lists of postcodes for each mode of transport and region
     rail_scotland = transport_scot[2]
     bus_scotland = transport_scot[0]
     car_scotland = transport_scot[1]
@@ -134,7 +134,6 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     """"=================================Converting to NumPy arrays=================================="""	
 
     # Extract mid leg distances from the dictionaries and converts them to numpy arrays (THESE ARE ONLY DISTANCES BETWEEN THE POSTCODES AND THE STOPS/STATIONS/AIRPORTS)
-    """NEED TO THINK ABOUT FIRST AND FINAL LEG OF JOURNEY, AND HOW TO CALCULATE THAT"""
     rail_scotland_distances = np.array([value[2] for value in scotland_rail_data.values()])
     rail_eng_distances = np.array([value[2] for value in eng_rail_data.values()])
     rail_wales_distances = np.array([value[2] for value in wales_rail_data.values()])
@@ -188,8 +187,6 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     # Create a heatmap to visualise the total distances with reversed green to red colour scheme
     sns.heatmap(total_distances, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total distance (km)'})
     plt.title('Total distances travelled by students')
-    # Save the heatmap as a .png file
-    #plt.savefig('distances_heatmap.png')
 
     """=================================Emissions=================================="""
 
@@ -199,6 +196,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     # Calculate the emissions for each mode of transport
     # Emissions = distance * emission factor
     # Emissions are in kgCO2e
+    # Scotland emissions
     rail_emissions_scotland = total_distance_rail_scotland * emission_factors['rail']
     bus_emissions_scotland = total_distance_bus_scotland * emission_factors['bus']
     car_emissions_scotland = total_distance_car_scotland * emission_factors['car']
@@ -207,6 +205,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     # Total emissions
     total_emissions_scotland = rail_emissions_scotland + bus_emissions_scotland + car_emissions_scotland + taxi_emissions_scotland + walk_emissions_scotland
 
+    # England emissions
     rail_emissions_england = total_distance_rail_eng * emission_factors['rail']
     plane_emissions_england = total_distance_plane_eng * emission_factors['plane']
     car_emissions_england = total_distance_car_eng * emission_factors['car']
@@ -216,6 +215,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     # Total emissions
     total_emissions_england = rail_emissions_england + plane_emissions_england + car_emissions_england + taxi_emissions_england + walk_emissions_england
 
+    # Wales emissions
     rail_emissions_wales = total_distance_rail_wales * emission_factors['rail']
     plane_emissions_wales = total_distance_plane_wales * emission_factors['plane']
     car_emissions_wales = total_distance_car_wales * emission_factors['car']
@@ -225,6 +225,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     # Total emissions
     total_emissions_wales = rail_emissions_wales + plane_emissions_wales + car_emissions_wales + taxi_emissions_wales + walk_emissions_wales
 
+    # Northern Ireland emissions
     rail_emissions_ni = total_distance_rail_ni * emission_factors['rail']
     plane_emissions_ni = total_distance_plane_ni * emission_factors['plane']
     car_emissions_ni = total_distance_car_ni * emission_factors['car']
@@ -245,8 +246,6 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     # Create a heatmap to visualise the total emissions with reversed green to red colour scheme
     sns.heatmap(total_emissions_heatmap, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total emissions (kgCO2e)'})
     plt.title('Total emissions from student travel')
-    # Save the heatmap as a .png file
-    #plt.savefig('emissions_heatmap.png')
 
     # Dataframe to store the total emissions
     total_emissions = pd.DataFrame({'Scotland': [total_emissions_scotland],
@@ -261,13 +260,9 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     plt.xticks(rotation=0)
     plt.ylabel('Total emissions (kgCO2e)')
     plt.title('Total emissions from student travel')
-    # Save the bar chart as a .png file
-    # plt.savefig('emissions_bar_chart.png')
 
     # Return the total emissions dataframe
-    return total_emissions_heatmap, total_distances
-
-
+    return total_emissions_heatmap, total_distances, total_emissions
 
 
 if __name__ == '__main__':
