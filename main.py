@@ -178,18 +178,18 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
 
     """=================================Visualisation==================================""" 
 
-    # # Create a dataframe to store the total distances
-    # total_distances = pd.DataFrame({'Scotland': [total_distance_rail_scotland, 0, total_distance_bus_scotland, total_distance_car_scotland, total_distance_taxi_scotland, total_walk_scotland],
-    #                                 'England': [total_distance_rail_eng, total_distance_plane_eng,  total_distance_bus_eng, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
-    #                                 'Wales': [total_distance_rail_wales, total_distance_plane_wales,  total_distance_bus_wales, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
-    #                                 'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni,  total_distance_bus_ni, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]},
-    #                                 index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
+    # Create a dataframe to store the total distances
+    total_distances = pd.DataFrame({'Scotland': [total_distance_rail_scotland, 0, total_distance_bus_scotland, total_distance_car_scotland, total_distance_taxi_scotland, total_walk_scotland],
+                                    'England': [total_distance_rail_eng, total_distance_plane_eng,  total_distance_bus_eng, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
+                                    'Wales': [total_distance_rail_wales, total_distance_plane_wales,  total_distance_bus_wales, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
+                                    'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni,  total_distance_bus_ni, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]},
+                                    index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
 
-    # # Create a heatmap to visualise the total distances with reversed green to red colour scheme
-    # sns.heatmap(total_distances, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total distance (km)'})
-    # plt.title('Total distances travelled by students')
-    # # Save the heatmap as a .png file
-    # plt.savefig('distances_heatmap.png')
+    # Create a heatmap to visualise the total distances with reversed green to red colour scheme
+    sns.heatmap(total_distances, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total distance (km)'})
+    plt.title('Total distances travelled by students')
+    # Save the heatmap as a .png file
+    #plt.savefig('distances_heatmap.png')
 
     """=================================Emissions=================================="""
 
@@ -236,17 +236,17 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     total_emissions_ni = rail_emissions_ni + plane_emissions_ni + car_emissions_ni + taxi_emissions_ni + walk_emissions_ni
 
     # Create a dataframe to store the separate emissions
-    total_emissions = pd.DataFrame({'Scotland': [rail_emissions_scotland, 0, bus_emissions_scotland, car_emissions_scotland, taxi_emissions_scotland, walk_emissions_scotland],
+    total_emissions_heatmap = pd.DataFrame({'Scotland': [rail_emissions_scotland, 0, bus_emissions_scotland, car_emissions_scotland, taxi_emissions_scotland, walk_emissions_scotland],
                                     'England': [rail_emissions_england, plane_emissions_england, bus_emissions_england, car_emissions_england, taxi_emissions_england, walk_emissions_england],
                                     'Wales': [rail_emissions_wales, plane_emissions_wales, bus_emissions_wales, car_emissions_wales, taxi_emissions_wales, walk_emissions_wales],
                                     'Northern Ireland': [rail_emissions_ni, plane_emissions_ni, bus_emissions_ni, car_emissions_ni, taxi_emissions_ni, walk_emissions_ni]},
                                     index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
     
     # Create a heatmap to visualise the total emissions with reversed green to red colour scheme
-    sns.heatmap(total_emissions, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total emissions (kgCO2e)'})
+    sns.heatmap(total_emissions_heatmap, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total emissions (kgCO2e)'})
     plt.title('Total emissions from student travel')
     # Save the heatmap as a .png file
-    plt.savefig('emissions_heatmap.png')
+    #plt.savefig('emissions_heatmap.png')
 
     # Dataframe to store the total emissions
     total_emissions = pd.DataFrame({'Scotland': [total_emissions_scotland],
@@ -262,7 +262,10 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     plt.ylabel('Total emissions (kgCO2e)')
     plt.title('Total emissions from student travel')
     # Save the bar chart as a .png file
-    plt.savefig('emissions_bar_chart.png')
+    # plt.savefig('emissions_bar_chart.png')
+
+    # Return the total emissions dataframe
+    return total_emissions_heatmap, total_distances
 
 
 

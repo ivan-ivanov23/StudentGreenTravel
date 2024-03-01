@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox
+from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from tkinter.filedialog import askopenfile
 import pandas as pd
@@ -8,7 +8,10 @@ from final_leg import select_country
 from page1 import MainPage
 from page2 import Page2
 from page3 import Page3
+from results_page import ResultPage
 from main import main
+import plotly.express as px
+from PyQt6.QtWebEngineWidgets import *
 
 """
 Info:
@@ -44,6 +47,7 @@ class Calculator(QWidget):
         self.layout1 = QVBoxLayout()
         self.layout2 = QVBoxLayout()
         self.layout3 = QVBoxLayout()
+        self.layout4 = QHBoxLayout()
 
         # Stacked layout to hold the pages
         # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm 
@@ -53,11 +57,13 @@ class Calculator(QWidget):
         self.page1 = MainPage()
         self.page2 = Page2()
         self.page3 = Page3()
+        self.page4 = ResultPage()
 
         # Add the pages to the stacked layout and set the stacked layout as the main layout
         self.stackedLayout.addWidget(self.page1)
         self.stackedLayout.addWidget(self.page2)
         self.stackedLayout.addWidget(self.page3)
+        self.stackedLayout.addWidget(self.page4)
 
         self.setLayout(self.stackedLayout)
 
@@ -77,6 +83,11 @@ class Calculator(QWidget):
         self.page3.result_button.clicked.connect(self.go_to_results)
         self.hundred_percent_page3.connect(self.enable_page3)
         self.page3.submit.clicked.connect(self.check_combo_page3)
+
+        # Connect signals for page4
+        self.page4.button1.clicked.connect(self.go_to_page3)
+        self.page4.button2.clicked.connect(self.graphs)
+
 
         # Show the main page
         self.show()
@@ -118,6 +129,9 @@ class Calculator(QWidget):
 
     def go_to_page3(self):
         self.stackedLayout.setCurrentIndex(2)
+
+    def go_to_page4(self):
+        self.stackedLayout.setCurrentIndex(3)
 
 
     def check_combo_page2(self):
@@ -239,6 +253,7 @@ class Calculator(QWidget):
 
     def go_to_results(self):
         """Extract the final leg of the journey for each country"""
+        self.stackedLayout.setCurrentIndex(3)
         # Scotland
         scot_car_fleg = self.scot_fleg[0]
         scot_taxi_fleg = self.scot_fleg[1]
@@ -264,8 +279,30 @@ class Calculator(QWidget):
         ni_walk_fleg = self.ni_fleg_bus_rail[3] + self.ni_fleg_plane[3]
 
         # Call the main function
-        main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        self.emissions, self.distances = main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
 
+    def graphs(self):
+        df = self.emissions
+
+        # Exclude the Walk values
+        df = df.drop('Walk', axis=0)
+
+        # Round the values to 2 decimal places
+        df = df.round(2)
+
+        # Source: https://plotly.com/python/heatmaps/
+        self.fig1 = px.imshow(df, text_auto=True, aspect='auto', title='Total Emissions (kgCO2e) by Country and Mode of Transport',
+                        labels=dict(x="Country", y="Transport", color="Emissions (kgCO2e)"),
+                        color_continuous_scale='bupu')
+
+        # Edit the font size and color of the values
+        self.fig1.update_traces(textfont_size=16)
+
+        # Show the web view
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.fig1.to_html(include_plotlyjs='cdn'))
+
+        
 
 """==============================================Run the app=============================================="""
 app = QApplication(sys.argv)
