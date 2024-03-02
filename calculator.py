@@ -1,6 +1,7 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout, QLabel
+from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt6.QtGui import QIcon
 from tkinter.filedialog import askopenfile
 import pandas as pd
 from preprocess_data import determine_postcode, divide_scot_addresses, divide_uk_addresses
@@ -42,6 +43,9 @@ class Calculator(QWidget):
         """Set up application GUI"""
         self.setFixedSize(800, 600)
         self.setWindowTitle("StudentGreenTravel")
+        main_icon = QIcon('icons/eco.svg')
+        self.setWindowIcon(main_icon)
+
 
         # Layouts for pages
         self.layout1 = QVBoxLayout()
@@ -90,6 +94,99 @@ class Calculator(QWidget):
         self.page4.radio2.clicked.connect(self.click_radio2)
         self.page4.radio3.clicked.connect(self.click_radio3)
         self.page4.radio4.clicked.connect(self.click_radio4)
+
+        # Set style for the widgets in the application
+        self.setStyleSheet("font-size: 12px; font-weight: bold; color: #2d3436;")
+
+        # Set style for all QButtons in the application so that they are bigger and have a greenish color
+        self.setStyleSheet(
+            "QPushButton {"
+            "background-color: #A1FA80;"
+            "border: none;"
+            "color: #2d3436;"
+            "padding: 10px 10px;"
+            "text-align: center;"
+            "text-decoration: none;"
+            "font-size: 16px;"
+            "margin: 4px 2px;"
+            "border-radius: 12px;"
+            "}"
+
+            "QPushButton:hover {"
+            "background-color: #00b894;"
+            "}"
+
+            "QPushButton:disabled {"
+            "background-color: #dfe6e9;"
+            "}"
+
+            "QComboBox {"
+            "font-size: 12px;"
+            "color: #2d3436;"
+            "}"
+
+            "QLineEdit {"
+            "font-size: 12px;"
+            "color: #2d3436;"
+            "}"
+
+            "QGroupBox {"
+            "font-size: 12px;"
+            "font-weight: bold;"
+            "color: #2d3436;"
+            "border-radius: 5px;"
+            "background-color: #dfe6e9;"
+            "padding: 5px;"
+            "margin-bottom: 10px;"
+            "margin-top: 15px;"
+            "}"
+
+            "QGroupBox::title {"
+            "subcontrol-origin: margin;"
+            "padding: 0 3px;"
+            "}"
+
+            "QRadioButton {"
+            "font-size: 12px;"
+            "color: #2d3436;"
+            "}"
+
+            "QRadioButton::indicator:checked {"
+            "background-color: #64C540;"
+            "border: 1px solid #64C540;"
+            "border-radius: 6px;"
+            "}"
+
+            "QWebEngineView {"
+            "background-color: #dfe6e9;"
+            "}"
+            """
+
+        """)
+
+        # Get icons from StandardPixmap
+        # Source: https://www.svgrepo.com/
+        calculate_icon = QIcon('icons/calculator.svg')
+        back = QIcon('icons/back.svg')
+        submit = QIcon('icons/submit.svg')
+        next_button = QIcon('icons/next.svg')
+        file_button = QIcon('icons/file.svg')
+        dash = QIcon('icons/dash.svg')
+
+        # Set the icon for all the back buttons
+        self.page1.button1.setIcon(dash)
+        self.page1.button2.setIcon(file_button)
+        self.page2.back.setIcon(back)
+        self.page3.back.setIcon(back)
+        self.page4.button1.setIcon(back)
+        # Set the icon for the calculate button from images/calculator.png
+        
+        self.page3.calculate_button.setIcon(calculate_icon)
+        # Set the icon for the submit button
+        self.page2.submit.setIcon(submit)
+        self.page3.submit.setIcon(submit)
+        # Set the icon for the next button
+        self.page2.next_button2.setIcon(next_button)
 
 
         # Show the application
@@ -149,6 +246,7 @@ class Calculator(QWidget):
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
+            msg.setWindowIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogYesButton))
             msg.setText("The data has been submitted!")
             # Add a success icon to the message box
             msg.setIcon(QMessageBox.Icon.Information)
@@ -168,6 +266,7 @@ class Calculator(QWidget):
             # Show a message box with the error
             msg = QMessageBox()
             msg.setWindowTitle("Error")
+            msg.setWindowIcon(self.style().standardIcon(self.style().StandardPixmap.SP_MessageBoxCritical))
             msg.setText("The sum of the percentages for each country must be 100!\nPlease try again.")
             # Add a warning icon to the message box
             msg.setIcon(QMessageBox.Icon.Warning)
@@ -200,6 +299,7 @@ class Calculator(QWidget):
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
+            msg.setWindowIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogYesButton))
             msg.setText("The data has been submitted!")
             # Add a success icon to the message box
             msg.setIcon(QMessageBox.Icon.Information)
@@ -230,6 +330,7 @@ class Calculator(QWidget):
             # Show a message box with the error
             msg = QMessageBox()
             msg.setWindowTitle("Error")
+            msg.setWindowIcon(self.style().standardIcon(self.style().StandardPixmap.SP_MessageBoxCritical))
             msg.setText("The sum of the percentages for each country must be 100!\nPlease try again.")
             # Add a warning icon to the message box
             msg.setIcon(QMessageBox.Icon.Warning)
@@ -322,9 +423,6 @@ class Calculator(QWidget):
         self.fig4 = px.pie(values=values, names=labels, title='Emissions per Student by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"), color_discrete_sequence=px.colors.sequential.RdBu)
         # Edit the font size and color of the values
         self.fig4.update_traces(textfont_size=16)
-
-
-
 
 
         

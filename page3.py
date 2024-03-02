@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QIcon
 
 
 class Page3(QWidget):
@@ -12,6 +13,7 @@ class Page3(QWidget):
         """Create and arrange widgets for Page 3"""
         self.layout3 = QVBoxLayout()
         label = QLabel("Select the travel assumptions for the final leg of the journey.\nFrom Aberdeen transport hub to the University of Aberdeen")
+        label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
 
         # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm
         # List of countries
@@ -21,6 +23,7 @@ class Page3(QWidget):
         self.leftlist.insertItem(2, 'Wales')
         self.leftlist.insertItem(3, 'Northern Ireland')
         self.leftlist.setFixedWidth(100)
+        self.leftlist.setStyleSheet("background-color: #dfe6e9; border-radius: 5px;")
 
         # Right side widgets
         self.stack1 = QWidget()
@@ -45,6 +48,10 @@ class Page3(QWidget):
         hbox.addWidget(self.leftlist)
         hbox.addWidget(self.Stack)
 
+        # Label to say that it is calculating
+        self.calculating_label = QLabel("")
+        self.calculating_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
 
         # Button layout
         button_layout = QHBoxLayout()
@@ -62,6 +69,7 @@ class Page3(QWidget):
         self.layout3.addLayout(hbox)
         self.layout3.addStretch(1)
         self.leftlist.currentRowChanged.connect(self.display)
+        self.layout3.addWidget(self.calculating_label)
         self.layout3.addLayout(button_layout)
 
         self.setLayout(self.layout3)
@@ -69,7 +77,9 @@ class Page3(QWidget):
     def scotlandUI(self):
         """UI for Scotland""" 
         layout = QVBoxLayout()
+        lay1 = QHBoxLayout()
         country = QLabel("Scotland")
+        country.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
         scot_grid = QGridLayout()
         # Reduce space between labels and combo box columns
         scot_grid.setHorizontalSpacing(20)
@@ -124,6 +134,7 @@ class Page3(QWidget):
         """UI for England""" 
         layout = QVBoxLayout()
         country = QLabel("England")
+        country.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
         eng_grid_top = QGridLayout()
         # Reduce space between labels and combo box columns
         eng_grid_top.setHorizontalSpacing(20)
@@ -202,7 +213,7 @@ class Page3(QWidget):
         england_group_top.setLayout(eng_grid_top)
 
         # Create a group box for the grid layout
-        england_group_bottom = QGroupBox("Adjust percentages for top travel method from airport to university.")
+        england_group_bottom = QGroupBox("Adjust percentages for each travel method from airport to university.")
         england_group_bottom.setLayout(eng_grid_bottom)
 
 
@@ -218,6 +229,7 @@ class Page3(QWidget):
         """UI for Wales""" 
         layout = QVBoxLayout()
         country = QLabel("Wales")
+        country.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
         wales_grid_top = QGridLayout()
         # Reduce space between labels and combo box columns
         wales_grid_top.setHorizontalSpacing(20)
@@ -313,6 +325,7 @@ class Page3(QWidget):
         """UI for Northern Ireland""" 
         layout = QVBoxLayout()
         country = QLabel("Northern Ireland")
+        country.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
         ni_grid_top = QGridLayout()
         # Reduce space between labels and combo box columns
         ni_grid_top.setHorizontalSpacing(20)

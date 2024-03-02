@@ -1,9 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QWidget
 from PyQt6.QtCore import Qt
-from preprocess_data import determine_postcode
-from tkinter.filedialog import askopenfile
-import pandas as pd
-
+from PyQt6.QtGui import QIcon
 
 class MainPage(QWidget):
 
@@ -16,9 +13,13 @@ class MainPage(QWidget):
         # Main layout
         self.main_layout = QVBoxLayout()
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        logo = QIcon("icons/eco.svg")
+        logo_label = QLabel()
+        logo_label.setPixmap(logo.pixmap(100, 100))
+        logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Title label
-        title = QLabel("Welcome to StudentGreenTravel!")
+        title = QLabel("Welcome to StudentGreenTravel")
         title.setStyleSheet("font-size: 24px; font-weight: bold; color: #2d3436;")
         
         # Buttons
@@ -28,13 +29,26 @@ class MainPage(QWidget):
 
         # File label
         self.file_label = QLabel(" ")
+        self.file_label.setStyleSheet("color: #2d3436; font-size: 14px")
         self.file_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Small label to show the author and year
+        author_label = QLabel("© 2024 by I.Ivanov")
+        # align it at the right edge of the window
+        author_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        author_label.setStyleSheet("color: #2d3436; font-size: 12px")
         
         # Add widgets to layout
+        self.main_layout.addStretch(1)
+        self.main_layout.addWidget(logo_label)
         self.main_layout.addWidget(title)
         self.main_layout.addWidget(self.button1)
         self.main_layout.addWidget(self.button2)
         self.main_layout.addWidget(self.file_label)
+        # add stretch to push the author label to the bottom but it should not affect the other widgets
+        self.main_layout.addStretch(1)
+
+        self.main_layout.addWidget(author_label)
 
         self.setLayout(self.main_layout)
 
