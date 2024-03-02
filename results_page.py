@@ -35,9 +35,12 @@ class ResultPage(QWidget):
         self.radio1 = QRadioButton("Distance by Country")
         self.radio2 = QRadioButton("Emissions by Country")
         self.radio3 = QRadioButton("Total Emissions by Country")
+        self.radio4 = QRadioButton("Emissions per Student")
         radio_layout.addWidget(self.radio1)
         radio_layout.addWidget(self.radio2)
         radio_layout.addWidget(self.radio3)
+        radio_layout.addWidget(self.radio4)
+
         # Add stretch to push the radio buttons to the top
         radio_layout.addStretch(1)
 

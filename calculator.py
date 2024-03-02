@@ -89,6 +89,7 @@ class Calculator(QWidget):
         self.page4.radio1.clicked.connect(self.click_radio1)
         self.page4.radio2.clicked.connect(self.click_radio2)
         self.page4.radio3.clicked.connect(self.click_radio3)
+        self.page4.radio4.clicked.connect(self.click_radio4)
 
 
         # Show the application
@@ -109,8 +110,6 @@ class Calculator(QWidget):
             #self.file_label.setStyleSheet("font-size: 12px; font-weight: bold; color: #2d3436;")
             # Emit signal that a file has been selected
             self.file_selected.emit(True)
-            # Call the function to enable the button
-            # self.enable_buttons(True)
         else:
             self.page1.file_label.setText("No file was selected.")
             # Emit a signal that a file has not been selected
@@ -184,6 +183,7 @@ class Calculator(QWidget):
     def get_country_data(self):
         """Return the data from the file explorer function"""
         return self.scotland, self.wales, self.north_ireland, self.england
+    
 
     def enable_page2(self, hundred_percent):
         """Enable the next button if you get signal on page2"""
@@ -325,6 +325,27 @@ class Calculator(QWidget):
         # Edit the font size and color of the values
         self.fig3.update_traces(textfont_size=16)
 
+        # Pie chart for emissions per student by country
+        df = self.total_emissions
+        # Divide the total emissions by the number of students for each country
+        scot_emissions = df.iloc[0, 0] / len(self.scotland)
+        eng_emissions = df.iloc[0, 1] / len(self.england)
+        wales_emissions = df.iloc[0, 2] / len(self.wales)
+        ni_emissions = df.iloc[0, 3] / len(self.north_ireland)
+
+        # Create a pie chart
+        # Source: https://plotly.com/python/pie-charts/
+        labels = ['Scotland', 'England', 'Wales', 'Northern Ireland']
+        values = [scot_emissions, eng_emissions, wales_emissions, ni_emissions]
+        # Round the values to 0 decimal places
+        values = [round(i, 0) for i in values]
+        # Figure to store the pie chart with the emissions per student
+        self.fig4 = px.pie(values=values, names=labels, title='Total Emissions per Student by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"), color_discrete_sequence=px.colors.sequential.RdBu)
+        # Edit the font size and color of the values
+        self.fig4.update_traces(textfont_size=16)
+
+
+
 
 
         
@@ -342,6 +363,11 @@ class Calculator(QWidget):
         """Set the webview to show the pie chart with the total emissions data"""
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig3.to_html(include_plotlyjs='cdn'))
+
+    def click_radio4(self):
+        """Set the webview to show the pie chart with the emissions per student data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.fig4.to_html(include_plotlyjs='cdn'))
 
         
 
