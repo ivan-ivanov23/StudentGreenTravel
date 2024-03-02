@@ -11,7 +11,6 @@ from page3 import Page3
 from results_page import ResultPage
 from main import main
 import plotly.express as px
-import matplotlib.pyplot as plt
 
 """
 Info:
