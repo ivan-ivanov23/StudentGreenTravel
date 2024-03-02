@@ -313,6 +313,7 @@ class Calculator(QWidget):
         self.fig2.update_traces(textfont_size=16)
 
         # Pie chart for the total emissions
+        # Source: https://plotly.com/python/pie-charts/
         df = self.total_emissions
         df = df.round(0)
         # take names from columns
