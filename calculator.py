@@ -21,6 +21,7 @@ Info:
   for Scotland and the rest of the UK
 - page3 is the third page where the user selects the travel assumptions for the final leg of the journey 
   from Aberdeen transport hub to the University of Aberdeen
+- page4 is the final page where the user can see the results of the calculations in the form of heatmaps and pie charts
 
 """
 
@@ -70,18 +71,18 @@ class Calculator(QWidget):
         # Connect signals for page1
         self.page1.button1.clicked.connect(self.go_to_page2)
         self.page1.button2.clicked.connect(self.open_file)
-        self.file_selected.connect(self.enable_buttons1)
+        self.file_selected.connect(self.page1.enable_buttons1)
 
         # Connect signals for page2
         self.page2.next_button2.clicked.connect(self.go_to_page3)
         self.page2.submit.clicked.connect(self.check_combo_page2)
         self.page2.back.clicked.connect(self.go_to_page1)
-        self.hundred_percent.connect(self.enable_page2)
+        self.hundred_percent.connect(self.page2.enable_page2)
 
         # Connect signals for page3
         self.page3.back.clicked.connect(self.go_to_page2)
         self.page3.calculate_button.clicked.connect(self.go_to_results)
-        self.hundred_percent_page3.connect(self.enable_page3)
+        self.hundred_percent_page3.connect(self.page3.enable_page3)
         self.page3.submit.clicked.connect(self.check_combo_page3)
 
         # Connect signals for page4
@@ -115,13 +116,6 @@ class Calculator(QWidget):
             # Emit a signal that a file has not been selected
             self.file_selected.emit(False)
 
-
-    def enable_buttons1(self, file_selected):
-        """Enable the next button if a file has been selected """
-        if file_selected:
-            self.page1.button1.setEnabled(True)
-        else:
-            self.page1.button1.setEnabled(False)
 
     def go_to_page1(self):
         self.stackedLayout.setCurrentIndex(0)
@@ -184,13 +178,6 @@ class Calculator(QWidget):
         """Return the data from the file explorer function"""
         return self.scotland, self.wales, self.north_ireland, self.england
     
-
-    def enable_page2(self, hundred_percent):
-        """Enable the next button if you get signal on page2"""
-        if hundred_percent:
-            self.page2.next_button2.setEnabled(True)
-        else:
-            self.page2.next_button2.setEnabled(False)
     
     def check_combo_page3(self):
         """Check if the sum of the percentages for each country is 100. If it is, then call the menu function. If not, show a message box with an error.""" 
@@ -238,8 +225,7 @@ class Calculator(QWidget):
             ni_rail = self.travel_ni[2]
             ni_plane = self.travel_ni[0]
             self.ni_fleg_bus_rail, self.ni_fleg_plane = assign_uk(ni_rail, ni_plane, ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
-            # NEED to Extract the total distance travelled by each mode of transport in the final leg of the journey as in main.py
-            # Sum them as in total distances part of main.py
+
         else:
             self.hundred_percent_page3.emit(False)
             # Show a message box with the error
@@ -250,12 +236,6 @@ class Calculator(QWidget):
             msg.setIcon(QMessageBox.Icon.Warning)
             msg.exec()
 
-    def enable_page3(self, hundred_percent_page3):
-        """Enable the result button if you get signal on page3"""
-        if hundred_percent_page3:
-            self.page3.calculate_button.setEnabled(True)
-        else:
-            self.page3.calculate_button.setEnabled(False)
 
     def go_to_results(self):
         """Extract the final leg of the journey for each country"""
@@ -340,7 +320,7 @@ class Calculator(QWidget):
         # Round the values to 0 decimal places
         values = [round(i, 0) for i in values]
         # Figure to store the pie chart with the emissions per student
-        self.fig4 = px.pie(values=values, names=labels, title='Total Emissions per Student by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"), color_discrete_sequence=px.colors.sequential.RdBu)
+        self.fig4 = px.pie(values=values, names=labels, title='Emissions per Student by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"), color_discrete_sequence=px.colors.sequential.RdBu)
         # Edit the font size and color of the values
         self.fig4.update_traces(textfont_size=16)
 

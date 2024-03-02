@@ -79,10 +79,10 @@ class Page3(QWidget):
         scot_grid.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 
-        car = QLabel("Car")
-        taxi = QLabel("Taxi")
-        bus = QLabel("Bus")
-        walk = QLabel("Walk")
+        car = QLabel("Car %")
+        taxi = QLabel("Taxi %")
+        bus = QLabel("Bus %")
+        walk = QLabel("Walk %")
       
         # Combo boxes
         scot_car_box = QComboBox()
@@ -141,15 +141,15 @@ class Page3(QWidget):
         eng_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 
-        car_top = QLabel("Car")
-        taxi_top = QLabel("Taxi")
-        bus_top = QLabel("Bus")
-        walk_top = QLabel("Walk")
+        car_top = QLabel("Car %")
+        taxi_top = QLabel("Taxi %")
+        bus_top = QLabel("Bus %")
+        walk_top = QLabel("Walk %")
 
-        car_bottom = QLabel("Car")
-        taxi_bottom = QLabel("Taxi")
-        bus_bottom = QLabel("Bus")
-        walk_bottom = QLabel("Walk")
+        car_bottom = QLabel("Car %")
+        taxi_bottom = QLabel("Taxi %")
+        bus_bottom = QLabel("Bus %")
+        walk_bottom = QLabel("Walk %")
       
         # Combo boxes for left side
         eng_car_box_top = QComboBox()
@@ -235,15 +235,15 @@ class Page3(QWidget):
         wales_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 
-        car_top = QLabel("Car")
-        taxi_top = QLabel("Taxi")
-        bus_top = QLabel("Bus")
-        walk_top = QLabel("Walk")
+        car_top = QLabel("Car %")
+        taxi_top = QLabel("Taxi %")
+        bus_top = QLabel("Bus %")
+        walk_top = QLabel("Walk %")
 
-        car_bottom = QLabel("Car")
-        taxi_bottom = QLabel("Taxi")
-        bus_bottom = QLabel("Bus")
-        walk_bottom = QLabel("Walk")
+        car_bottom = QLabel("Car %")
+        taxi_bottom = QLabel("Taxi %")
+        bus_bottom = QLabel("Bus %")
+        walk_bottom = QLabel("Walk %")
       
         # Combo boxes for left side
         wales_car_box_top = QComboBox()
@@ -330,15 +330,15 @@ class Page3(QWidget):
         ni_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
 
-        car_top = QLabel("Car")
-        taxi_top = QLabel("Taxi")
-        bus_top = QLabel("Bus")
-        walk_top = QLabel("Walk")
+        car_top = QLabel("Car %")
+        taxi_top = QLabel("Taxi %")
+        bus_top = QLabel("Bus %")
+        walk_top = QLabel("Walk %")
 
-        car_bottom = QLabel("Car")
-        taxi_bottom = QLabel("Taxi")
-        bus_bottom = QLabel("Bus")
-        walk_bottom = QLabel("Walk")
+        car_bottom = QLabel("Car %")
+        taxi_bottom = QLabel("Taxi %")
+        bus_bottom = QLabel("Bus %")
+        walk_bottom = QLabel("Walk %")
       
         # Combo boxes for left side
         ni_car_box_top = QComboBox()
@@ -413,5 +413,9 @@ class Page3(QWidget):
         ni = {key: int(combo_box.currentText()) for key, combo_box in self.ni_combos.items()}
         return scot, eng, wales, ni
     
-    def get_combos(self):
-        pass
+    def enable_page3(self, hundred_percent_page3):
+        """Enable the result button if you get signal on page3"""
+        if hundred_percent_page3:
+            self.calculate_button.setEnabled(True)
+        else:
+            self.calculate_button.setEnabled(False)

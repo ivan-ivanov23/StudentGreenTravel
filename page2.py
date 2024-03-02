@@ -93,3 +93,10 @@ class Page2(QWidget):
         self.layout2.addLayout(button_layout)
 
         self.setLayout(self.layout2)
+
+    def enable_page2(self, hundred_percent):
+        """Enable the next button if you get signal on page2"""
+        if hundred_percent:
+            self.next_button2.setEnabled(True)
+        else:
+            self.next_button2.setEnabled(False)

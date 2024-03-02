@@ -1,5 +1,8 @@
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QWidget
 from PyQt6.QtCore import Qt
+from preprocess_data import determine_postcode
+from tkinter.filedialog import askopenfile
+import pandas as pd
 
 
 class MainPage(QWidget):
@@ -34,3 +37,10 @@ class MainPage(QWidget):
         self.main_layout.addWidget(self.file_label)
 
         self.setLayout(self.main_layout)
+
+    def enable_buttons1(self, file_selected):
+        """Enable the next button if a file has been selected """
+        if file_selected:
+            self.button1.setEnabled(True)
+        else:
+            self.button1.setEnabled(False)
