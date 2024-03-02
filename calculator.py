@@ -88,6 +88,7 @@ class Calculator(QWidget):
         self.page4.button1.clicked.connect(self.go_to_page3)
         self.page4.radio1.clicked.connect(self.click_radio1)
         self.page4.radio2.clicked.connect(self.click_radio2)
+        self.page4.radio3.clicked.connect(self.click_radio3)
 
 
         # Show the application
@@ -291,7 +292,7 @@ class Calculator(QWidget):
         # Exclude the Walk values
         df = df.drop('Walk', axis=0)
         # Round the values to 2 decimal places
-        df = df.round(2)
+        df = df.round(0)
         # Source: https://plotly.com/python/heatmaps/
         # Figure to store the heatmap with the emissions
         self.fig1 = px.imshow(df, text_auto=True, aspect='auto', title='Total Emissions (kgCO2e) by Country and Mode of Transport',
@@ -303,16 +304,29 @@ class Calculator(QWidget):
 
         # Do the same for the distances
         df = self.distances
-        df = df.round(1)
+        df = df.round(0)
         # Figure to store the heatmap with the distances
         self.fig2 = px.imshow(df, text_auto=True, aspect='auto', title='Total Distance (km) by Country and Mode of Transport',
                         labels=dict(x="Country", y="Transport", color="Distance (km)"),
                         color_continuous_scale='bugn')
         
         self.fig2.update_traces(textfont_size=16)
-        
-                
 
+        # Pie chart for the total emissions
+        df = self.total_emissions
+        df = df.round(0)
+        # take names from columns
+        names = df.columns
+        # Values are the second row
+        values = df.iloc[0, :]
+        # Figure to store the pie chart with the total emissions
+        self.fig3 = px.pie(df, values=values, names=names, title='Total Emissions by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"))
+        # Edit the font size and color of the values
+        self.fig3.update_traces(textfont_size=16)
+
+
+
+        
     def click_radio1(self):
         """Set the webview to show the first heatmap with the emissions data"""
         # Source: https://zetcode.com/pyqt/qwebengineview/
@@ -322,6 +336,11 @@ class Calculator(QWidget):
         """Set the webview to show the second heatmap with the distances data"""
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig2.to_html(include_plotlyjs='cdn'))
+
+    def click_radio3(self):
+        """Set the webview to show the pie chart with the total emissions data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.fig3.to_html(include_plotlyjs='cdn'))
 
         
 
