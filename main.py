@@ -175,13 +175,16 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     total_walk_wales = wales_walk_fleg
     total_walk_ni = ni_walk_fleg
 
+    # Create a dictionary to store the total distances for each country
+    total_distances_dict = {'Scotland': [total_distance_rail_scotland, 0, total_distance_bus_scotland, total_distance_car_scotland, total_distance_taxi_scotland, total_walk_scotland],
+                        'England': [total_distance_rail_eng, total_distance_plane_eng,  total_distance_bus_eng, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
+                        'Wales': [total_distance_rail_wales, total_distance_plane_wales,  total_distance_bus_wales, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
+                        'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni,  total_distance_bus_ni, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]}
+
     """=================================Visualisation==================================""" 
 
     # Create a dataframe to store the total distances
-    total_distances = pd.DataFrame({'Scotland': [total_distance_rail_scotland, 0, total_distance_bus_scotland, total_distance_car_scotland, total_distance_taxi_scotland, total_walk_scotland],
-                                    'England': [total_distance_rail_eng, total_distance_plane_eng,  total_distance_bus_eng, total_distance_car_eng, total_distance_taxi_eng, total_walk_eng],
-                                    'Wales': [total_distance_rail_wales, total_distance_plane_wales,  total_distance_bus_wales, total_distance_car_wales, total_distance_taxi_wales, total_walk_wales],
-                                    'Northern Ireland': [total_distance_rail_ni, total_distance_plane_ni,  total_distance_bus_ni, total_distance_car_ni, total_distance_taxi_ni, total_walk_ni]},
+    total_distances = pd.DataFrame(total_distances_dict,
                                     index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
 
     # Create a heatmap to visualise the total distances with reversed green to red colour scheme
@@ -262,7 +265,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     plt.title('Total emissions from student travel')
 
     # Return the total emissions dataframe
-    return total_emissions_heatmap, total_distances, total_emissions
+    return total_emissions_heatmap, total_distances, total_emissions, total_distances_dict
 
 
 if __name__ == '__main__':

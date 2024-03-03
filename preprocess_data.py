@@ -83,18 +83,18 @@ def divide_uk_addresses(country: list, p_plane, p_car, p_rail):
     percent_rail_uk = p_rail
 
     # Calculate the number of postcodes for each transport method
-    p_plane_eng = int(len(country) * (percent_plane_uk / 100))
-    p_car_eng = int(len(country) * (percent_car_uk / 100))
-    p_rail_eng = int(len(country) * (percent_rail_uk / 100))
+    p_plane_uk = int(len(country) * (percent_plane_uk / 100))
+    p_car_uk = int(len(country) * (percent_car_uk / 100))
+    p_rail_uk = int(len(country) * (percent_rail_uk / 100))
     # randomly divide 'uk' into 3 parts based on the percentages
-    seclist_uk = [p_plane_eng, p_car_eng, p_rail_eng]
+    seclist_uk = [p_plane_uk, p_car_uk, p_rail_uk]
 
     # Iterator to split the list into 3 parts
     it = iter(country)
     # randomly divide 'england' into 3 parts based on the percentages and make sure they don't overlap with islice
-    plane_eng, car_eng, rail_eng = [list(islice(it, 0, i)) for i in seclist_uk]
+    plane_uk, car_uk, rail_uk = [list(islice(it, 0, i)) for i in seclist_uk]
 
     # List of lists to store the postcodes for each transport method
-    transport = [plane_eng, car_eng, rail_eng]
+    transport = [plane_uk, car_uk, rail_uk]
 
     return transport

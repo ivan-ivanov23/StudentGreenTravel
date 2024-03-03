@@ -1,7 +1,7 @@
 # This is the final page which contains the webview for the ploty heatmaps and 
 # the other widgets
 
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, QPushButton, QWidget
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, QPushButton, QWidget, QLabel
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 import sys
 
@@ -29,13 +29,18 @@ class ResultPage(QWidget):
         self.webview.setHtml("To see a heatmap, select a filter on the right.")
         hbox.addWidget(self.webview)
 
+        # layout the hold the group boxes
+        vbox1 = QVBoxLayout()
+
         # create a group box to hold radio buttons
-        group_box = QGroupBox("Filter")
+        group_box = QGroupBox("Basic Data")
+        group_box.setFixedWidth(200)
         radio_layout = QVBoxLayout()
-        self.radio1 = QRadioButton("Distance by Country")
-        self.radio2 = QRadioButton("Emissions by Country")
+        self.radio1 = QRadioButton("Emissions by Country")
+        self.radio2 = QRadioButton("Distance by Country")
         self.radio3 = QRadioButton("Total Emissions by Country")
         self.radio4 = QRadioButton("Emissions per Student")
+
         radio_layout.addWidget(self.radio1)
         radio_layout.addWidget(self.radio2)
         radio_layout.addWidget(self.radio3)
@@ -44,16 +49,47 @@ class ResultPage(QWidget):
         # Add stretch to push the radio buttons to the top
         radio_layout.addStretch(1)
 
+        # Scotland specific data
+        group_box2 = QGroupBox("Scotland Data")
+        group_box2.setFixedWidth(200)
+        radio_layout2 = QVBoxLayout()
+        self.radio5 = QRadioButton("Car Distance (Coucil)")
+        self.radio6 = QRadioButton("Bus Distance (Coucil)")
+        self.radio7 = QRadioButton("Train Distance (Coucil)")
+        self.radio8 = QRadioButton("Taxi Distance (Coucil)")
+
+        radio_layout2.addWidget(self.radio5)
+        radio_layout2.addWidget(self.radio6)
+        radio_layout2.addWidget(self.radio7)
+        radio_layout2.addWidget(self.radio8)
+
+        radio_layout2.addStretch(1)
+
+
+
+
+        # radio_layout.addWidget(self.radio6)
+        # radio_layout.addWidget(self.radio7)
+        # radio_layout.addWidget(self.radio8)
+
+
+ 
+
         # Add radio buttons to group box
         group_box.setLayout(radio_layout)
-        hbox.addWidget(group_box)
+        group_box2.setLayout(radio_layout2)
+        vbox1.addWidget(group_box)
+        vbox1.addWidget(group_box2)
+        hbox.addLayout(vbox1)
 
 
 
         # Button layout
         button_layout = QHBoxLayout()
         self.button1 = QPushButton("Back")
+        self.button2 = QPushButton("Menu")
         button_layout.addWidget(self.button1)
+        button_layout.addWidget(self.button2)
         
         # Add hbox layout to main layout
         vbox.addLayout(hbox)

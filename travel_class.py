@@ -63,7 +63,7 @@ class Travel:
         # For postcode in addresses
         for postcode in addresses:
         # Find the closest airport to the postcode
-            closest_airport_name, distance = self.closest_hub(postcode, postcodes, airports)
+            closest_airport_name, distance_to = self.closest_hub(postcode, postcodes, airports)
             
             # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is not from Scotland or London
             if closest_airport_name != 'Aberdeen' and postcode[:2] not in london_postcodes:
@@ -82,7 +82,7 @@ class Travel:
                 # If the postcode is invalid, add it to the list of invalid postcodes
                 invalid_postcodes.append(postcode)
                 continue
-            data[postcode] = (closest_airport_name, round(distance, 2), round(travel_distance, 2))
+            data[postcode] = (closest_airport_name, round(distance_to, 2), round(travel_distance, 2))
 
 
         return data, invalid_postcodes
@@ -98,7 +98,7 @@ class Travel:
         for postcode in addresses:
             # Find the closest bus stop to the given postcode and the distance to it
             if postcode in potcodes:
-                closest_stop_name, distance = self.closest_hub(postcode, potcodes, stops)
+                closest_stop_name, distance_to = self.closest_hub(postcode, potcodes, stops)
                 
                 # If the closest stop is not Aberdeen, calculate the distance to it
                 if closest_stop_name != 'Aberdeen':
@@ -108,7 +108,7 @@ class Travel:
                 else:
                     # For default value, set the distance to 0
                     travel_distance = 0
-                data[postcode] = (closest_stop_name, round(distance, 2), round(travel_distance, 2))
+                data[postcode] = (closest_stop_name, round(distance_to, 2), round(travel_distance, 2))
             else:
                 # If the postcode is invalid, add it to the list of invalid postcodes
                 invalid_postcodes.append(postcode)

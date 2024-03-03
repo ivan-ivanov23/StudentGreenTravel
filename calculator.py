@@ -1,6 +1,6 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout, QLabel
-from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout
+from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtGui import QIcon
 from tkinter.filedialog import askopenfile
 import pandas as pd
@@ -12,6 +12,7 @@ from page3 import Page3
 from results_page import ResultPage
 from main import main
 import plotly.express as px
+from council_areas import get_district, group_district, find_percentage
 
 """
 Info:
@@ -41,7 +42,7 @@ class Calculator(QWidget):
 
     def initializeUI(self):
         """Set up application GUI"""
-        self.setFixedSize(800, 600)
+        self.setMinimumSize(1000, 600)
         self.setWindowTitle("StudentGreenTravel")
         main_icon = QIcon('icons/eco.svg')
         self.setWindowIcon(main_icon)
@@ -90,10 +91,16 @@ class Calculator(QWidget):
 
         # Connect signals for page4
         self.page4.button1.clicked.connect(self.go_to_page3)
+        self.page4.button2.clicked.connect(self.go_to_page1)
         self.page4.radio1.clicked.connect(self.click_radio1)
         self.page4.radio2.clicked.connect(self.click_radio2)
         self.page4.radio3.clicked.connect(self.click_radio3)
         self.page4.radio4.clicked.connect(self.click_radio4)
+        self.page4.radio5.clicked.connect(self.click_radio5)
+        self.page4.radio6.clicked.connect(self.click_radio6)
+        self.page4.radio7.clicked.connect(self.click_radio7)
+        self.page4.radio8.clicked.connect(self.click_radio8)
+    
 
         # Set style for the widgets in the application
         self.setStyleSheet("font-size: 12px; font-weight: bold; color: #2d3436;")
@@ -172,6 +179,7 @@ class Calculator(QWidget):
         next_button = QIcon('icons/next.svg')
         file_button = QIcon('icons/file.svg')
         dash = QIcon('icons/dash.svg')
+        menu = QIcon('icons/menu.svg')
 
         # Set the icon for all the back buttons
         self.page1.button1.setIcon(dash)
@@ -179,6 +187,7 @@ class Calculator(QWidget):
         self.page2.back.setIcon(back)
         self.page3.back.setIcon(back)
         self.page4.button1.setIcon(back)
+        self.page4.button2.setIcon(menu)
         # Set the icon for the calculate button from images/calculator.png
         
         self.page3.calculate_button.setIcon(calculate_icon)
@@ -253,7 +262,6 @@ class Calculator(QWidget):
             msg.exec()
             # take the returns from the file explorer function without running it again
             scotland, wales, north_ireland, england = self.get_country_data()
-            #print(scotland)
             self.hundred_percent.emit(True)
             # call the divide_address functions for each country
             self.travel_scotland = divide_scot_addresses(scotland, scot_bus, scot_car, scot_rail)
@@ -365,8 +373,36 @@ class Calculator(QWidget):
         ni_walk_fleg = self.ni_fleg_bus_rail[3] + self.ni_fleg_plane[3]
 
         # Call the main function
-        self.emissions, self.distances, self.total_emissions = main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        
+       
 
+        # Create piechart for council areas
+        scot_dict = self.create_council_areas()
+
+        # Create a dataframe from the dict
+        df = pd.DataFrame(scot_dict)
+        # Round the values to 0 decimal places
+        df = df.round(1)
+        # Figure to show car distances by council area
+        # self.scot_car = px.pie(df, values=df.loc['Car', :], names=df.columns, title='Car Distance by Council Area (in km)', labels=dict(names="Council Area", values="Distance (km)"))
+        # Bar chart for the car distances by council area
+        self.scot_car = px.bar(df, x=df.columns, y=df.loc['Car', :], title='Car Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
+        # Show distance values on the bars
+        # self.scot_car.update_traces(texttemplate='%{y}', textposition='outside')
+
+        # do this for bus, rail and taxi
+        self.scot_bus = px.bar(df, x=df.columns, y=df.loc['Bus', :], title='Bus Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
+
+
+        self.scot_rail = px.bar(df, x=df.columns, y=df.loc['Rail', :], title='Train Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
+
+        self.scot_taxi = px.bar(df, x=df.columns, y=df.loc['Taxi', :], title='Taxi Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
+
+
+        
+    def click_radio1(self):
+        """Set the webview to show the first heatmap with the emissions data"""
         # Create the heatmaps
         df = self.emissions
         # Exclude the Walk values
@@ -381,7 +417,11 @@ class Calculator(QWidget):
 
         # Edit the font size and color of the values
         self.fig1.update_traces(textfont_size=16)
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.fig1.to_html(include_plotlyjs='cdn'))
 
+    def click_radio2(self):
+        """Set the webview to show the second heatmap with the distances data"""
         # Do the same for the distances
         df = self.distances
         df = df.round(0)
@@ -391,8 +431,12 @@ class Calculator(QWidget):
                         color_continuous_scale='bugn')
         
         self.fig2.update_traces(textfont_size=16)
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.fig2.to_html(include_plotlyjs='cdn'))
 
-        # Pie chart for the total emissions
+    def click_radio3(self):
+        """Set the webview to show the pie chart with the total emissions data"""
+         # Pie chart for the total emissions
         # Source: https://plotly.com/python/pie-charts/
         df = self.total_emissions
         df = df.round(0)
@@ -404,7 +448,11 @@ class Calculator(QWidget):
         self.fig3 = px.pie(df, values=values, names=names, title='Total Emissions by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"))
         # Edit the font size and color of the values
         self.fig3.update_traces(textfont_size=16)
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.fig3.to_html(include_plotlyjs='cdn'))
 
+    def click_radio4(self):
+        """Set the webview to show the pie chart with the emissions per student data"""
         # Pie chart for emissions per student by country
         df = self.total_emissions
         # Divide the total emissions by the number of students for each country
@@ -423,28 +471,112 @@ class Calculator(QWidget):
         self.fig4 = px.pie(values=values, names=labels, title='Emissions per Student by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"), color_discrete_sequence=px.colors.sequential.RdBu)
         # Edit the font size and color of the values
         self.fig4.update_traces(textfont_size=16)
-
-
-        
-    def click_radio1(self):
-        """Set the webview to show the first heatmap with the emissions data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
-        self.page4.webview.setHtml(self.fig1.to_html(include_plotlyjs='cdn'))
-
-    def click_radio2(self):
-        """Set the webview to show the second heatmap with the distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
-        self.page4.webview.setHtml(self.fig2.to_html(include_plotlyjs='cdn'))
-
-    def click_radio3(self):
-        """Set the webview to show the pie chart with the total emissions data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
-        self.page4.webview.setHtml(self.fig3.to_html(include_plotlyjs='cdn'))
-
-    def click_radio4(self):
-        """Set the webview to show the pie chart with the emissions per student data"""
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig4.to_html(include_plotlyjs='cdn'))
+
+    def click_radio5(self):
+        """Set the webview to show the heatmap with the council areas data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.scot_car.to_html(include_plotlyjs='cdn'))
+
+    def click_radio6(self):
+        """Set the webview to show the heatmap with the bus distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.scot_bus.to_html(include_plotlyjs='cdn'))
+
+    def click_radio7(self):
+        """Set the webview to show the heatmap with the rail distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.scot_rail.to_html(include_plotlyjs='cdn'))
+
+    def click_radio8(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.scot_taxi.to_html(include_plotlyjs='cdn'))
+
+
+    def create_council_areas(self):
+        # Scotland
+        scot_districts = get_district(self.scotland)
+        scot_grouped = group_district(scot_districts)
+        scot_percent = find_percentage(scot_grouped, self.scotland)
+
+        # From self.total_distance_dict get the distances for Scotland
+        scot_distances = self.total_distance_dict['Scotland']
+        # Extract the distances for each mode of transport
+        scot_car = scot_distances[3]
+        scot_bus = scot_distances[2]
+        scot_rail = scot_distances[0]
+        scot_walk = scot_distances[5]
+        scot_taxi = scot_distances[4]
+
+        # Create a dict with the distances for each mode of transport for Scotland according to the admin district percentage
+        scot_dict = {}
+        for key, value in scot_percent.items():
+            scot_dict[key] = {'Car': scot_car * value / 100, 'Bus': scot_bus * value / 100, 'Rail': scot_rail * value / 100, 'Taxi': scot_taxi * value / 100, 'Walk': scot_walk * value / 100}
+
+
+        # # England
+        # eng_districts = get_district(self.england)
+        # eng_grouped = group_district(eng_districts)
+        # eng_percent = find_percentage(eng_grouped, self.england)
+
+        # # From self.total_distance_dict get the distances for England
+        # eng_distances = self.total_distance_dict['England']
+        # # Extract the distances for each mode of transport
+        # eng_car = eng_distances[3]
+        # eng_bus = eng_distances[2]
+        # eng_rail = eng_distances[0]
+        # eng_walk = eng_distances[5]
+        # eng_taxi = eng_distances[4]
+        # eng_plane = eng_distances[1]
+
+        # # Create a dict with the distances for each mode of transport for England according to the admin district percentage
+        # eng_dict = {}
+        # for key, value in eng_percent.items():
+        #     eng_dict[key] = {'Car': eng_car * value, 'Bus': eng_bus * value, 'Rail': eng_rail * value, 'Taxi': eng_taxi * value, 'Walk': eng_walk * value, 'Plane': eng_plane * value}
+
+        # # Wales
+        # wales_districts = get_district(self.wales)
+        # wales_grouped = group_district(wales_districts)
+        # wales_percent = find_percentage(wales_grouped, self.wales)
+
+        # # From self.total_distance_dict get the distances for Wales
+        # wales_distances = self.total_distance_dict['Wales']
+        # # Extract the distances for each mode of transport
+        # wales_car = wales_distances[3]
+        # wales_bus = wales_distances[2]
+        # wales_rail = wales_distances[0]
+        # wales_walk = wales_distances[5]
+        # wales_taxi = wales_distances[4]
+        # wales_plane = wales_distances[1]
+
+        # # Create a dict with the distances for each mode of transport for Wales according to the admin district percentage
+        # wales_dict = {}
+        # for key, value in wales_percent.items():
+        #     wales_dict[key] = {'Car': wales_car * value, 'Bus': wales_bus * value, 'Rail': wales_rail * value, 'Taxi': wales_taxi * value, 'Walk': wales_walk * value, 'Plane': wales_plane * value}
+
+        # # Northern Ireland
+        # ni_districts = get_district(self.north_ireland)
+        # ni_grouped = group_district(ni_districts)
+        # ni_percent = find_percentage(ni_grouped, self.north_ireland)
+
+        # # From self.total_distance_dict get the distances for Northern Ireland
+        # ni_distances = self.total_distance_dict['Northern Ireland']
+        # # Extract the distances for each mode of transport
+        # ni_car = ni_distances[3]
+        # ni_bus = ni_distances[2]
+        # ni_rail = ni_distances[0]
+        # ni_walk = ni_distances[5]
+        # ni_taxi = ni_distances[4]
+        # ni_plane = ni_distances[1]
+
+        # # Create a dict with the distances for each mode of transport for Northern Ireland according to the admin district percentage
+        # ni_dict = {}
+        # for key, value in ni_percent.items():
+        #     ni_dict[key] = {'Car': ni_car * value, 'Bus': ni_bus * value, 'Rail': ni_rail * value, 'Taxi': ni_taxi * value, 'Walk': ni_walk * value, 'Plane': ni_plane * value}
+
+        return scot_dict# , eng_dict, wales_dict, ni_dict
 
         
 

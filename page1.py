@@ -19,13 +19,16 @@ class MainPage(QWidget):
         logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Title label
-        title = QLabel("Welcome to StudentGreenTravel")
+        title = QLabel("StudentGreenTravel")
         title.setStyleSheet("font-size: 24px; font-weight: bold; color: #2d3436;")
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         # Buttons
         self.button1 = QPushButton("Calculate Emissions")
+        self.button1.setFixedSize(300, 50)
         self.button1.setEnabled(False)
         self.button2 = QPushButton("Select a File")
+        self.button2.setFixedSize(300, 50)
 
         # File label
         self.file_label = QLabel(" ")
