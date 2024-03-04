@@ -141,4 +141,3 @@ class Travel:
         return car_data, invalid_postcodes
             
     
-    

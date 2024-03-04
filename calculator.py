@@ -1,6 +1,8 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout
+from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout, QProgressDialog, QProgressBar
 from PyQt6.QtCore import pyqtSignal
+from PyQt6 import QtCore
+from PyQt6 import QtWidgets
 from PyQt6.QtGui import QIcon
 from tkinter.filedialog import askopenfile
 import pandas as pd
@@ -255,7 +257,8 @@ class Calculator(QWidget):
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
-            msg.setWindowIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogYesButton))
+            success = QIcon('icons/success.svg')
+            msg.setWindowIcon(success)
             msg.setText("The data has been submitted!")
             # Add a success icon to the message box
             msg.setIcon(QMessageBox.Icon.Information)
@@ -274,9 +277,9 @@ class Calculator(QWidget):
             # Show a message box with the error
             msg = QMessageBox()
             msg.setWindowTitle("Error")
-            msg.setWindowIcon(self.style().standardIcon(self.style().StandardPixmap.SP_MessageBoxCritical))
+            warning = QIcon('icons/warning.svg')
+            msg.setWindowIcon(warning)
             msg.setText("The sum of the percentages for each country must be 100!\nPlease try again.")
-            # Add a warning icon to the message box
             msg.setIcon(QMessageBox.Icon.Warning)
             msg.exec()
 
@@ -307,7 +310,8 @@ class Calculator(QWidget):
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
-            msg.setWindowIcon(self.style().standardIcon(self.style().StandardPixmap.SP_DialogYesButton))
+            success = QIcon('icons/success.svg')
+            msg.setWindowIcon(success)
             msg.setText("The data has been submitted!")
             # Add a success icon to the message box
             msg.setIcon(QMessageBox.Icon.Information)
@@ -338,15 +342,30 @@ class Calculator(QWidget):
             # Show a message box with the error
             msg = QMessageBox()
             msg.setWindowTitle("Error")
-            msg.setWindowIcon(self.style().standardIcon(self.style().StandardPixmap.SP_MessageBoxCritical))
+            warning = QIcon('icons/warning.svg')
+            msg.setWindowIcon(warning)
             msg.setText("The sum of the percentages for each country must be 100!\nPlease try again.")
-            # Add a warning icon to the message box
             msg.setIcon(QMessageBox.Icon.Warning)
             msg.exec()
 
 
     def go_to_results(self):
         """Extract the final leg of the journey for each country"""
+        # Crate a progress dialog
+        pdg = QProgressDialog()
+        pdg.setWindowTitle("Calculating")
+        pdg.setLabelText("Please wait while distances and emissions are processed...")
+        loading_icon = QIcon('icons/loading.svg')
+        pdg.setWindowIcon(loading_icon)
+        self.pbar = QProgressBar()
+        pdg.setBar(self.pbar)
+        pdg.setMinimum(0)
+        pdg.setMaximum(100)
+        pdg.show()
+
+        self.pbar.setValue(0)
+        QtWidgets.QApplication.processEvents()
+
         self.stackedLayout.setCurrentIndex(3)
         # Scotland
         scot_car_fleg = self.scot_fleg[0]
@@ -372,34 +391,55 @@ class Calculator(QWidget):
         ni_bus_fleg = self.ni_fleg_bus_rail[2] + self.ni_fleg_plane[2]
         ni_walk_fleg = self.ni_fleg_bus_rail[3] + self.ni_fleg_plane[3]
 
+        # Update the progress bar
+        self.pbar.setValue(25)
+        # This is necessary for showing and updating the progress bar
+        # Source: https://stackoverflow.com/questions/30823863/pyqt-progress-bar-not-updating-or-appearing-until-100
+        QtWidgets.QApplication.processEvents()
+
         # Call the main function
         self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
-        
-       
+        # Update the progress bar
+        self.pbar.setValue(50)
+        QtWidgets.QApplication.processEvents()
+
 
         # Create piechart for council areas
         scot_dict = self.create_council_areas()
 
-        # Create a dataframe from the dict
+        # # Create a dataframe with the distances for each mode of transport for Scotland
         df = pd.DataFrame(scot_dict)
-        # Round the values to 0 decimal places
         df = df.round(1)
-        # Figure to show car distances by council area
-        # self.scot_car = px.pie(df, values=df.loc['Car', :], names=df.columns, title='Car Distance by Council Area (in km)', labels=dict(names="Council Area", values="Distance (km)"))
-        # Bar chart for the car distances by council area
-        self.scot_car = px.bar(df, x=df.columns, y=df.loc['Car', :], title='Car Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
-        # Show distance values on the bars
-        # self.scot_car.update_traces(texttemplate='%{y}', textposition='outside')
+        areas = df.columns
+        car_values = df.loc['Car', :]
+        bus_values = df.loc['Bus', :]
+        rail_values = df.loc['Rail', :]
+        taxi_values = df.loc['Taxi', :]
 
-        # do this for bus, rail and taxi
-        self.scot_bus = px.bar(df, x=df.columns, y=df.loc['Bus', :], title='Bus Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
-
-
-        self.scot_rail = px.bar(df, x=df.columns, y=df.loc['Rail', :], title='Train Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
-
-        self.scot_taxi = px.bar(df, x=df.columns, y=df.loc['Taxi', :], title='Taxi Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
+        labels = {'x': 'Council Area', 'y': 'Distance (km)'}
+        
 
 
+
+        # # Bar chart for the car distances by council area
+        self.scot_car = px.bar(df, x=areas, y=car_values, title='Car Distance by Council Area (in km)', labels=labels)
+        # # Show distance values on the bars
+        # # self.scot_car.update_traces(texttemplate='%{y}', textposition='outside')
+
+        # # do this for bus, rail and taxi
+        self.scot_bus = px.bar(df, x=areas, y=bus_values, title='Bus Distance by Council Area (in km)', labels=labels)
+
+
+        self.scot_rail = px.bar(df, x=areas, y=rail_values, title='Rail Distance by Council Area (in km)', labels=labels)
+
+        self.scot_taxi = px.bar(df, x=areas, y=taxi_values, title='Taxi Distance by Council Area (in km)', labels=labels)
+
+        #self.scot_car = px.bar(scot_dict, x=scot_dict.keys(), y=[i['Car'] for i in scot_dict.values()], title='Car Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
+
+        #Update the progress bar
+        self.pbar.setValue(100)
+        QtWidgets.QApplication.processEvents()
+        pdg.close()
         
     def click_radio1(self):
         """Set the webview to show the first heatmap with the emissions data"""
@@ -497,12 +537,17 @@ class Calculator(QWidget):
 
     def create_council_areas(self):
         # Scotland
+        self.scotland = self.scotland.to_list()
         scot_districts = get_district(self.scotland)
+        #print(scot_districts)
         scot_grouped = group_district(scot_districts)
         scot_percent = find_percentage(scot_grouped, self.scotland)
+        #print(scot_percent)
+
 
         # From self.total_distance_dict get the distances for Scotland
         scot_distances = self.total_distance_dict['Scotland']
+
         # Extract the distances for each mode of transport
         scot_car = scot_distances[3]
         scot_bus = scot_distances[2]
@@ -515,6 +560,9 @@ class Calculator(QWidget):
         for key, value in scot_percent.items():
             scot_dict[key] = {'Car': scot_car * value / 100, 'Bus': scot_bus * value / 100, 'Rail': scot_rail * value / 100, 'Taxi': scot_taxi * value / 100, 'Walk': scot_walk * value / 100}
 
+        # Update the progress bar
+        self.pbar.setValue(65)
+        QtWidgets.QApplication.processEvents()
 
         # # England
         # eng_districts = get_district(self.england)
@@ -536,6 +584,9 @@ class Calculator(QWidget):
         # for key, value in eng_percent.items():
         #     eng_dict[key] = {'Car': eng_car * value, 'Bus': eng_bus * value, 'Rail': eng_rail * value, 'Taxi': eng_taxi * value, 'Walk': eng_walk * value, 'Plane': eng_plane * value}
 
+        # self.pbar.setValue(75)
+        # QtWidgets.QApplication.processEvents()
+
         # # Wales
         # wales_districts = get_district(self.wales)
         # wales_grouped = group_district(wales_districts)
@@ -555,6 +606,9 @@ class Calculator(QWidget):
         # wales_dict = {}
         # for key, value in wales_percent.items():
         #     wales_dict[key] = {'Car': wales_car * value, 'Bus': wales_bus * value, 'Rail': wales_rail * value, 'Taxi': wales_taxi * value, 'Walk': wales_walk * value, 'Plane': wales_plane * value}
+
+        # self.pbar.setValue(85)
+        # QtWidgets.QApplication.processEvents()
 
         # # Northern Ireland
         # ni_districts = get_district(self.north_ireland)
@@ -576,7 +630,10 @@ class Calculator(QWidget):
         # for key, value in ni_percent.items():
         #     ni_dict[key] = {'Car': ni_car * value, 'Bus': ni_bus * value, 'Rail': ni_rail * value, 'Taxi': ni_taxi * value, 'Walk': ni_walk * value, 'Plane': ni_plane * value}
 
-        return scot_dict# , eng_dict, wales_dict, ni_dict
+        # self.pbar.setValue(90)
+        # QtWidgets.QApplication.processEvents()
+
+        return scot_dict#, eng_dict, wales_dict, ni_dict
 
         
 

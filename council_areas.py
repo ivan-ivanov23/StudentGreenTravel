@@ -1,33 +1,61 @@
-import asyncio
-import aiohttp
+import requests
 
-async def fetch_postcode(session, postcode):
-    url = f"https://api.postcodes.io/postcodes/{postcode}"
-    async with session.get(url) as response:
-        if response.status == 200:
-            data = await response.json()
-            admin_district = data.get("result", {}).get("admin_district")
-            return postcode, admin_district
-        else:
-            return postcode, None
+# def get_district(country_postcodes: list):
+#     """Finds the admin district for a passed list with postcodes of a country.""" 
+#     # Inspired by: https://stackoverflow.com/questions/16877422/whats-the-best-way-to-parse-a-json-response-from-the-requests-library 
+#     result = {}
+#     for postcode in country_postcodes:
+#         url = f"https://api.postcodes.io/postcodes/{postcode}"
+#         response = requests.get(url)
+#         if response.status_code == 200:
+#             data = response.json()
+#             admin_district = data.get("result", {}).get("admin_district")
+#             result[postcode] = admin_district
+#         else:
+#             result[postcode] = None
 
-async def get_district_async(country_postcodes):
-    async with aiohttp.ClientSession() as session:
-        tasks = [fetch_postcode(session, postcode) for postcode in country_postcodes]
-        results = await asyncio.gather(*tasks)
-        return {postcode: district for postcode, district in results}
+#     print(result)
+    
+#     return result
 
 def get_district(country_postcodes):
-    loop = asyncio.get_event_loop()
-    return loop.run_until_complete(get_district_async(country_postcodes))
-
-def group_district(districts):
+    """Finds the admin district for a passed list with postcodes of a country.""" 
     result = {}
-    for postcode, district in districts.items():
-        result.setdefault(district, []).append(postcode)
+    country_postcodes = split_list(country_postcodes)
+    for part in country_postcodes:
+        data = {"postcodes": part}
+        response = requests.post("https://api.postcodes.io/postcodes", json=data)
+        if response.status_code == 200:
+            response_json = response.json()
+            for item in response_json["result"]:
+                postcode = item["query"]  # Use "query" instead of "postcode"
+                if item["result"] is None:
+                    result[postcode] = None
+                else:
+                    district = item["result"]["admin_district"]
+                    result[postcode] = district
+
+    #print(result)
     return result
 
-def find_percentage(ordered, country_postcodes):
+def split_list(lst, chunk_size=100):
+    return [lst[i:i+chunk_size] for i in range(0, len(lst), chunk_size)]
+    
+
+
+def group_district(districts: dict):
+    """Groups the postcodes by their admin district."""
+    # Source: https://www.tutorialspoint.com/python-group-similar-keys-in-dictionary
+    result = {}
+    for postcode, district in districts.items():
+        if district in result:
+            result[district].append(postcode)
+        else:
+            result[district] = [postcode]
+    return result
+
+def find_percentage(ordered: dict, country_postcodes: list):
+    """Finds the percentage of postcodes in each admin district in respect to all postcodes for country."""
     total = len(country_postcodes)
     result = {}
     for district, postcodes in ordered.items():
@@ -38,29 +66,30 @@ def find_percentage(ordered, country_postcodes):
 
 
 # Example list of Scottish postcodes
-# scot = ["PO7 5GE", "PE11 3FQ",
-# "NE20 9SZ",
-# "AB11 6HS",
-# "SG27PB",
-# "AB25 1XF",
-# "HP9 2DJ",
-# "UB5 6NA",
-# "TR7 2AA",
-# "L36 3XR",
-# "SW6 4HE",
-# "NE66 2LP",
-# "W5 1JG",
-# "SY13 1HP",
-# "NR11PR",
-# "E11 4RW",
-# "AB245RQ",
-# "E2 8FB",
-# "TS5 6QU",
-# "IG1 3NJ"]
+scot = ["PO7 5GE", "PE11 3FQ",
+"NE20 9SZ",
+"AB11 6HS",
+"SG27PB",
+"AB25 1XF",
+"HP9 2DJ",
+"UB5 6NA",
+"TR7 2AA",
+"L36 3XR",
+"SW6 4HE",
+"NE66 2LP",
+"W5 1JG",
+"SY13 1HP",
+"NR11PR",
+"E11 4RW",
+"AB245RQ",
+"E2 8FB",
+"TS5 6QU",
+"IG1 3NJ"]
+
 
 # districts = get_district(scot)
-# # print(districts)
+# print(districts)
 # grouped = group_district(districts)
-# # print(grouped)
+# print(grouped)
 # percent = find_percentage(grouped, scot)
 # print(percent)
