@@ -14,6 +14,7 @@ from page3 import Page3
 from results_page import ResultPage
 from main import main
 import plotly.express as px
+import plotly.graph_objects as go
 from council_areas import get_district, group_district, find_percentage
 
 """
@@ -44,7 +45,7 @@ class Calculator(QWidget):
 
     def initializeUI(self):
         """Set up application GUI"""
-        self.setMinimumSize(1000, 600)
+        self.setMinimumSize(1200, 720)
         self.setWindowTitle("StudentGreenTravel")
         main_icon = QIcon('icons/eco.svg')
         self.setWindowIcon(main_icon)
@@ -102,6 +103,18 @@ class Calculator(QWidget):
         self.page4.radio6.clicked.connect(self.click_radio6)
         self.page4.radio7.clicked.connect(self.click_radio7)
         self.page4.radio8.clicked.connect(self.click_radio8)
+        self.page4.radio9.clicked.connect(self.click_radio9)
+        self.page4.radio10.clicked.connect(self.click_radio10)
+        self.page4.radio11.clicked.connect(self.click_radio11)
+        self.page4.radio12.clicked.connect(self.click_radio12)
+        self.page4.radio13.clicked.connect(self.click_radio13)
+        self.page4.radio14.clicked.connect(self.click_radio14)
+        self.page4.radio15.clicked.connect(self.click_radio15)
+        self.page4.radio16.clicked.connect(self.click_radio16)
+        self.page4.radio17.clicked.connect(self.click_radio17)
+        self.page4.radio18.clicked.connect(self.click_radio18)
+        self.page4.radio19.clicked.connect(self.click_radio19)
+        self.page4.radio20.clicked.connect(self.click_radio20)
     
 
         # Set style for the widgets in the application
@@ -403,30 +416,129 @@ class Calculator(QWidget):
         self.pbar.setValue(50)
         QtWidgets.QApplication.processEvents()
 
-
-        scot_dict = self.create_council_areas(self.scotland, 'Scotland')
+        # Scotland
+        # Remove postcodes where [:2] == 'AB'
+        self.scotland = [i for i in self.scotland if i[:2] != 'AB']
+        car_dict, bus_dict, rail_dict, taxi_dict = self.create_council_areas(self.scotland, 'Scotland')
 
         # Update the progress bar
         self.pbar.setValue(65)
         QtWidgets.QApplication.processEvents()
 
-        # Create a dataframe with the distances for each mode of transport for Scotland
-        df = pd.DataFrame(scot_dict)
-        df = df.round(1)
-        areas = df.columns
-        car_values = df.loc['Car', :]
-        bus_values = df.loc['Bus', :]
-        rail_values = df.loc['Rail', :]
-        taxi_values = df.loc['Taxi', :]
 
-        labels = {'x': 'Council Area', 'y': 'Distance (km)'}
+        df_car = pd.DataFrame(car_dict)
+        df_car = df_car.round(1)
+        df_bus = pd.DataFrame(bus_dict)
+        df_bus = df_bus.round(1)
+        df_rail = pd.DataFrame(rail_dict)
+        df_rail = df_rail.round(1)
+        df_taxi = pd.DataFrame(taxi_dict)
+        df_taxi = df_taxi.round(1)
+
+
+        self.scot_car = go.Figure(
+            data=[go.Bar(x=df_car.columns, y=df_car.iloc[0, :], text=df_car.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Car Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)')),
+        )
+        self.scot_bus = go.Figure(
+            data=[go.Bar(x=df_bus.columns, y=df_bus.iloc[0, :], text=df_bus.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Bus Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)')),
+        )
+        self.scot_rail = go.Figure(
+            data=[go.Bar(x=df_rail.columns, y=df_rail.iloc[0, :], text=df_rail.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Train Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)')),
+        )
+        self.scot_taxi = go.Figure(
+            data=[go.Bar(x=df_taxi.columns, y=df_taxi.iloc[0, :], text=df_taxi.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Taxi Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)')),
+        )
+
+        # Do same for England
+        car_dict_eng, bus_dict_eng, rail_dict_eng, taxi_dict_eng = self.create_council_areas(self.england, 'England')
+        df_car_eng = pd.DataFrame(car_dict_eng)
+        df_car_eng = df_car_eng.round(1)
+        df_bus_eng = pd.DataFrame(bus_dict_eng)
+        df_bus_eng = df_bus_eng.round(1)
+        df_rail_eng = pd.DataFrame(rail_dict_eng)
+        df_rail_eng = df_rail_eng.round(1)
+        df_taxi_eng = pd.DataFrame(taxi_dict_eng)
+        df_taxi_eng = df_taxi_eng.round(1)
+
+        self.eng_car = go.Figure(
+            data=[go.Bar(x=df_car_eng.columns, y=df_car_eng.iloc[0, :], text=df_car_eng.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Car Travel Distances Across English Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        self.eng_bus = go.Figure(
+            data=[go.Bar(x=df_bus_eng.columns, y=df_bus_eng.iloc[0, :], text=df_bus_eng.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Bus Travel Distances Across English Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        self.eng_rail = go.Figure(
+            data=[go.Bar(x=df_rail_eng.columns, y=df_rail_eng.iloc[0, :], text=df_rail_eng.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Train Travel Distances Across English Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        self.eng_taxi = go.Figure(
+            data=[go.Bar(x=df_taxi_eng.columns, y=df_taxi_eng.iloc[0, :], text=df_taxi_eng.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Taxi Travel Distances Across English Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+
+        # Do same for Wales
+        car_dict_wales, bus_dict_wales, rail_dict_wales, taxi_dict_wales = self.create_council_areas(self.wales, 'Wales')
+        df_car_wales = pd.DataFrame(car_dict_wales)
+        df_car_wales = df_car_wales.round(1)
+        df_bus_wales = pd.DataFrame(bus_dict_wales)
+        df_bus_wales = df_bus_wales.round(1)
+        df_rail_wales = pd.DataFrame(rail_dict_wales)
+        df_rail_wales = df_rail_wales.round(1)
+        df_taxi_wales = pd.DataFrame(taxi_dict_wales)
+        df_taxi_wales = df_taxi_wales.round(1)
+
+        self.wales_car = go.Figure(
+            data=[go.Bar(x=df_car_wales.columns, y=df_car_wales.iloc[0, :], text=df_car_wales.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Car Travel Distances Across Welsh Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        self.wales_bus = go.Figure(
+            data=[go.Bar(x=df_bus_wales.columns, y=df_bus_wales.iloc[0, :], text=df_bus_wales.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Bus Travel Distances Across Welsh Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        self.wales_rail = go.Figure(
+            data=[go.Bar(x=df_rail_wales.columns, y=df_rail_wales.iloc[0, :], text=df_rail_wales.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Train Travel Distances Across Welsh Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        self.wales_taxi = go.Figure(
+            data=[go.Bar(x=df_taxi_wales.columns, y=df_taxi_wales.iloc[0, :], text=df_taxi_wales.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Taxi Travel Distances Across Welsh Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        
+        # Do same for Northern Ireland
+        car_dict_ni, bus_dict_ni, rail_dict_ni, taxi_dict_ni = self.create_council_areas(self.north_ireland, 'Northern Ireland')
+        df_car_ni = pd.DataFrame(car_dict_ni)
+        df_car_ni = df_car_ni.round(1)
+        df_bus_ni = pd.DataFrame(bus_dict_ni)
+        df_bus_ni = df_bus_ni.round(1)
+        df_rail_ni = pd.DataFrame(rail_dict_ni)
+        df_rail_ni = df_rail_ni.round(1)
+        df_taxi_ni = pd.DataFrame(taxi_dict_ni)
+        df_taxi_ni = df_taxi_ni.round(1)
+
+        # Make the car figure different colours
+        self.ni_car = go.Figure(
+            data=[go.Bar(x=df_car_ni.columns, y=df_car_ni.iloc[0, :], text=df_car_ni.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Car Travel Distances Across Northern Irish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        self.ni_bus = go.Figure(
+            data=[go.Bar(x=df_bus_ni.columns, y=df_bus_ni.iloc[0, :], text=df_bus_ni.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Bus Travel Distances Across Northern Irish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        self.ni_rail = go.Figure(
+            data=[go.Bar(x=df_rail_ni.columns, y=df_rail_ni.iloc[0, :], text=df_rail_ni.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Train Travel Distances Across Northern Irish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
+        self.ni_taxi = go.Figure(
+            data=[go.Bar(x=df_taxi_ni.columns, y=df_taxi_ni.iloc[0, :], text=df_taxi_ni.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Taxi Travel Distances Across Northern Irish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
+        )
         
 
-        # Bar chart for the car distances by council area
-        self.scot_car = px.bar(df, x=areas, y=car_values, title='Car Distance by Council Area (in km)', labels=labels)
-        self.scot_bus = px.bar(df, x=areas, y=bus_values, title='Bus Distance by Council Area (in km)', labels=labels)
-        self.scot_rail = px.bar(df, x=areas, y=rail_values, title='Rail Distance by Council Area (in km)', labels=labels)
-        self.scot_taxi = px.bar(df, x=areas, y=taxi_values, title='Taxi Distance by Council Area (in km)', labels=labels)
 
 
         #Update the progress bar
@@ -507,6 +619,7 @@ class Calculator(QWidget):
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig4.to_html(include_plotlyjs='cdn'))
 
+    # Scotland radio buttons
     def click_radio5(self):
         """Set the webview to show the heatmap with the council areas data"""
         # Source: https://zetcode.com/pyqt/qwebengineview/
@@ -527,6 +640,69 @@ class Calculator(QWidget):
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.scot_taxi.to_html(include_plotlyjs='cdn'))
 
+    # England radio buttons
+    def click_radio9(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.eng_car.to_html(include_plotlyjs='cdn'))
+
+    def click_radio10(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.eng_bus.to_html(include_plotlyjs='cdn'))
+
+    def click_radio11(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.eng_rail.to_html(include_plotlyjs='cdn'))
+
+    def click_radio12(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.eng_taxi.to_html(include_plotlyjs='cdn'))
+    
+    # Wales radio buttons
+    def click_radio13(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.wales_car.to_html(include_plotlyjs='cdn'))
+
+    def click_radio14(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.wales_bus.to_html(include_plotlyjs='cdn'))
+
+    def click_radio15(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.wales_rail.to_html(include_plotlyjs='cdn'))
+
+    def click_radio16(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.wales_taxi.to_html(include_plotlyjs='cdn'))
+    
+    # Northern Ireland radio buttons
+    def click_radio17(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.ni_car.to_html(include_plotlyjs='cdn'))
+
+    def click_radio18(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.ni_bus.to_html(include_plotlyjs='cdn'))
+
+    def click_radio19(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.ni_rail.to_html(include_plotlyjs='cdn'))
+
+    def click_radio20(self):
+        """Set the webview to show the heatmap with the taxi distances data"""
+        # Source: https://zetcode.com/pyqt/qwebengineview/
+        self.page4.webview.setHtml(self.ni_taxi.to_html(include_plotlyjs='cdn'))
+
 
     def create_council_areas(self, country_posctodes: list, country: str):
         # Scotland
@@ -542,15 +718,23 @@ class Calculator(QWidget):
         car = distances[3]
         bus = distances[2]
         rail = distances[0]
-        walk = distances[5]
         taxi = distances[4]
 
-        # Create a dictionary with the distances for each mode of transport
+        car_dict = {}
+        bus_dict = {}
+        rail_dict = {}
+        taxi_dict = {}
+
+        # Create dictionaries with the distances for each mode of transport
         country_dict = {}
         for key, value in country_percent.items():
-            country_dict[key] = {'Car' : car * value / 100, 'Bus' : bus * value / 100, 'Rail' : rail * value / 100, 'Walk' : walk * value / 100, 'Taxi' : taxi * value / 100}
+            # country_dict[key] = {'Car' : car * value / 100, 'Bus' : bus * value / 100, 'Rail' : rail * value / 100, 'Walk' : walk * value / 100, 'Taxi' : taxi * value / 100}
+            car_dict[key] = {'Car' : car * value / 100}
+            bus_dict[key] = {'Bus' : bus * value / 100}
+            rail_dict[key] = {'Rail' : rail * value / 100}
+            taxi_dict[key] = {'Taxi' : taxi * value / 100}
 
-        return country_dict
+        return car_dict, bus_dict, rail_dict, taxi_dict
 
         
 

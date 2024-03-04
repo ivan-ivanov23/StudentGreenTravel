@@ -47,7 +47,7 @@ class ResultPage(QWidget):
         radio_layout.addWidget(self.radio4)
 
         # Add stretch to push the radio buttons to the top
-        radio_layout.addStretch(1)
+        # radio_layout.addStretch(1)
 
         # Scotland specific data
         group_box2 = QGroupBox("Scotland Data")
@@ -63,14 +63,57 @@ class ResultPage(QWidget):
         radio_layout2.addWidget(self.radio7)
         radio_layout2.addWidget(self.radio8)
 
-        radio_layout2.addStretch(1)
+        # radio_layout2.addStretch(1)
 
 
 
+        # England specific data
+        group_box3 = QGroupBox("England Data")
+        group_box3.setFixedWidth(200)
+        radio_layout3 = QVBoxLayout()
+        self.radio9 = QRadioButton("Car Distance (Coucil)")
+        self.radio10 = QRadioButton("Bus Distance (Coucil)")
+        self.radio11 = QRadioButton("Train Distance (Coucil)")
+        self.radio12 = QRadioButton("Taxi Distance (Coucil)")
 
-        # radio_layout.addWidget(self.radio6)
-        # radio_layout.addWidget(self.radio7)
-        # radio_layout.addWidget(self.radio8)
+        radio_layout3.addWidget(self.radio9)
+        radio_layout3.addWidget(self.radio10)
+        radio_layout3.addWidget(self.radio11)
+        radio_layout3.addWidget(self.radio12)
+
+        # radio_layout3.addStretch(1)
+
+        # Wales specific data
+        group_box4 = QGroupBox("Wales Data")
+        group_box4.setFixedWidth(200)
+        radio_layout4 = QVBoxLayout()
+        self.radio13 = QRadioButton("Car Distance (Coucil)")
+        self.radio14 = QRadioButton("Bus Distance (Coucil)")
+        self.radio15 = QRadioButton("Train Distance (Coucil)")
+        self.radio16 = QRadioButton("Taxi Distance (Coucil)")
+
+        radio_layout4.addWidget(self.radio13)
+        radio_layout4.addWidget(self.radio14)
+        radio_layout4.addWidget(self.radio15)
+        radio_layout4.addWidget(self.radio16)
+
+        # radio_layout4.addStretch(1)
+
+        # Northern Ireland specific data
+        group_box5 = QGroupBox("Northern Ireland Data")
+        group_box5.setFixedWidth(200)
+        radio_layout5 = QVBoxLayout()
+        self.radio17 = QRadioButton("Car Distance (Coucil)")
+        self.radio18 = QRadioButton("Bus Distance (Coucil)")
+        self.radio19 = QRadioButton("Train Distance (Coucil)")
+        self.radio20 = QRadioButton("Taxi Distance (Coucil)")
+
+        radio_layout5.addWidget(self.radio17)
+        radio_layout5.addWidget(self.radio18)
+        radio_layout5.addWidget(self.radio19)
+        radio_layout5.addWidget(self.radio20)
+
+        # radio_layout5.addStretch(1)
 
 
  
@@ -78,8 +121,14 @@ class ResultPage(QWidget):
         # Add radio buttons to group box
         group_box.setLayout(radio_layout)
         group_box2.setLayout(radio_layout2)
+        group_box3.setLayout(radio_layout3)
+        group_box4.setLayout(radio_layout4)
+        group_box5.setLayout(radio_layout5)
         vbox1.addWidget(group_box)
         vbox1.addWidget(group_box2)
+        vbox1.addWidget(group_box3)
+        vbox1.addWidget(group_box4)
+        vbox1.addWidget(group_box5)
         hbox.addLayout(vbox1)
 
 

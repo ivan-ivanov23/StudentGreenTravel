@@ -30,7 +30,7 @@ def get_district(country_postcodes):
             for item in response_json["result"]:
                 postcode = item["query"]  # Use "query" instead of "postcode"
                 if item["result"] is None:
-                    result[postcode] = None
+                    result[postcode] = 'Uknown district'
                 else:
                     district = item["result"]["admin_district"]
                     result[postcode] = district
