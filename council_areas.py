@@ -39,7 +39,10 @@ def get_district(country_postcodes):
     return result
 
 def split_list(lst, chunk_size=100):
-    return [lst[i:i+chunk_size] for i in range(0, len(lst), chunk_size)]
+    chunks = [[] for _ in range((len(lst) + chunk_size - 1) // chunk_size)]
+    for i, item in enumerate(lst):
+        chunks[i // chunk_size].append(item)
+    return chunks
     
 
 

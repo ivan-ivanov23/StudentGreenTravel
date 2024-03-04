@@ -404,10 +404,13 @@ class Calculator(QWidget):
         QtWidgets.QApplication.processEvents()
 
 
-        # Create piechart for council areas
-        scot_dict = self.create_council_areas()
+        scot_dict = self.create_council_areas(self.scotland, 'Scotland')
 
-        # # Create a dataframe with the distances for each mode of transport for Scotland
+        # Update the progress bar
+        self.pbar.setValue(65)
+        QtWidgets.QApplication.processEvents()
+
+        # Create a dataframe with the distances for each mode of transport for Scotland
         df = pd.DataFrame(scot_dict)
         df = df.round(1)
         areas = df.columns
@@ -419,22 +422,12 @@ class Calculator(QWidget):
         labels = {'x': 'Council Area', 'y': 'Distance (km)'}
         
 
-
-
-        # # Bar chart for the car distances by council area
+        # Bar chart for the car distances by council area
         self.scot_car = px.bar(df, x=areas, y=car_values, title='Car Distance by Council Area (in km)', labels=labels)
-        # # Show distance values on the bars
-        # # self.scot_car.update_traces(texttemplate='%{y}', textposition='outside')
-
-        # # do this for bus, rail and taxi
         self.scot_bus = px.bar(df, x=areas, y=bus_values, title='Bus Distance by Council Area (in km)', labels=labels)
-
-
         self.scot_rail = px.bar(df, x=areas, y=rail_values, title='Rail Distance by Council Area (in km)', labels=labels)
-
         self.scot_taxi = px.bar(df, x=areas, y=taxi_values, title='Taxi Distance by Council Area (in km)', labels=labels)
 
-        #self.scot_car = px.bar(scot_dict, x=scot_dict.keys(), y=[i['Car'] for i in scot_dict.values()], title='Car Distance by Council Area (in km)', labels=dict(x="Council Area", y="Distance (km)"))
 
         #Update the progress bar
         self.pbar.setValue(100)
@@ -535,105 +528,29 @@ class Calculator(QWidget):
         self.page4.webview.setHtml(self.scot_taxi.to_html(include_plotlyjs='cdn'))
 
 
-    def create_council_areas(self):
+    def create_council_areas(self, country_posctodes: list, country: str):
         # Scotland
-        self.scotland = self.scotland.to_list()
-        scot_districts = get_district(self.scotland)
-        #print(scot_districts)
-        scot_grouped = group_district(scot_districts)
-        scot_percent = find_percentage(scot_grouped, self.scotland)
-        #print(scot_percent)
+        country_districts = get_district(country_posctodes)
+        country_grouped = group_district(country_districts)
+        country_percent = find_percentage(country_grouped, country_posctodes)
 
 
         # From self.total_distance_dict get the distances for Scotland
-        scot_distances = self.total_distance_dict['Scotland']
+        distances = self.total_distance_dict[country]
 
         # Extract the distances for each mode of transport
-        scot_car = scot_distances[3]
-        scot_bus = scot_distances[2]
-        scot_rail = scot_distances[0]
-        scot_walk = scot_distances[5]
-        scot_taxi = scot_distances[4]
+        car = distances[3]
+        bus = distances[2]
+        rail = distances[0]
+        walk = distances[5]
+        taxi = distances[4]
 
-        # Create a dict with the distances for each mode of transport for Scotland according to the admin district percentage
-        scot_dict = {}
-        for key, value in scot_percent.items():
-            scot_dict[key] = {'Car': scot_car * value / 100, 'Bus': scot_bus * value / 100, 'Rail': scot_rail * value / 100, 'Taxi': scot_taxi * value / 100, 'Walk': scot_walk * value / 100}
+        # Create a dictionary with the distances for each mode of transport
+        country_dict = {}
+        for key, value in country_percent.items():
+            country_dict[key] = {'Car' : car * value / 100, 'Bus' : bus * value / 100, 'Rail' : rail * value / 100, 'Walk' : walk * value / 100, 'Taxi' : taxi * value / 100}
 
-        # Update the progress bar
-        self.pbar.setValue(65)
-        QtWidgets.QApplication.processEvents()
-
-        # # England
-        # eng_districts = get_district(self.england)
-        # eng_grouped = group_district(eng_districts)
-        # eng_percent = find_percentage(eng_grouped, self.england)
-
-        # # From self.total_distance_dict get the distances for England
-        # eng_distances = self.total_distance_dict['England']
-        # # Extract the distances for each mode of transport
-        # eng_car = eng_distances[3]
-        # eng_bus = eng_distances[2]
-        # eng_rail = eng_distances[0]
-        # eng_walk = eng_distances[5]
-        # eng_taxi = eng_distances[4]
-        # eng_plane = eng_distances[1]
-
-        # # Create a dict with the distances for each mode of transport for England according to the admin district percentage
-        # eng_dict = {}
-        # for key, value in eng_percent.items():
-        #     eng_dict[key] = {'Car': eng_car * value, 'Bus': eng_bus * value, 'Rail': eng_rail * value, 'Taxi': eng_taxi * value, 'Walk': eng_walk * value, 'Plane': eng_plane * value}
-
-        # self.pbar.setValue(75)
-        # QtWidgets.QApplication.processEvents()
-
-        # # Wales
-        # wales_districts = get_district(self.wales)
-        # wales_grouped = group_district(wales_districts)
-        # wales_percent = find_percentage(wales_grouped, self.wales)
-
-        # # From self.total_distance_dict get the distances for Wales
-        # wales_distances = self.total_distance_dict['Wales']
-        # # Extract the distances for each mode of transport
-        # wales_car = wales_distances[3]
-        # wales_bus = wales_distances[2]
-        # wales_rail = wales_distances[0]
-        # wales_walk = wales_distances[5]
-        # wales_taxi = wales_distances[4]
-        # wales_plane = wales_distances[1]
-
-        # # Create a dict with the distances for each mode of transport for Wales according to the admin district percentage
-        # wales_dict = {}
-        # for key, value in wales_percent.items():
-        #     wales_dict[key] = {'Car': wales_car * value, 'Bus': wales_bus * value, 'Rail': wales_rail * value, 'Taxi': wales_taxi * value, 'Walk': wales_walk * value, 'Plane': wales_plane * value}
-
-        # self.pbar.setValue(85)
-        # QtWidgets.QApplication.processEvents()
-
-        # # Northern Ireland
-        # ni_districts = get_district(self.north_ireland)
-        # ni_grouped = group_district(ni_districts)
-        # ni_percent = find_percentage(ni_grouped, self.north_ireland)
-
-        # # From self.total_distance_dict get the distances for Northern Ireland
-        # ni_distances = self.total_distance_dict['Northern Ireland']
-        # # Extract the distances for each mode of transport
-        # ni_car = ni_distances[3]
-        # ni_bus = ni_distances[2]
-        # ni_rail = ni_distances[0]
-        # ni_walk = ni_distances[5]
-        # ni_taxi = ni_distances[4]
-        # ni_plane = ni_distances[1]
-
-        # # Create a dict with the distances for each mode of transport for Northern Ireland according to the admin district percentage
-        # ni_dict = {}
-        # for key, value in ni_percent.items():
-        #     ni_dict[key] = {'Car': ni_car * value, 'Bus': ni_bus * value, 'Rail': ni_rail * value, 'Taxi': ni_taxi * value, 'Walk': ni_walk * value, 'Plane': ni_plane * value}
-
-        # self.pbar.setValue(90)
-        # QtWidgets.QApplication.processEvents()
-
-        return scot_dict#, eng_dict, wales_dict, ni_dict
+        return country_dict
 
         
 
