@@ -533,6 +533,8 @@ class Calculator(QWidget):
         )
 
 
+        self.pbar.setValue(75)
+        QtWidgets.QApplication.processEvents()
 
         # Do same for England
         car_dict_eng, bus_dict_eng, rail_dict_eng, taxi_dict_eng = self.create_council_areas(self.england, 'England')
@@ -632,6 +634,9 @@ class Calculator(QWidget):
             layout=go.Layout(title='Taxi Travel Emissions Across English Councils (kg CO2)')
         )
 
+        self.pbar.setValue(85)
+        QtWidgets.QApplication.processEvents()
+
         # Do same for Wales
         car_dict_wales, bus_dict_wales, rail_dict_wales, taxi_dict_wales = self.create_council_areas(self.wales, 'Wales')
         df_car_wales = pd.DataFrame(car_dict_wales)
@@ -687,6 +692,8 @@ class Calculator(QWidget):
             layout=go.Layout(title='Taxi Travel Emissions Across Welsh Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
         )
 
+        self.pbar.setValue(95)
+        QtWidgets.QApplication.processEvents()
         
         # Do same for Northern Ireland
         car_dict_ni, bus_dict_ni, rail_dict_ni, taxi_dict_ni = self.create_council_areas(self.north_ireland, 'Northern Ireland')
