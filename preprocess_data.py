@@ -22,7 +22,7 @@ airports = pd.read_csv("data/GBairports.csv", usecols=['Unnamed: 0', 'Latitude',
 airports_dict = dict(zip(airports['Unnamed: 0'], zip(airports['Latitude'], airports['Longitude'])))
 
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
-eng_postcodes = ['AL', 'B', 'BA', 'BB', 'BD', 'BH', 'BL', 'BN', 'BR', 'BS', 'CA', 'CB', 'CF', 'CH', 'CM', 'CO', 'CR', 'CT', 'CV', 'CW', 'DA', 'DE', 'DH', 'DL', 'DN', 'DT', 'DY', 'E', 'EC', 'EN', 'EX', 'FY', 'GL', 'GU', 'HA', 'HD', 'HG', 'HP', 'HR', 'HU', 'HX', 'IG', 'IP', 'KT', 'L', 'LA', 'LD', 'LE', 'LN', 'LS', 'LU', 'M', 'ME', 'MK', 'N', 'NE', 'NG', 'NN', 'NP', 'NR', 'NW', 'OL', 'OX', 'PE', 'PL', 'PO', 'PR', 'RG', 'RH', 'RM', 'S', 'SE', 'SG', 'SK', 'SL', 'SM', 'SN', 'SO', 'SP', 'SR', 'SS', 'ST', 'SW', 'TA', 'TF', 'TN', 'TQ', 'TR', 'TS', 'TW', 'UB', 'W', 'WA', 'WC', 'WD', 'WF', 'WN', 'WR', 'WS', 'WV', 'YO']
+eng_postcodes = ['AL', 'BA', 'BB', 'BD', 'BH', 'BL', 'BN', 'BR', 'BS', 'CA', 'CB', 'CH', 'CM', 'CO', 'CR', 'CT', 'CV', 'CW', 'DA', 'DE', 'DH', 'DL', 'DN', 'DT', 'DY', 'EC', 'EN', 'EX', 'FY', 'GL', 'GU', 'HA', 'HD', 'HG', 'HP', 'HR', 'HU', 'HX', 'IG', 'IP', 'KT', 'LA', 'LD', 'LE', 'LN', 'LS', 'LU', 'ME', 'MK', 'NE', 'NG', 'NN', 'NR', 'NW', 'OL', 'OX', 'PE', 'PL', 'PO', 'PR', 'RG', 'RH', 'RM', 'SE', 'SG', 'SK', 'SL', 'SM', 'SN', 'SO', 'SP', 'SR', 'SS', 'ST', 'SW', 'TA', 'TF', 'TN', 'TQ', 'TR', 'TS', 'TW', 'UB', 'WA', 'WC', 'WD', 'WF', 'WN', 'WR', 'WS', 'WV', 'YO']
 wales_postcodes = ['CF', 'LL', 'NP', 'SA', 'SY']
 
 
@@ -46,7 +46,7 @@ def create_address_df():
 def determine_postcode(postcodes):
     # postcodes = create_address_df().dropna()  # Drop NaN values
     scotland = postcodes[postcodes.str[:2].isin(scot_postcodes) | (postcodes.str[:1] == 'G')]
-    england = postcodes[(postcodes.str[:2].isin(eng_postcodes) | (postcodes.str[:1].isin(eng_postcodes)))]
+    england = postcodes[(postcodes.str[:2].isin(eng_postcodes) | (postcodes.str[:1] == 'B') | (postcodes.str[:1] == 'E') | (postcodes.str[:1] == 'M') | (postcodes.str[:1] == 'N') | (postcodes.str[:1] == 'S') | (postcodes.str[:1] == 'W') | (postcodes.str[:1] == 'L'))]
     wales = postcodes[postcodes.str[:2].isin(wales_postcodes)]
     north_ireland = postcodes[postcodes.str[:2] == 'BT']
     return scotland, wales, north_ireland, england
