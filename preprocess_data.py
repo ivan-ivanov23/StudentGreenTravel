@@ -44,12 +44,13 @@ def create_address_df():
         
 
 def determine_postcode(postcodes):
-    # postcodes = create_address_df().dropna()  # Drop NaN values
-    scotland = postcodes[postcodes.str[:2].isin(scot_postcodes) | (postcodes.str[:1] == 'G')]
-    england = postcodes[(postcodes.str[:2].isin(eng_postcodes) | (postcodes.str[:1] == 'B') | (postcodes.str[:1] == 'E') | (postcodes.str[:1] == 'M') | (postcodes.str[:1] == 'N') | (postcodes.str[:1] == 'S') | (postcodes.str[:1] == 'W') | (postcodes.str[:1] == 'L'))]
+    postcodes = postcodes.dropna()  # Drop NaN values
+    scotland = postcodes[(postcodes.str[:2].isin(scot_postcodes)) | ((postcodes.str[:2] == 'G') & ~(postcodes.str[:2].isin(eng_postcodes)))]  # Postcodes starting with 'G' not in England list
+    england = postcodes[(postcodes.str[:2].isin(eng_postcodes)) & ~(postcodes.str[:2].isin(scot_postcodes)) & ~(postcodes.str[:2]).isin(wales_postcodes)]
     wales = postcodes[postcodes.str[:2].isin(wales_postcodes)]
     north_ireland = postcodes[postcodes.str[:2] == 'BT']
     return scotland, wales, north_ireland, england
+
 
 
 def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
