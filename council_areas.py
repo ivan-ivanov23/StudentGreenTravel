@@ -1,23 +1,5 @@
 import requests
 
-# def get_district(country_postcodes: list):
-#     """Finds the admin district for a passed list with postcodes of a country.""" 
-#     # Inspired by: https://stackoverflow.com/questions/16877422/whats-the-best-way-to-parse-a-json-response-from-the-requests-library 
-#     result = {}
-#     for postcode in country_postcodes:
-#         url = f"https://api.postcodes.io/postcodes/{postcode}"
-#         response = requests.get(url)
-#         if response.status_code == 200:
-#             data = response.json()
-#             admin_district = data.get("result", {}).get("admin_district")
-#             result[postcode] = admin_district
-#         else:
-#             result[postcode] = None
-
-#     print(result)
-    
-#     return result
-
 def get_district(country_postcodes):
     """Finds the admin district for a passed list with postcodes of a country.""" 
     result = {}
@@ -35,7 +17,6 @@ def get_district(country_postcodes):
                     district = item["result"]["admin_district"]
                     result[postcode] = district
 
-    #print(result)
     return result
 
 def split_list(lst, chunk_size=100):
@@ -66,33 +47,3 @@ def find_percentage(ordered: dict, country_postcodes: list):
         percentage = (count / total) * 100
         result[district] = percentage
     return result
-
-
-# Example list of Scottish postcodes
-scot = ["PO7 5GE", "PE11 3FQ",
-"NE20 9SZ",
-"AB11 6HS",
-"SG27PB",
-"AB25 1XF",
-"HP9 2DJ",
-"UB5 6NA",
-"TR7 2AA",
-"L36 3XR",
-"SW6 4HE",
-"NE66 2LP",
-"W5 1JG",
-"SY13 1HP",
-"NR11PR",
-"E11 4RW",
-"AB245RQ",
-"E2 8FB",
-"TS5 6QU",
-"IG1 3NJ"]
-
-
-# districts = get_district(scot)
-# print(districts)
-# grouped = group_district(districts)
-# print(grouped)
-# percent = find_percentage(grouped, scot)
-# print(percent)

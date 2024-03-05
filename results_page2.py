@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, QPushButton, QWidget, QLabel
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-import sys
 
 
 class ResultPage2(QWidget):
@@ -22,8 +21,6 @@ class ResultPage2(QWidget):
         # Show a web view
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.webview = QWebEngineView()
-        # Show an empty page
-        self.webview.setHtml("To see a heatmap, select a filter on the right.")
         hbox.addWidget(self.webview)
 
         # layout the hold the group boxes
@@ -43,8 +40,6 @@ class ResultPage2(QWidget):
         radio_layout.addWidget(self.radio3)
         radio_layout.addWidget(self.radio4)
 
-        # Add stretch to push the radio buttons to the top
-        # radio_layout.addStretch(1)
 
         # Scotland specific data
         group_box2 = QGroupBox("Scotland Data")
@@ -59,9 +54,6 @@ class ResultPage2(QWidget):
         radio_layout2.addWidget(self.radio6)
         radio_layout2.addWidget(self.radio7)
         radio_layout2.addWidget(self.radio8)
-
-        # radio_layout2.addStretch(1)
-
 
 
         # England specific data
@@ -78,7 +70,6 @@ class ResultPage2(QWidget):
         radio_layout3.addWidget(self.radio11)
         radio_layout3.addWidget(self.radio12)
 
-        # radio_layout3.addStretch(1)
 
         # Wales specific data
         group_box4 = QGroupBox("Wales Data")
@@ -94,7 +85,6 @@ class ResultPage2(QWidget):
         radio_layout4.addWidget(self.radio15)
         radio_layout4.addWidget(self.radio16)
 
-        # radio_layout4.addStretch(1)
 
         # Northern Ireland specific data
         group_box5 = QGroupBox("Northern Ireland Data")
@@ -110,10 +100,6 @@ class ResultPage2(QWidget):
         radio_layout5.addWidget(self.radio19)
         radio_layout5.addWidget(self.radio20)
 
-        # radio_layout5.addStretch(1)
-
-
- 
 
         # Add radio buttons to group box
         group_box.setLayout(radio_layout)
@@ -127,7 +113,6 @@ class ResultPage2(QWidget):
         vbox1.addWidget(group_box4)
         vbox1.addWidget(group_box5)
         hbox.addLayout(vbox1)
-
 
 
         # Button layout
@@ -144,3 +129,4 @@ class ResultPage2(QWidget):
         # Add button layout to main layout
         vbox.addLayout(button_layout)
         self.setLayout(vbox)
+        
