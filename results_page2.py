@@ -1,12 +1,9 @@
-# This is the final page which contains the webview for the ploty heatmaps and 
-# the other widgets
-
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, QPushButton, QWidget, QLabel
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 import sys
 
 
-class ResultPage(QWidget):
+class ResultPage2(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -53,10 +50,10 @@ class ResultPage(QWidget):
         group_box2 = QGroupBox("Scotland Data")
         group_box2.setFixedWidth(200)
         radio_layout2 = QVBoxLayout()
-        self.radio5 = QRadioButton("Car Distance (Coucil)")
-        self.radio6 = QRadioButton("Bus Distance (Coucil)")
-        self.radio7 = QRadioButton("Train Distance (Coucil)")
-        self.radio8 = QRadioButton("Taxi Distance (Coucil)")
+        self.radio5 = QRadioButton("Car Emissions (Coucil)")
+        self.radio6 = QRadioButton("Bus Emissions (Coucil)")
+        self.radio7 = QRadioButton("Train Emissions (Coucil)")
+        self.radio8 = QRadioButton("Taxi Emissions (Coucil)")
 
         radio_layout2.addWidget(self.radio5)
         radio_layout2.addWidget(self.radio6)
@@ -71,10 +68,10 @@ class ResultPage(QWidget):
         group_box3 = QGroupBox("England Data")
         group_box3.setFixedWidth(200)
         radio_layout3 = QVBoxLayout()
-        self.radio9 = QRadioButton("Car Distance (Coucil)")
-        self.radio10 = QRadioButton("Bus Distance (Coucil)")
-        self.radio11 = QRadioButton("Train Distance (Coucil)")
-        self.radio12 = QRadioButton("Taxi Distance (Coucil)")
+        self.radio9 = QRadioButton("Car Emissions (Coucil)")
+        self.radio10 = QRadioButton("Bus Emissions (Coucil)")
+        self.radio11 = QRadioButton("Train Emissions (Coucil)")
+        self.radio12 = QRadioButton("Taxi Emissions (Coucil)")
 
         radio_layout3.addWidget(self.radio9)
         radio_layout3.addWidget(self.radio10)
@@ -87,10 +84,10 @@ class ResultPage(QWidget):
         group_box4 = QGroupBox("Wales Data")
         group_box4.setFixedWidth(200)
         radio_layout4 = QVBoxLayout()
-        self.radio13 = QRadioButton("Car Distance (Coucil)")
-        self.radio14 = QRadioButton("Bus Distance (Coucil)")
-        self.radio15 = QRadioButton("Train Distance (Coucil)")
-        self.radio16 = QRadioButton("Taxi Distance (Coucil)")
+        self.radio13 = QRadioButton("Car Emissions (Coucil)")
+        self.radio14 = QRadioButton("Bus Emissions (Coucil)")
+        self.radio15 = QRadioButton("Train Emissions (Coucil)")
+        self.radio16 = QRadioButton("Taxi Emissions (Coucil)")
 
         radio_layout4.addWidget(self.radio13)
         radio_layout4.addWidget(self.radio14)
@@ -103,10 +100,10 @@ class ResultPage(QWidget):
         group_box5 = QGroupBox("Northern Ireland Data")
         group_box5.setFixedWidth(200)
         radio_layout5 = QVBoxLayout()
-        self.radio17 = QRadioButton("Car Distance (Coucil)")
-        self.radio18 = QRadioButton("Bus Distance (Coucil)")
-        self.radio19 = QRadioButton("Train Distance (Coucil)")
-        self.radio20 = QRadioButton("Taxi Distance (Coucil)")
+        self.radio17 = QRadioButton("Car Emissions (Coucil)")
+        self.radio18 = QRadioButton("Bus Emissions (Coucil)")
+        self.radio19 = QRadioButton("Train Emissions (Coucil)")
+        self.radio20 = QRadioButton("Taxi Emissions (Coucil)")
 
         radio_layout5.addWidget(self.radio17)
         radio_layout5.addWidget(self.radio18)
@@ -137,7 +134,7 @@ class ResultPage(QWidget):
         button_layout = QHBoxLayout()
         self.button1 = QPushButton("Back")
         self.button2 = QPushButton("Menu")
-        self.button3 = QPushButton("Show Council Emissions")
+        self.button3 = QPushButton("Show Council Distances")
         button_layout.addWidget(self.button1)
         button_layout.addWidget(self.button2)
         button_layout.addWidget(self.button3)
@@ -147,17 +144,3 @@ class ResultPage(QWidget):
         # Add button layout to main layout
         vbox.addLayout(button_layout)
         self.setLayout(vbox)
-
-#         # Connect the radio buttons to the function
-#         self.radio1.clicked.connect(self.click_radio1)
-#         self.radio2.clicked.connect(self.click_radio2)
-
-#     def click_radio1(self):
-#         self.webview.setHtml("Distance by Country")
-
-#     def click_radio2(self):
-#         self.webview.setHtml("Emissions by Country")
-
-# app = QApplication(sys.argv)
-# window = ResultPage()
-# sys.exit(app.exec())

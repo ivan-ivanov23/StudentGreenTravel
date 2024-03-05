@@ -12,6 +12,7 @@ from page1 import MainPage
 from page2 import Page2
 from page3 import Page3
 from results_page import ResultPage
+from results_page2 import ResultPage2
 from main import main
 import plotly.express as px
 import plotly.graph_objects as go
@@ -56,6 +57,7 @@ class Calculator(QWidget):
         self.layout2 = QVBoxLayout()
         self.layout3 = QVBoxLayout()
         self.layout4 = QHBoxLayout()
+        self.layout5 = QVBoxLayout()
 
         # Stacked layout to hold the pages
         # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm 
@@ -66,12 +68,15 @@ class Calculator(QWidget):
         self.page2 = Page2()
         self.page3 = Page3()
         self.page4 = ResultPage()
+        self.page5 = ResultPage2()
 
         # Add the pages to the stacked layout and set the stacked layout as the main layout
         self.stackedLayout.addWidget(self.page1)
         self.stackedLayout.addWidget(self.page2)
         self.stackedLayout.addWidget(self.page3)
         self.stackedLayout.addWidget(self.page4)
+        self.stackedLayout.addWidget(self.page5)
+
 
         self.setLayout(self.stackedLayout)
 
@@ -95,6 +100,7 @@ class Calculator(QWidget):
         # Connect signals for page4
         self.page4.button1.clicked.connect(self.go_to_page3)
         self.page4.button2.clicked.connect(self.go_to_page1)
+        self.page4.button3.clicked.connect(self.go_to_page5)
         self.page4.radio1.clicked.connect(self.click_radio1)
         self.page4.radio2.clicked.connect(self.click_radio2)
         self.page4.radio3.clicked.connect(self.click_radio3)
@@ -115,6 +121,32 @@ class Calculator(QWidget):
         self.page4.radio18.clicked.connect(self.click_radio18)
         self.page4.radio19.clicked.connect(self.click_radio19)
         self.page4.radio20.clicked.connect(self.click_radio20)
+
+        # Connect signals for page5
+        self.page5.button1.clicked.connect(self.go_to_page3)
+        self.page5.button2.clicked.connect(self.go_to_page1)
+        self.page5.button3.clicked.connect(self.go_to_page4)
+        self.page5.radio1.clicked.connect(self.click_radio1)
+        self.page5.radio2.clicked.connect(self.click_radio2)
+        self.page5.radio3.clicked.connect(self.click_radio3)
+        self.page5.radio4.clicked.connect(self.click_radio4)
+        self.page5.radio5.clicked.connect(self.click_radio_emissions1)
+        self.page5.radio6.clicked.connect(self.click_radio_emissions2)
+        self.page5.radio7.clicked.connect(self.click_radio_emissions3)
+        self.page5.radio8.clicked.connect(self.click_radio_emissions4)
+        self.page5.radio9.clicked.connect(self.click_radio_emissions5)
+        self.page5.radio10.clicked.connect(self.click_radio_emissions6)
+        self.page5.radio11.clicked.connect(self.click_radio_emissions7)
+        self.page5.radio12.clicked.connect(self.click_radio_emissions8)
+        self.page5.radio13.clicked.connect(self.click_radio_emissions9)
+        self.page5.radio14.clicked.connect(self.click_radio_emissions10)
+        self.page5.radio15.clicked.connect(self.click_radio_emissions11)
+        self.page5.radio16.clicked.connect(self.click_radio_emissions12)
+        self.page5.radio17.clicked.connect(self.click_radio_emissions13)
+        self.page5.radio18.clicked.connect(self.click_radio_emissions14)
+        self.page5.radio19.clicked.connect(self.click_radio_emissions15)
+        self.page5.radio20.clicked.connect(self.click_radio_emissions16)
+
     
 
         # Set style for the widgets in the application
@@ -195,6 +227,8 @@ class Calculator(QWidget):
         file_button = QIcon('icons/file.svg')
         dash = QIcon('icons/dash.svg')
         menu = QIcon('icons/menu.svg')
+        one = QIcon('icons/1.svg')
+        two = QIcon('icons/2.svg')
 
         # Set the icon for all the back buttons
         self.page1.button1.setIcon(dash)
@@ -203,6 +237,10 @@ class Calculator(QWidget):
         self.page3.back.setIcon(back)
         self.page4.button1.setIcon(back)
         self.page4.button2.setIcon(menu)
+        self.page4.button3.setIcon(two)
+        self.page5.button1.setIcon(back)
+        self.page5.button2.setIcon(menu)
+        self.page5.button3.setIcon(one)
         # Set the icon for the calculate button from images/calculator.png
         
         self.page3.calculate_button.setIcon(calculate_icon)
@@ -248,6 +286,9 @@ class Calculator(QWidget):
 
     def go_to_page4(self):
         self.stackedLayout.setCurrentIndex(3)
+
+    def go_to_page5(self):
+        self.stackedLayout.setCurrentIndex(4)
 
 
     def check_combo_page2(self):
@@ -416,6 +457,8 @@ class Calculator(QWidget):
         self.pbar.setValue(50)
         QtWidgets.QApplication.processEvents()
 
+        emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach': 0.027181, 'taxi': 0.148615, 'ferry': 0.02555, 'plane': 0.03350}
+
         # Scotland
         # Remove postcodes where [:2] == 'AB'
         self.scotland = [i for i in self.scotland if i[:2] != 'AB']
@@ -428,41 +471,87 @@ class Calculator(QWidget):
 
         df_car = pd.DataFrame(car_dict)
         df_car = df_car.round(1)
+        # Emissions df
+        df_car_emissions = df_car * emission_factors['car']
+        df_car_emissions = df_car_emissions.round(1)
         df_bus = pd.DataFrame(bus_dict)
         df_bus = df_bus.round(1)
+        df_bus_emissions = df_bus * emission_factors['bus']
+        df_bus_emissions = df_bus_emissions.round(1)
         df_rail = pd.DataFrame(rail_dict)
         df_rail = df_rail.round(1)
+        df_rail_emissions = df_rail * emission_factors['rail']
+        df_rail_emissions = df_rail_emissions.round(1)
         df_taxi = pd.DataFrame(taxi_dict)
         df_taxi = df_taxi.round(1)
+        df_taxi_emissions = df_taxi * emission_factors['taxi']
+        df_taxi_emissions = df_taxi_emissions.round(1)
 
 
         self.scot_car = go.Figure(
             data=[go.Bar(x=df_car.columns, y=df_car.iloc[0, :], text=df_car.iloc[0, :], textposition='auto')],
             layout=go.Layout(title='Car Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)')),
         )
+        # Change the color of the bars
+        self.scot_car.update_traces(marker_color='rgb(75, 235, 230)', marker_line_color='rgb(98, 143, 142)', marker_line_width=1.5, opacity=0.6)
         self.scot_bus = go.Figure(
             data=[go.Bar(x=df_bus.columns, y=df_bus.iloc[0, :], text=df_bus.iloc[0, :], textposition='auto')],
-            layout=go.Layout(title='Bus Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)')),
+            layout=go.Layout(title='Bus Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
         )
+        self.scot_bus.update_traces(marker_color='rgb(75, 235, 230)', marker_line_color='rgb(98, 143, 142)', marker_line_width=1.5, opacity=0.6)
         self.scot_rail = go.Figure(
             data=[go.Bar(x=df_rail.columns, y=df_rail.iloc[0, :], text=df_rail.iloc[0, :], textposition='auto')],
-            layout=go.Layout(title='Train Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)')),
+            layout=go.Layout(title='Train Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
         )
+        self.scot_rail.update_traces(marker_color='rgb(75, 235, 230)', marker_line_color='rgb(98, 143, 142)', marker_line_width=1.5, opacity=0.6)
         self.scot_taxi = go.Figure(
             data=[go.Bar(x=df_taxi.columns, y=df_taxi.iloc[0, :], text=df_taxi.iloc[0, :], textposition='auto')],
-            layout=go.Layout(title='Taxi Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)')),
+            layout=go.Layout(title='Taxi Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
         )
+        self.scot_taxi.update_traces(marker_color='rgb(75, 235, 230)', marker_line_color='rgb(98, 143, 142)', marker_line_width=1.5, opacity=0.6)
+
+
+
+
+        """=======================Scotland Council Emissions=========================="""
+        self.scot_car_emissions = go.Figure(
+            data=[go.Bar(x=df_car_emissions.columns, y=df_car_emissions.iloc[0, :], text=df_car_emissions.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Car Travel Emissions Across Scottish Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        # self.scot_car_emissions.update_traces(marker_color='rgb(75, 235, 230)', marker_line_color='rgb(98, 143, 142)', marker_line_width=1.5, opacity=0.6)
+        self.scot_bus_emissions = go.Figure(
+            data=[go.Bar(x=df_bus_emissions.columns, y=df_bus_emissions.iloc[0, :], text=df_bus_emissions.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Bus Travel Emissions Across Scottish Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.scot_rail_emissions = go.Figure(
+            data=[go.Bar(x=df_rail_emissions.columns, y=df_rail_emissions.iloc[0, :], text=df_rail_emissions.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Train Travel Emissions Across Scottish Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.scot_taxi_emissions = go.Figure(
+            data=[go.Bar(x=df_taxi_emissions.columns, y=df_taxi_emissions.iloc[0, :], text=df_taxi_emissions.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Taxi Travel Emissions Across Scottish Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+
+
 
         # Do same for England
         car_dict_eng, bus_dict_eng, rail_dict_eng, taxi_dict_eng = self.create_council_areas(self.england, 'England')
         df_car_eng = pd.DataFrame(car_dict_eng)
         df_car_eng = df_car_eng.round(1)
+        df_car_emissions_eng = df_car_eng * emission_factors['car']
+        df_car_emissions_eng = df_car_emissions_eng.round(1)
         df_bus_eng = pd.DataFrame(bus_dict_eng)
         df_bus_eng = df_bus_eng.round(1)
+        df_bus_emissions_eng = df_bus_eng * emission_factors['bus']
+        df_bus_emissions_eng = df_bus_emissions_eng.round(1)
         df_rail_eng = pd.DataFrame(rail_dict_eng)
         df_rail_eng = df_rail_eng.round(1)
+        df_rail_emissions_eng = df_rail_eng * emission_factors['rail']
+        df_rail_emissions_eng = df_rail_emissions_eng.round(1)
         df_taxi_eng = pd.DataFrame(taxi_dict_eng)
         df_taxi_eng = df_taxi_eng.round(1)
+        df_taxi_emissions_eng = df_taxi_eng * emission_factors['taxi']
+        df_taxi_emissions_eng = df_taxi_emissions_eng.round(1)
 
         self.eng_car = go.Figure(
             data=[go.Bar(x=df_car_eng.columns, y=df_car_eng.iloc[0, :], text=df_car_eng.iloc[0, :], textposition='auto')],
@@ -481,16 +570,45 @@ class Calculator(QWidget):
             layout=go.Layout(title='Taxi Travel Distances Across English Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
         )
 
+
+
+        """=======================England Council Emissions=========================="""
+        self.eng_car_emissions = go.Figure(
+            data=[go.Bar(x=df_car_emissions_eng.columns, y=df_car_emissions_eng.iloc[0, :], text=df_car_emissions_eng.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Car Travel Emissions Across English Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.eng_bus_emissions = go.Figure(
+            data=[go.Bar(x=df_bus_emissions_eng.columns, y=df_bus_emissions_eng.iloc[0, :], text=df_bus_emissions_eng.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Bus Travel Emissions Across English Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.eng_rail_emissions = go.Figure(
+            data=[go.Bar(x=df_rail_emissions_eng.columns, y=df_rail_emissions_eng.iloc[0, :], text=df_rail_emissions_eng.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Train Travel Emissions Across English Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.eng_taxi_emissions = go.Figure(
+            data=[go.Bar(x=df_taxi_emissions_eng.columns, y=df_taxi_emissions_eng.iloc[0, :], text=df_taxi_emissions_eng.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Taxi Travel Emissions Across English Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+
+
         # Do same for Wales
         car_dict_wales, bus_dict_wales, rail_dict_wales, taxi_dict_wales = self.create_council_areas(self.wales, 'Wales')
         df_car_wales = pd.DataFrame(car_dict_wales)
         df_car_wales = df_car_wales.round(1)
+        df_car_emissions_wales = df_car_wales * emission_factors['car']
+        df_car_emissions_wales = df_car_emissions_wales.round(1)
         df_bus_wales = pd.DataFrame(bus_dict_wales)
         df_bus_wales = df_bus_wales.round(1)
+        df_bus_emissions_wales = df_bus_wales * emission_factors['bus']
+        df_bus_emissions_wales = df_bus_emissions_wales.round(1)
         df_rail_wales = pd.DataFrame(rail_dict_wales)
         df_rail_wales = df_rail_wales.round(1)
+        df_rail_emissions_wales = df_rail_wales * emission_factors['rail']
+        df_rail_emissions_wales = df_rail_emissions_wales.round(1)
         df_taxi_wales = pd.DataFrame(taxi_dict_wales)
         df_taxi_wales = df_taxi_wales.round(1)
+        df_taxi_emissions_wales = df_taxi_wales * emission_factors['taxi']
+        df_taxi_emissions_wales = df_taxi_emissions_wales.round(1)
 
         self.wales_car = go.Figure(
             data=[go.Bar(x=df_car_wales.columns, y=df_car_wales.iloc[0, :], text=df_car_wales.iloc[0, :], textposition='auto')],
@@ -508,17 +626,45 @@ class Calculator(QWidget):
             data=[go.Bar(x=df_taxi_wales.columns, y=df_taxi_wales.iloc[0, :], text=df_taxi_wales.iloc[0, :], textposition='auto')],
             layout=go.Layout(title='Taxi Travel Distances Across Welsh Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
         )
+
+
+        """=======================Wales Council Emissions=========================="""
+        self.wales_car_emissions = go.Figure(
+            data=[go.Bar(x=df_car_emissions_wales.columns, y=df_car_emissions_wales.iloc[0, :], text=df_car_emissions_wales.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Car Travel Emissions Across Welsh Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.wales_bus_emissions = go.Figure(
+            data=[go.Bar(x=df_bus_emissions_wales.columns, y=df_bus_emissions_wales.iloc[0, :], text=df_bus_emissions_wales.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Bus Travel Emissions Across Welsh Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.wales_rail_emissions = go.Figure(
+            data=[go.Bar(x=df_rail_emissions_wales.columns, y=df_rail_emissions_wales.iloc[0, :], text=df_rail_emissions_wales.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Train Travel Emissions Across Welsh Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.wales_taxi_emissions = go.Figure(
+            data=[go.Bar(x=df_taxi_emissions_wales.columns, y=df_taxi_emissions_wales.iloc[0, :], text=df_taxi_emissions_wales.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Taxi Travel Emissions Across Welsh Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+
         
         # Do same for Northern Ireland
         car_dict_ni, bus_dict_ni, rail_dict_ni, taxi_dict_ni = self.create_council_areas(self.north_ireland, 'Northern Ireland')
         df_car_ni = pd.DataFrame(car_dict_ni)
         df_car_ni = df_car_ni.round(1)
+        df_car_emissions_ni = df_car_ni * emission_factors['car']
+        df_car_emissions_ni = df_car_emissions_ni.round(1)
         df_bus_ni = pd.DataFrame(bus_dict_ni)
         df_bus_ni = df_bus_ni.round(1)
+        df_bus_emissions_ni = df_bus_ni * emission_factors['bus']
+        df_bus_emissions_ni = df_bus_emissions_ni.round(1)
         df_rail_ni = pd.DataFrame(rail_dict_ni)
         df_rail_ni = df_rail_ni.round(1)
+        df_rail_emissions_ni = df_rail_ni * emission_factors['rail']
+        df_rail_emissions_ni = df_rail_emissions_ni.round(1)
         df_taxi_ni = pd.DataFrame(taxi_dict_ni)
         df_taxi_ni = df_taxi_ni.round(1)
+        df_taxi_emissions_ni = df_taxi_ni * emission_factors['taxi']
+        df_taxi_emissions_ni = df_taxi_emissions_ni.round(1)
 
         # Make the car figure different colours
         self.ni_car = go.Figure(
@@ -537,6 +683,27 @@ class Calculator(QWidget):
             data=[go.Bar(x=df_taxi_ni.columns, y=df_taxi_ni.iloc[0, :], text=df_taxi_ni.iloc[0, :], textposition='auto')],
             layout=go.Layout(title='Taxi Travel Distances Across Northern Irish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
         )
+
+
+
+        """=======================Northern Ireland Council Emissions=========================="""
+        self.ni_car_emissions = go.Figure(
+            data=[go.Bar(x=df_car_emissions_ni.columns, y=df_car_emissions_ni.iloc[0, :], text=df_car_emissions_ni.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Car Travel Emissions Across Northern Irish Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.ni_bus_emissions = go.Figure(
+            data=[go.Bar(x=df_bus_emissions_ni.columns, y=df_bus_emissions_ni.iloc[0, :], text=df_bus_emissions_ni.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Bus Travel Emissions Across Northern Irish Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.ni_rail_emissions = go.Figure(
+            data=[go.Bar(x=df_rail_emissions_ni.columns, y=df_rail_emissions_ni.iloc[0, :], text=df_rail_emissions_ni.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Train Travel Emissions Across Northern Irish Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+        self.ni_taxi_emissions = go.Figure(
+            data=[go.Bar(x=df_taxi_emissions_ni.columns, y=df_taxi_emissions_ni.iloc[0, :], text=df_taxi_emissions_ni.iloc[0, :], textposition='auto')],
+            layout=go.Layout(title='Taxi Travel Emissions Across Northern Irish Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
+        )
+
         
 
 
@@ -564,6 +731,7 @@ class Calculator(QWidget):
         self.fig1.update_traces(textfont_size=16)
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig1.to_html(include_plotlyjs='cdn'))
+        self.page5.webview.setHtml(self.fig1.to_html(include_plotlyjs='cdn'))
 
     def click_radio2(self):
         """Set the webview to show the second heatmap with the distances data"""
@@ -578,6 +746,7 @@ class Calculator(QWidget):
         self.fig2.update_traces(textfont_size=16)
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig2.to_html(include_plotlyjs='cdn'))
+        self.page5.webview.setHtml(self.fig2.to_html(include_plotlyjs='cdn'))
 
     def click_radio3(self):
         """Set the webview to show the pie chart with the total emissions data"""
@@ -595,6 +764,7 @@ class Calculator(QWidget):
         self.fig3.update_traces(textfont_size=16)
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig3.to_html(include_plotlyjs='cdn'))
+        self.page5.webview.setHtml(self.fig3.to_html(include_plotlyjs='cdn'))
 
     def click_radio4(self):
         """Set the webview to show the pie chart with the emissions per student data"""
@@ -618,95 +788,123 @@ class Calculator(QWidget):
         self.fig4.update_traces(textfont_size=16)
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig4.to_html(include_plotlyjs='cdn'))
+        self.page5.webview.setHtml(self.fig4.to_html(include_plotlyjs='cdn'))
 
     # Scotland radio buttons
     def click_radio5(self):
-        """Set the webview to show the heatmap with the council areas data"""
+        """Set the webview to show the chart with data"""
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.scot_car.to_html(include_plotlyjs='cdn'))
 
     def click_radio6(self):
-        """Set the webview to show the heatmap with the bus distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.scot_bus.to_html(include_plotlyjs='cdn'))
 
     def click_radio7(self):
-        """Set the webview to show the heatmap with the rail distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.scot_rail.to_html(include_plotlyjs='cdn'))
 
     def click_radio8(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.scot_taxi.to_html(include_plotlyjs='cdn'))
 
     # England radio buttons
     def click_radio9(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.eng_car.to_html(include_plotlyjs='cdn'))
 
     def click_radio10(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.eng_bus.to_html(include_plotlyjs='cdn'))
 
     def click_radio11(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.eng_rail.to_html(include_plotlyjs='cdn'))
 
     def click_radio12(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.eng_taxi.to_html(include_plotlyjs='cdn'))
     
     # Wales radio buttons
     def click_radio13(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.wales_car.to_html(include_plotlyjs='cdn'))
 
     def click_radio14(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.wales_bus.to_html(include_plotlyjs='cdn'))
 
     def click_radio15(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.wales_rail.to_html(include_plotlyjs='cdn'))
 
     def click_radio16(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.wales_taxi.to_html(include_plotlyjs='cdn'))
     
     # Northern Ireland radio buttons
     def click_radio17(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.ni_car.to_html(include_plotlyjs='cdn'))
 
     def click_radio18(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.ni_bus.to_html(include_plotlyjs='cdn'))
 
     def click_radio19(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.ni_rail.to_html(include_plotlyjs='cdn'))
 
     def click_radio20(self):
-        """Set the webview to show the heatmap with the taxi distances data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.ni_taxi.to_html(include_plotlyjs='cdn'))
+
+
+        """==============================================Council Area Emissions Buttons=============================================="""
+    # Scotland radio buttons
+    def click_radio_emissions1(self):
+        self.page5.webview.setHtml(self.scot_car_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions2(self):
+        self.page5.webview.setHtml(self.scot_bus_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions3(self):
+        self.page5.webview.setHtml(self.scot_rail_emissions.to_html(include_plotlyjs='cdn'))
+    
+    def click_radio_emissions4(self):
+        self.page5.webview.setHtml(self.scot_taxi_emissions.to_html(include_plotlyjs='cdn'))
+
+    # England radio buttons
+    def click_radio_emissions5(self):
+        self.page5.webview.setHtml(self.eng_car_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions6(self):
+        self.page5.webview.setHtml(self.eng_bus_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions7(self):
+        self.page5.webview.setHtml(self.eng_rail_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions8(self):
+        self.page5.webview.setHtml(self.eng_taxi_emissions.to_html(include_plotlyjs='cdn'))
+
+    # Wales radio buttons
+    def click_radio_emissions9(self):
+        self.page5.webview.setHtml(self.wales_car_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions10(self):
+        self.page5.webview.setHtml(self.wales_bus_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions11(self):
+        self.page5.webview.setHtml(self.wales_rail_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions12(self):
+        self.page5.webview.setHtml(self.wales_taxi_emissions.to_html(include_plotlyjs='cdn'))
+
+    # Northern Ireland radio buttons
+    def click_radio_emissions13(self):
+        self.page5.webview.setHtml(self.ni_car_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions14(self):
+        self.page5.webview.setHtml(self.ni_bus_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions15(self):
+        self.page5.webview.setHtml(self.ni_rail_emissions.to_html(include_plotlyjs='cdn'))
+
+    def click_radio_emissions16(self):
+        self.page5.webview.setHtml(self.ni_taxi_emissions.to_html(include_plotlyjs='cdn'))
+
 
 
     def create_council_areas(self, country_posctodes: list, country: str):
         # Scotland
         country_districts = get_district(country_posctodes)
+        print('==============================', country)
+        print(country_districts)
         country_grouped = group_district(country_districts)
         country_percent = find_percentage(country_grouped, country_posctodes)
 
@@ -736,7 +934,13 @@ class Calculator(QWidget):
 
         return car_dict, bus_dict, rail_dict, taxi_dict
 
+    # def calculate_emissions(self, dataframe, mode: str):
+    #     emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach': 0.027181, 'taxi': 0.148615,
+    #     'ferry': 0.02555, 'plane': 0.03350}
         
+    #     # Calculate the emissions for the given mode of transport by multiplying the values in the dataframe by the emission factor
+    #     dataframe = dataframe * emission_factors[mode]
+    #     return dataframe
 
 """==============================================Run the app=============================================="""
 app = QApplication(sys.argv)
