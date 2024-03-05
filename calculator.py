@@ -1,7 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout, QProgressDialog, QProgressBar
 from PyQt6.QtCore import pyqtSignal
-from PyQt6 import QtCore
 from PyQt6 import QtWidgets
 from PyQt6.QtGui import QIcon
 from tkinter.filedialog import askopenfile
@@ -26,7 +25,8 @@ Info:
   for Scotland and the rest of the UK
 - page3 is the third page where the user selects the travel assumptions for the final leg of the journey 
   from Aberdeen transport hub to the University of Aberdeen
-- page4 is the final page where the user can see the results of the calculations in the form of heatmaps and pie charts
+- page4 is the final page where the user can see the results of distance calculations for councils and base data
+- page5 is the final page where the user can see the results of emissions calculations for councils and base data
 
 """
 
@@ -962,10 +962,7 @@ class Calculator(QWidget):
         rail_dict = {}
         taxi_dict = {}
 
-        # Create dictionaries with the distances for each mode of transport
-        country_dict = {}
         for key, value in country_percent.items():
-            # country_dict[key] = {'Car' : car * value / 100, 'Bus' : bus * value / 100, 'Rail' : rail * value / 100, 'Walk' : walk * value / 100, 'Taxi' : taxi * value / 100}
             car_dict[key] = {'Car' : car * value / 100}
             bus_dict[key] = {'Bus' : bus * value / 100}
             rail_dict[key] = {'Rail' : rail * value / 100}
@@ -973,13 +970,6 @@ class Calculator(QWidget):
 
         return car_dict, bus_dict, rail_dict, taxi_dict
 
-    # def calculate_emissions(self, dataframe, mode: str):
-    #     emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach': 0.027181, 'taxi': 0.148615,
-    #     'ferry': 0.02555, 'plane': 0.03350}
-        
-    #     # Calculate the emissions for the given mode of transport by multiplying the values in the dataframe by the emission factor
-    #     dataframe = dataframe * emission_factors[mode]
-    #     return dataframe
 
 """==============================================Run the app=============================================="""
 app = QApplication(sys.argv)
