@@ -82,35 +82,35 @@ class Calculator(QWidget):
         self.setLayout(self.stackedLayout)
 
         # Connect signals for page1
-        self.page1.button1.clicked.connect(self.go_to_page2)
+        self.page1.button1.clicked.connect(lambda: self.go_to_page(1))
         self.page1.button2.clicked.connect(self.open_file)
         self.file_selected.connect(self.page1.enable_buttons1)
 
         # Connect signals for page2
-        self.page2.next_button2.clicked.connect(self.go_to_page3)
+        self.page2.next_button2.clicked.connect(lambda: self.go_to_page(2))
         self.page2.submit.clicked.connect(self.check_combo_page2)
-        self.page2.back.clicked.connect(self.go_to_page1)
+        self.page2.back.clicked.connect(lambda: self.go_to_page(0))
         self.hundred_percent.connect(self.page2.enable_page2)
 
         # Connect signals for page3
-        self.page3.back.clicked.connect(self.go_to_page2)
+        self.page3.back.clicked.connect(lambda: self.go_to_page(1))
         self.page3.calculate_button.clicked.connect(self.go_to_results)
         self.hundred_percent_page3.connect(self.page3.enable_page3)
         self.page3.submit.clicked.connect(self.check_combo_page3)
 
         # Connect signals for page4
-        self.page4.button1.clicked.connect(self.go_to_page3)
-        self.page4.button2.clicked.connect(self.go_to_page1)
-        self.page4.button3.clicked.connect(self.go_to_page5)
+        self.page4.button1.clicked.connect(lambda: self.go_to_page(2))
+        self.page4.button2.clicked.connect(lambda: self.go_to_page(0))
+        self.page4.button3.clicked.connect(lambda: self.go_to_page(4))
         self.page4.radio1.clicked.connect(self.click_radio1)
         self.page4.radio2.clicked.connect(self.click_radio2)
         self.page4.radio3.clicked.connect(self.click_radio3)
         self.page4.radio4.clicked.connect(self.click_radio4)
 
         # Connect signals for page5
-        self.page5.button1.clicked.connect(self.go_to_page3)
-        self.page5.button2.clicked.connect(self.go_to_page1)
-        self.page5.button3.clicked.connect(self.go_to_page4)
+        self.page5.button1.clicked.connect(lambda: self.go_to_page(2))
+        self.page5.button2.clicked.connect(lambda: self.go_to_page(0))
+        self.page5.button3.clicked.connect(lambda: self.go_to_page(3))
         self.page5.radio1.clicked.connect(self.click_radio1)
         self.page5.radio2.clicked.connect(self.click_radio2)
         self.page5.radio3.clicked.connect(self.click_radio3)
@@ -176,21 +176,8 @@ class Calculator(QWidget):
             # Emit a signal that a file has not been selected
             self.file_selected.emit(False)
 
-
-    def go_to_page1(self):
-        self.stackedLayout.setCurrentIndex(0)
-    
-    def go_to_page2(self):
-        self.stackedLayout.setCurrentIndex(1)
-
-    def go_to_page3(self):
-        self.stackedLayout.setCurrentIndex(2)
-
-    def go_to_page4(self):
-        self.stackedLayout.setCurrentIndex(3)
-
-    def go_to_page5(self):
-        self.stackedLayout.setCurrentIndex(4)
+    def go_to_page(self, i):
+        self.stackedLayout.setCurrentIndex(i)
 
 
     def check_combo_page2(self):
