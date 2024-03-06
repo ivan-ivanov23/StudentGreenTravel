@@ -150,7 +150,7 @@ class Calculator(QWidget):
             addresses = pd.read_excel(file.name, engine='openpyxl')
             addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
             # Add the file name to the label text with the file name withouth the path
-            self.page1.file_label.setText(f"File: {file.name.split('/')[-1]}")
+            self.page1.file_label.setText(f"Dataset: {file.name.split('/')[-1]}")
             self.scotland, self.wales, self.north_ireland, self.england = determine_postcode(addresses.iloc[:, 1])
             # Emit signal that a file has been selected
             self.file_selected.emit(True)
@@ -654,7 +654,7 @@ class Calculator(QWidget):
         # Exclude the Walk values
         df = df.drop('Walk', axis=0)
         # Round the values to 2 decimal places
-        df = df.round(0)
+        df = df.round(1)
         # Source: https://plotly.com/python/heatmaps/
         # Figure to store the heatmap with the emissions
         self.fig1 = px.imshow(df, text_auto=True, aspect='auto', title='Total Emissions (kgCO2e) by Country and Mode of Transport',
@@ -671,7 +671,7 @@ class Calculator(QWidget):
         """Set the webview to show the second heatmap with the distances data"""
         # Do the same for the distances
         df = self.distances
-        df = df.round(0)
+        df = df.round(1)
         # Figure to store the heatmap with the distances
         self.fig2 = px.imshow(df, text_auto=True, aspect='auto', title='Total Distance (km) by Country and Mode of Transport',
                         labels=dict(x="Country", y="Transport", color="Distance (km)"),
@@ -687,7 +687,7 @@ class Calculator(QWidget):
          # Pie chart for the total emissions
         # Source: https://plotly.com/python/pie-charts/
         df = self.total_emissions
-        df = df.round(0)
+        df = df.round(1)
         # take names from columns
         names = df.columns
         # Values are the second row
@@ -715,7 +715,7 @@ class Calculator(QWidget):
         labels = ['Scotland', 'England', 'Wales', 'Northern Ireland']
         values = [scot_emissions, eng_emissions, wales_emissions, ni_emissions]
         # Round the values to 0 decimal places
-        values = [round(i, 0) for i in values]
+        values = [round(i, 1) for i in values]
         # Figure to store the pie chart with the emissions per student
         self.fig4 = px.pie(values=values, names=labels, title='Emissions per Student by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"), color_discrete_sequence=px.colors.sequential.RdBu)
         # Edit the font size and color of the values
@@ -723,8 +723,7 @@ class Calculator(QWidget):
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.page4.webview.setHtml(self.fig4.to_html(include_plotlyjs='cdn'))
         self.page5.webview.setHtml(self.fig4.to_html(include_plotlyjs='cdn'))
-
-    
+   
     def set_webpage4(self, data):
         """Set the webview to show the data from the radio buttons on page4"""
         data = data.to_html(include_plotlyjs='cdn')
@@ -734,8 +733,6 @@ class Calculator(QWidget):
         """Set the webview to show the data from the radio buttons on page5"""
         data = data.to_html(include_plotlyjs='cdn')
         self.page5.webview.setHtml(data)
-
-
 
     def create_council_areas(self, country_posctodes: list, country: str):
         # Scotland

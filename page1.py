@@ -27,7 +27,7 @@ class MainPage(QWidget):
         self.button1 = QPushButton("Calculate Emissions")
         self.button1.setFixedSize(300, 50)
         self.button1.setEnabled(False)
-        self.button2 = QPushButton("Select a File")
+        self.button2 = QPushButton("Select Student Data")
         self.button2.setFixedSize(300, 50)
 
         # File label

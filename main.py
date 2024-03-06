@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from itertools import islice
 from travel_class import Travel
 from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict
+from utils import extract_distances, extract_car_distances, init_leg
 
 def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_fleg, scot_car_fleg, scot_taxi_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg):
     travel = Travel(stops_dict, stations_dict, airports_dict, ukpostcode_coords)
@@ -53,77 +53,26 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
 
     """=================================Initial leg of journey=================================="""
 
-    # From all of these above dictionaries, extract the value[1] (the closest stop/airport) and put them in a list
-    # Then, use the list to extract the distances from the dictionaries and sum them to get the total distance
-    # travelled by each mode of transport and region
-    # We dont consider car distances here because the car distance is the distance from the postcode to the university and there is no initial leg of the journey
-    all_inital_scotland = [value[1] for value in scotland_rail_data.values()] + [value[1] for value in scotland_bus_data.values()]
+    """ From all of these above dictionaries, extract the value[1] (the closest stop/airport) and put them in a list
+    Then, use the list to extract the distances from the dictionaries and sum them to get the total distance
+    travelled by each mode of transport and region.We dont consider car distances here because the car distance 
+    is the distance from the postcode to the university and there is no initial leg of the journey. """
 
-    init_car = 40
-    init_taxi = 40
-    init_bus = 20
-
-    init_car1 = int(len(all_inital_scotland) * (init_car / 100))
-    init_taxi1 = int(len(all_inital_scotland) * (init_taxi / 100))
-    init_bus1 = int(len(all_inital_scotland) * (init_bus / 100))
-
-    # Divide the all_initial list into 3 lists, one for each mode of transport according to the percentages without overlapping
-    seclist1 = [init_car1, init_taxi1, init_bus1]
-    it1 = iter(all_inital_scotland)
-    car1, taxi1, bus1 = [list(islice(it1, 0, i)) for i in seclist1]
-    # Add the distances in each list to get the total distance travelled by each mode of transport
-    total_car1 = np.sum(car1)
-    total_taxi1 = np.sum(taxi1)
-    total_bus1 = np.sum(bus1)
+    # Scotland
+    all_inital_scotland = [value[1] for value in scotland_rail_data.values()] + [value[1] for value in scotland_bus_data.values()] 
+    total_car1, total_taxi1, total_bus1 = init_leg(all_inital_scotland)
 
     # England
-    # We dont consider car distances here because the car distance is the distance from the postcode to the university and there is no initial leg of the journey
     all_inital_eng = [value[1] for value in eng_rail_data.values()] + [value[1] for value in eng_flying_data.values()]
-
-    init_car2 = int(len(all_inital_eng) * (init_car / 100))
-    init_taxi2 = int(len(all_inital_eng) * (init_taxi / 100))
-    init_bus2 = int(len(all_inital_eng) * (init_bus / 100))
-
-    seclist2 = [init_car2, init_taxi2, init_bus2]
-
-    it2 = iter(all_inital_eng)
-    car2, taxi2, bus2 = [list(islice(it2, 0, i)) for i in seclist2]
-
-    total_car2 = np.sum(car2)
-    total_taxi2 = np.sum(taxi2)
-    total_bus2 = np.sum(bus2)
-
+    total_car2, total_taxi2, total_bus2 = init_leg(all_inital_eng)
 
     # Wales
-    # We dont consider car distances here because the car distance is the distance from the postcode to the university and there is no initial leg of the journey
     all_inital_wales = [value[1] for value in wales_rail_data.values()] + [value[1] for value in wales_flying_data.values()]
-
-    init_car3 = int(len(all_inital_wales) * (init_car / 100))
-    init_taxi3 = int(len(all_inital_wales) * (init_taxi / 100))
-    init_bus3 = int(len(all_inital_wales) * (init_bus / 100))
-
-    seclist3 = [init_car3, init_taxi3, init_bus3]
-    it3 = iter(all_inital_wales)
-    car3, taxi3, bus3 = [list(islice(it3, 0, i)) for i in seclist3]
-    total_car3 = np.sum(car3)
-    total_taxi3 = np.sum(taxi3)
-    total_bus3 = np.sum(bus3)
-
+    total_car3, total_taxi3, total_bus3 = init_leg(all_inital_wales)
 
     # Northern Ireland
-    # We dont consider car distances here because the car distance is the distance from the postcode to the university and there is no initial leg of the journey
     all_inital_ni = [value[1] for value in ni_rail_data.values()] + [value[1] for value in ni_flying_data.values()]
-
-    init_car4 = int(len(all_inital_ni) * (init_car / 100))
-    init_taxi4 = int(len(all_inital_ni) * (init_taxi / 100))
-    init_bus4 = int(len(all_inital_ni) * (init_bus / 100))
-
-    seclist4 = [init_car4, init_taxi4, init_bus4]
-    it4 = iter(all_inital_ni)
-    car4, taxi4, bus4 = [list(islice(it4, 0, i)) for i in seclist4]
-    total_car4 = np.sum(car4)
-    total_taxi4 = np.sum(taxi4)
-    total_bus4 = np.sum(bus4)
+    total_car4, total_taxi4, total_bus4 = init_leg(all_inital_ni)
 
     """=================================Initialize Total distances=================================="""
     total_distance_rail_scotland, total_distance_rail_eng, total_distance_rail_wales, total_distance_rail_ni = 0, 0, 0, 0
@@ -134,18 +83,18 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     """"=================================Converting to NumPy arrays=================================="""	
 
     # Extract mid leg distances from the dictionaries and converts them to numpy arrays (THESE ARE ONLY DISTANCES BETWEEN THE POSTCODES AND THE STOPS/STATIONS/AIRPORTS)
-    rail_scotland_distances = np.array([value[2] for value in scotland_rail_data.values()])
-    rail_eng_distances = np.array([value[2] for value in eng_rail_data.values()])
-    rail_wales_distances = np.array([value[2] for value in wales_rail_data.values()])
-    rail_ni_distances = np.array([value[2] for value in ni_rail_data.values()])
-    bus_scotland_distances = np.array([value[2] for value in scotland_bus_data.values()])
-    car_scotland_distances = np.array([value for value in scotland_car_data.values()])
-    car_eng_distances = np.array([value for value in eng_car_data.values()])
-    car_wales_distances = np.array([value for value in wales_car_data.values()])
-    car_ni_distances = np.array([value for value in ni_car_data.values()])
-    plane_eng_distances = np.array([value[2] for value in eng_flying_data.values()])
-    plane_wales_distances = np.array([value[2] for value in wales_flying_data.values()])
-    plane_ni_distances = np.array([value[2] for value in ni_flying_data.values()])
+    rail_scotland_distances = extract_distances(scotland_rail_data)
+    rail_eng_distances = extract_distances(eng_rail_data)
+    rail_wales_distances = extract_distances(wales_rail_data)
+    rail_ni_distances = extract_distances(ni_rail_data)
+    bus_scotland_distances = extract_distances(scotland_bus_data)
+    car_scotland_distances = extract_car_distances(scotland_car_data)
+    car_eng_distances = extract_car_distances(eng_car_data)
+    car_wales_distances = extract_car_distances(wales_car_data)
+    car_ni_distances = extract_car_distances(ni_car_data)
+    plane_eng_distances = extract_distances(eng_flying_data)
+    plane_wales_distances = extract_distances(wales_flying_data)
+    plane_ni_distances = extract_distances(ni_flying_data)
 
     """=================================Summing of Total distance values from different transports=================================="""
 
@@ -186,10 +135,6 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     # Create a dataframe to store the total distances
     total_distances = pd.DataFrame(total_distances_dict,
                                     index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
-
-    # Create a heatmap to visualise the total distances with reversed green to red colour scheme
-    sns.heatmap(total_distances, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total distance (km)'})
-    plt.title('Total distances travelled by students')
 
     """=================================Emissions=================================="""
 
@@ -246,9 +191,6 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
                                     'Northern Ireland': [rail_emissions_ni, plane_emissions_ni, bus_emissions_ni, car_emissions_ni, taxi_emissions_ni, walk_emissions_ni]},
                                     index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
     
-    # Create a heatmap to visualise the total emissions with reversed green to red colour scheme
-    sns.heatmap(total_emissions_heatmap, annot=True, fmt='g', cmap='YlOrRd', cbar_kws={'label': 'Total emissions (kgCO2e)'})
-    plt.title('Total emissions from student travel')
 
     # Dataframe to store the total emissions
     total_emissions = pd.DataFrame({'Scotland': [total_emissions_scotland],
@@ -256,13 +198,6 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
                                     'Wales': [total_emissions_wales],
                                     'Northern Ireland': [total_emissions_ni]},
                                     index=['Country'])
-    
-    # Create a bar chart to visualise the total emissions
-    total_emissions.plot(kind='bar')
-    # Rotate the x-axis labels for better readability
-    plt.xticks(rotation=0)
-    plt.ylabel('Total emissions (kgCO2e)')
-    plt.title('Total emissions from student travel')
 
     # Return the total emissions dataframe
     return total_emissions_heatmap, total_distances, total_emissions, total_distances_dict
