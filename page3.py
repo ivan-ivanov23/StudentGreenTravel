@@ -12,8 +12,18 @@ class Page3(QWidget):
     def initializeUI(self):
         """Create and arrange widgets for Page 3"""
         self.layout3 = QVBoxLayout()
-        label = QLabel("Select the travel assumptions for the final leg of the journey.\nFrom Aberdeen transport hub to the University of Aberdeen")
+        label = QLabel("Assumptions for Final Leg of the Journey")
         label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
+
+        instruction = QLabel("""
+                             <b>Tip:</b> Select the percentage of students traveling by each transport method 
+                             for the final leg of their journey. That is from the bus/rail station or airport to the university.
+                             <br>
+                             Please, do this for each of the countries in the list on the left. 
+                             <br><br>
+                             Once you have selected the percentages for the middle leg of the journey, click '<b>Submit</b>' to confirm your choices.
+                             """)
+        instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
 
         # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm
         # List of countries
@@ -66,6 +76,7 @@ class Page3(QWidget):
         button_layout.addWidget(self.calculate_button)
 
         self.layout3.addWidget(label)
+        self.layout3.addWidget(instruction)
         self.layout3.addLayout(hbox)
         self.layout3.addStretch(1)
         self.leftlist.currentRowChanged.connect(self.display)
@@ -121,7 +132,7 @@ class Page3(QWidget):
         scot_grid.addWidget(scot_walk_box, 3, 1)
 
         # reate a group box for the grid layout
-        scotland_group = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
+        scotland_group = QGroupBox("Journey from bus/rail station to university.")
         scotland_group.setLayout(scot_grid)
 
         layout.addWidget(country)
@@ -209,11 +220,11 @@ class Page3(QWidget):
 
 
         # Create a group box for the grid layout
-        england_group_top = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
+        england_group_top = QGroupBox("Journey from bus/rail station to university.")
         england_group_top.setLayout(eng_grid_top)
 
         # Create a group box for the grid layout
-        england_group_bottom = QGroupBox("Adjust percentages for each travel method from airport to university.")
+        england_group_bottom = QGroupBox("Journey from airport to university.")
         england_group_bottom.setLayout(eng_grid_bottom)
 
 
@@ -305,11 +316,11 @@ class Page3(QWidget):
 
 
         # Create a group box for the grid layout
-        wales_group_top = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
+        wales_group_top = QGroupBox("Journey from bus/rail station to university.")
         wales_group_top.setLayout(wales_grid_top)
 
         # Create a group box for the grid layout
-        wales_group_bottom = QGroupBox("Adjust percentages for each travel method from airport to university.")
+        wales_group_bottom = QGroupBox("Journey from airport to university.")
         wales_group_bottom.setLayout(wales_grid_bottom)
 
 
@@ -400,11 +411,11 @@ class Page3(QWidget):
 
 
         # Create a group box for the grid layout
-        ni_group_top = QGroupBox("Adjust percentages for each travel method from bus/rail station to university.")
+        ni_group_top = QGroupBox("Journey from bus/rail station to university.")
         ni_group_top.setLayout(ni_grid_top)
 
         # Create a group box for the grid layout
-        ni_group_bottom = QGroupBox("Adjust percentages for each travel method from airport to university.")
+        ni_group_bottom = QGroupBox("Journey from airport to university.")
         ni_group_bottom.setLayout(ni_grid_bottom)
 
 

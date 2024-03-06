@@ -11,9 +11,26 @@ class Page2(QWidget):
         """Create and arrange widgets in the SecondPage"""
         self.layout2 = QVBoxLayout()
         # Title label
-        label = QLabel("Select percentages of students travelling by each transport method")
+        label = QLabel("Assumptions for Middle Leg of the Journey")
         label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
         self.layout2.addWidget(label)
+
+        instruction = QLabel("""
+            <b>Tip:</b> Select the percentage of students traveling by each transport method 
+            for the middle leg of their journey, from the transportation hub in their city to Aberdeen.
+            <br><br>
+            The percentages selected under the 'Scotland' section will be used for the Scottish students,
+            <br>
+            and the percentages selected under the 'Rest of UK' section will be used for the students from England, Wales, and Northern Ireland.
+            <br><br>
+            The initial leg of the journey (from home address to local transportation hub) is already pre-defined:
+            <br>
+            40% of students travel by car, 40% by taxi, and 20% by bus.
+            <br><br>
+            Once you have selected the percentages for the middle leg of the journey, click '<b>Submit</b>' to confirm your choices.
+        """)
+        instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        self.layout2.addWidget(instruction)
 
         # Grid layout for the combo boxes
         grid = QGridLayout()

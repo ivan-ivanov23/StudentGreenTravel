@@ -20,6 +20,7 @@ class ResultDistance(QWidget):
         # Show a web view
         # Source: https://zetcode.com/pyqt/qwebengineview/
         self.webview = QWebEngineView()
+        self.webview.setHtml("<b>Tip:</b> Select from the options on the right to view the data.")
         hbox.addWidget(self.webview)
 
         # layout the hold the group boxes
@@ -96,8 +97,6 @@ class ResultDistance(QWidget):
         radio_layout5.addWidget(self.radio18)
         radio_layout5.addWidget(self.radio19)
         radio_layout5.addWidget(self.radio20)
-
- 
 
         # Add radio buttons to group box
         group_box.setLayout(radio_layout)
