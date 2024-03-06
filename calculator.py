@@ -10,12 +10,13 @@ from final_leg import assign_scotland, assign_uk
 from page1 import MainPage
 from page2 import Page2
 from page3 import Page3
-from results_page import ResultPage
-from results_page2 import ResultPage2
+from results_distance import ResultPage
+from results_emissions import ResultPage2
 from main import main
 import plotly.express as px
 import plotly.graph_objects as go
 from council_areas import get_district, group_district, find_percentage
+from style_sheets import main_stylesheet, widget_stylesheet
 
 """
 Info:
@@ -105,22 +106,6 @@ class Calculator(QWidget):
         self.page4.radio2.clicked.connect(self.click_radio2)
         self.page4.radio3.clicked.connect(self.click_radio3)
         self.page4.radio4.clicked.connect(self.click_radio4)
-        self.page4.radio5.clicked.connect(self.click_radio5)
-        self.page4.radio6.clicked.connect(self.click_radio6)
-        self.page4.radio7.clicked.connect(self.click_radio7)
-        self.page4.radio8.clicked.connect(self.click_radio8)
-        self.page4.radio9.clicked.connect(self.click_radio9)
-        self.page4.radio10.clicked.connect(self.click_radio10)
-        self.page4.radio11.clicked.connect(self.click_radio11)
-        self.page4.radio12.clicked.connect(self.click_radio12)
-        self.page4.radio13.clicked.connect(self.click_radio13)
-        self.page4.radio14.clicked.connect(self.click_radio14)
-        self.page4.radio15.clicked.connect(self.click_radio15)
-        self.page4.radio16.clicked.connect(self.click_radio16)
-        self.page4.radio17.clicked.connect(self.click_radio17)
-        self.page4.radio18.clicked.connect(self.click_radio18)
-        self.page4.radio19.clicked.connect(self.click_radio19)
-        self.page4.radio20.clicked.connect(self.click_radio20)
 
         # Connect signals for page5
         self.page5.button1.clicked.connect(self.go_to_page3)
@@ -130,93 +115,13 @@ class Calculator(QWidget):
         self.page5.radio2.clicked.connect(self.click_radio2)
         self.page5.radio3.clicked.connect(self.click_radio3)
         self.page5.radio4.clicked.connect(self.click_radio4)
-        self.page5.radio5.clicked.connect(self.click_radio_emissions1)
-        self.page5.radio6.clicked.connect(self.click_radio_emissions2)
-        self.page5.radio7.clicked.connect(self.click_radio_emissions3)
-        self.page5.radio8.clicked.connect(self.click_radio_emissions4)
-        self.page5.radio9.clicked.connect(self.click_radio_emissions5)
-        self.page5.radio10.clicked.connect(self.click_radio_emissions6)
-        self.page5.radio11.clicked.connect(self.click_radio_emissions7)
-        self.page5.radio12.clicked.connect(self.click_radio_emissions8)
-        self.page5.radio13.clicked.connect(self.click_radio_emissions9)
-        self.page5.radio14.clicked.connect(self.click_radio_emissions10)
-        self.page5.radio15.clicked.connect(self.click_radio_emissions11)
-        self.page5.radio16.clicked.connect(self.click_radio_emissions12)
-        self.page5.radio17.clicked.connect(self.click_radio_emissions13)
-        self.page5.radio18.clicked.connect(self.click_radio_emissions14)
-        self.page5.radio19.clicked.connect(self.click_radio_emissions15)
-        self.page5.radio20.clicked.connect(self.click_radio_emissions16)
-
     
 
         # Set style for the widgets in the application
-        self.setStyleSheet("font-size: 12px; font-weight: bold; color: #2d3436;")
+        self.setStyleSheet(widget_stylesheet)
 
-        # Set style for all QButtons in the application so that they are bigger and have a greenish color
-        self.setStyleSheet(
-            "QPushButton {"
-            "background-color: #A1FA80;"
-            "border: none;"
-            "color: #2d3436;"
-            "padding: 10px 10px;"
-            "text-align: center;"
-            "text-decoration: none;"
-            "font-size: 16px;"
-            "margin: 4px 2px;"
-            "border-radius: 12px;"
-            "}"
-
-            "QPushButton:hover {"
-            "background-color: #00b894;"
-            "}"
-
-            "QPushButton:disabled {"
-            "background-color: #dfe6e9;"
-            "}"
-
-            "QComboBox {"
-            "font-size: 12px;"
-            "color: #2d3436;"
-            "}"
-
-            "QLineEdit {"
-            "font-size: 12px;"
-            "color: #2d3436;"
-            "}"
-
-            "QGroupBox {"
-            "font-size: 12px;"
-            "font-weight: bold;"
-            "color: #2d3436;"
-            "border-radius: 5px;"
-            "background-color: #dfe6e9;"
-            "padding: 5px;"
-            "margin-bottom: 10px;"
-            "margin-top: 15px;"
-            "}"
-
-            "QGroupBox::title {"
-            "subcontrol-origin: margin;"
-            "padding: 0 3px;"
-            "}"
-
-            "QRadioButton {"
-            "font-size: 12px;"
-            "color: #2d3436;"
-            "}"
-
-            "QRadioButton::indicator:checked {"
-            "background-color: #64C540;"
-            "border: 1px solid #64C540;"
-            "border-radius: 6px;"
-            "}"
-
-            "QWebEngineView {"
-            "background-color: #dfe6e9;"
-            "}"
-            """
-
-        """)
+        # Set style for the windows
+        self.setStyleSheet(main_stylesheet)
 
         # Get icons from StandardPixmap
         # Source: https://www.svgrepo.com/
@@ -250,9 +155,6 @@ class Calculator(QWidget):
         # Set the icon for the next button
         self.page2.next_button2.setIcon(next_button)
 
-
-        # Show the application
-        self.show()
 
     """==============================================Methods for pages=============================================="""
     def open_file(self):
@@ -752,7 +654,50 @@ class Calculator(QWidget):
             layout=go.Layout(title='Taxi Travel Emissions Across Northern Irish Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
         )
 
-        
+        # Connect radio buttons on results page (page4)
+        # Source: Answer from ozcanyarimdunya in: https://stackoverflow.com/questions/6784084/how-to-pass-arguments-to-functions-by-the-click-of-button-in-pyqt
+        # Scotland travel distances by council
+        self.page4.radio5.clicked.connect(lambda: self.set_webpage4(self.scot_car))
+        self.page4.radio6.clicked.connect(lambda: self.set_webpage4(self.scot_bus))
+        self.page4.radio7.clicked.connect(lambda: self.set_webpage4(self.scot_rail))
+        self.page4.radio8.clicked.connect(lambda: self.set_webpage4(self.scot_taxi))
+        # England travel distances by council
+        self.page4.radio9.clicked.connect(lambda: self.set_webpage4(self.eng_car))
+        self.page4.radio10.clicked.connect(lambda: self.set_webpage4(self.eng_bus))
+        self.page4.radio11.clicked.connect(lambda: self.set_webpage4(self.eng_rail))
+        self.page4.radio12.clicked.connect(lambda: self.set_webpage4(self.eng_taxi))
+        # Wales travel distances by council
+        self.page4.radio13.clicked.connect(lambda: self.set_webpage4(self.wales_car))
+        self.page4.radio14.clicked.connect(lambda: self.set_webpage4(self.wales_bus))
+        self.page4.radio15.clicked.connect(lambda: self.set_webpage4(self.wales_rail))
+        self.page4.radio16.clicked.connect(lambda: self.set_webpage4(self.wales_taxi))
+        # Northern Ireland travel distances by council
+        self.page4.radio17.clicked.connect(lambda: self.set_webpage4(self.ni_car))
+        self.page4.radio18.clicked.connect(lambda: self.set_webpage4(self.ni_bus))
+        self.page4.radio19.clicked.connect(lambda: self.set_webpage4(self.ni_rail))
+        self.page4.radio20.clicked.connect(lambda: self.set_webpage4(self.ni_taxi))
+
+        # Connect radio buttons on results page (page5)
+        # Scotland travel emissions by council
+        self.page5.radio5.clicked.connect(lambda: self.set_webpage5(self.scot_car_emissions))
+        self.page5.radio6.clicked.connect(lambda: self.set_webpage5(self.scot_bus_emissions))
+        self.page5.radio7.clicked.connect(lambda: self.set_webpage5(self.scot_rail_emissions))
+        self.page5.radio8.clicked.connect(lambda: self.set_webpage5(self.scot_taxi_emissions))
+        # England travel emissions by council
+        self.page5.radio9.clicked.connect(lambda: self.set_webpage5(self.eng_car_emissions))
+        self.page5.radio10.clicked.connect(lambda: self.set_webpage5(self.eng_bus_emissions))
+        self.page5.radio11.clicked.connect(lambda: self.set_webpage5(self.eng_rail_emissions))
+        self.page5.radio12.clicked.connect(lambda: self.set_webpage5(self.eng_taxi_emissions))
+        # Wales travel emissions by council
+        self.page5.radio13.clicked.connect(lambda: self.set_webpage5(self.wales_car_emissions))
+        self.page5.radio14.clicked.connect(lambda: self.set_webpage5(self.wales_bus_emissions))
+        self.page5.radio15.clicked.connect(lambda: self.set_webpage5(self.wales_rail_emissions))
+        self.page5.radio16.clicked.connect(lambda: self.set_webpage5(self.wales_taxi_emissions))
+        # Northern Ireland travel emissions by council
+        self.page5.radio17.clicked.connect(lambda: self.set_webpage5(self.ni_car_emissions))
+        self.page5.radio18.clicked.connect(lambda: self.set_webpage5(self.ni_bus_emissions))
+        self.page5.radio19.clicked.connect(lambda: self.set_webpage5(self.ni_rail_emissions))
+        self.page5.radio20.clicked.connect(lambda: self.set_webpage5(self.ni_taxi_emissions))
 
 
 
@@ -838,113 +783,16 @@ class Calculator(QWidget):
         self.page4.webview.setHtml(self.fig4.to_html(include_plotlyjs='cdn'))
         self.page5.webview.setHtml(self.fig4.to_html(include_plotlyjs='cdn'))
 
-    # Scotland radio buttons
-    def click_radio5(self):
-        """Set the webview to show the chart with data"""
-        # Source: https://zetcode.com/pyqt/qwebengineview/
-        self.page4.webview.setHtml(self.scot_car.to_html(include_plotlyjs='cdn'))
-
-    def click_radio6(self):
-        self.page4.webview.setHtml(self.scot_bus.to_html(include_plotlyjs='cdn'))
-
-    def click_radio7(self):
-        self.page4.webview.setHtml(self.scot_rail.to_html(include_plotlyjs='cdn'))
-
-    def click_radio8(self):
-        self.page4.webview.setHtml(self.scot_taxi.to_html(include_plotlyjs='cdn'))
-
-    # England radio buttons
-    def click_radio9(self):
-        self.page4.webview.setHtml(self.eng_car.to_html(include_plotlyjs='cdn'))
-
-    def click_radio10(self):
-        self.page4.webview.setHtml(self.eng_bus.to_html(include_plotlyjs='cdn'))
-
-    def click_radio11(self):
-        self.page4.webview.setHtml(self.eng_rail.to_html(include_plotlyjs='cdn'))
-
-    def click_radio12(self):
-        self.page4.webview.setHtml(self.eng_taxi.to_html(include_plotlyjs='cdn'))
     
-    # Wales radio buttons
-    def click_radio13(self):
-        self.page4.webview.setHtml(self.wales_car.to_html(include_plotlyjs='cdn'))
+    def set_webpage4(self, data):
+        """Set the webview to show the data from the radio buttons on page4"""
+        data = data.to_html(include_plotlyjs='cdn')
+        self.page4.webview.setHtml(data)
 
-    def click_radio14(self):
-        self.page4.webview.setHtml(self.wales_bus.to_html(include_plotlyjs='cdn'))
-
-    def click_radio15(self):
-        self.page4.webview.setHtml(self.wales_rail.to_html(include_plotlyjs='cdn'))
-
-    def click_radio16(self):
-        self.page4.webview.setHtml(self.wales_taxi.to_html(include_plotlyjs='cdn'))
-    
-    # Northern Ireland radio buttons
-    def click_radio17(self):
-        self.page4.webview.setHtml(self.ni_car.to_html(include_plotlyjs='cdn'))
-
-    def click_radio18(self):
-        self.page4.webview.setHtml(self.ni_bus.to_html(include_plotlyjs='cdn'))
-
-    def click_radio19(self):
-        self.page4.webview.setHtml(self.ni_rail.to_html(include_plotlyjs='cdn'))
-
-    def click_radio20(self):
-        self.page4.webview.setHtml(self.ni_taxi.to_html(include_plotlyjs='cdn'))
-
-
-        """==============================================Council Area Emissions Buttons=============================================="""
-    # Scotland radio buttons
-    def click_radio_emissions1(self):
-        self.page5.webview.setHtml(self.scot_car_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions2(self):
-        self.page5.webview.setHtml(self.scot_bus_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions3(self):
-        self.page5.webview.setHtml(self.scot_rail_emissions.to_html(include_plotlyjs='cdn'))
-    
-    def click_radio_emissions4(self):
-        self.page5.webview.setHtml(self.scot_taxi_emissions.to_html(include_plotlyjs='cdn'))
-
-    # England radio buttons
-    def click_radio_emissions5(self):
-        self.page5.webview.setHtml(self.eng_car_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions6(self):
-        self.page5.webview.setHtml(self.eng_bus_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions7(self):
-        self.page5.webview.setHtml(self.eng_rail_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions8(self):
-        self.page5.webview.setHtml(self.eng_taxi_emissions.to_html(include_plotlyjs='cdn'))
-
-    # Wales radio buttons
-    def click_radio_emissions9(self):
-        self.page5.webview.setHtml(self.wales_car_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions10(self):
-        self.page5.webview.setHtml(self.wales_bus_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions11(self):
-        self.page5.webview.setHtml(self.wales_rail_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions12(self):
-        self.page5.webview.setHtml(self.wales_taxi_emissions.to_html(include_plotlyjs='cdn'))
-
-    # Northern Ireland radio buttons
-    def click_radio_emissions13(self):
-        self.page5.webview.setHtml(self.ni_car_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions14(self):
-        self.page5.webview.setHtml(self.ni_bus_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions15(self):
-        self.page5.webview.setHtml(self.ni_rail_emissions.to_html(include_plotlyjs='cdn'))
-
-    def click_radio_emissions16(self):
-        self.page5.webview.setHtml(self.ni_taxi_emissions.to_html(include_plotlyjs='cdn'))
+    def set_webpage5(self, data):
+        """Set the webview to show the data from the radio buttons on page5"""
+        data = data.to_html(include_plotlyjs='cdn')
+        self.page5.webview.setHtml(data)
 
 
 
@@ -981,4 +829,5 @@ class Calculator(QWidget):
 """==============================================Run the app=============================================="""
 app = QApplication(sys.argv)
 window = Calculator()
+window.show()
 sys.exit(app.exec())
