@@ -10,8 +10,8 @@ from final_leg import assign_scotland, assign_uk
 from page1 import MainPage
 from page2 import Page2
 from page3 import Page3
-from results_distance import ResultPage
-from results_emissions import ResultPage2
+from results_distance import ResultDistance
+from results_emissions import ResultEmissions
 from main import main
 import plotly.express as px
 import plotly.graph_objects as go
@@ -68,8 +68,8 @@ class Calculator(QWidget):
         self.page1 = MainPage()
         self.page2 = Page2()
         self.page3 = Page3()
-        self.page4 = ResultPage()
-        self.page5 = ResultPage2()
+        self.page4 = ResultDistance()
+        self.page5 = ResultEmissions()
 
         # Add the pages to the stacked layout and set the stacked layout as the main layout
         self.stackedLayout.addWidget(self.page1)

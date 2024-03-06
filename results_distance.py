@@ -4,7 +4,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, QPushButton, QWidget, QLabel
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
-class ResultPage(QWidget):
+class ResultDistance(QWidget):
 
     def __init__(self):
         super().__init__()

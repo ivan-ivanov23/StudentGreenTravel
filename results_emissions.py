@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, Q
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 
-class ResultPage2(QWidget):
+class ResultEmissions(QWidget):
 
     def __init__(self):
         super().__init__()
