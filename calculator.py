@@ -389,7 +389,7 @@ class Calculator(QWidget):
         df_taxi_emissions = df_taxi * emission_factors['taxi']
         df_taxi_emissions = df_taxi_emissions.round(1)
 
-
+        """=======================Scotland Council Distances=========================="""
         self.scot_car = go.Figure(
             data=[go.Bar(x=df_car.columns, y=df_car.iloc[0, :], text=df_car.iloc[0, :], textposition='auto')],
             layout=go.Layout(title='Car Travel Distances Across Scottish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)')),
@@ -457,23 +457,7 @@ class Calculator(QWidget):
         df_taxi_emissions_eng = df_taxi_eng * emission_factors['taxi']
         df_taxi_emissions_eng = df_taxi_emissions_eng.round(1)
 
-        # self.eng_car = go.Figure(
-        #     data=[go.Bar(x=df_car_eng.columns, y=df_car_eng.iloc[0, :], text=df_car_eng.iloc[0, :], textposition='auto')],
-        #     layout=go.Layout(title='Car Travel Distances Across English Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
-        # )
-        # self.eng_bus = go.Figure(
-        #     data=[go.Bar(x=df_bus_eng.columns, y=df_bus_eng.iloc[0, :], text=df_bus_eng.iloc[0, :], textposition='auto')],
-        #     layout=go.Layout(title='Bus Travel Distances Across English Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
-        # )
-        # self.eng_rail = go.Figure(
-        #     data=[go.Bar(x=df_rail_eng.columns, y=df_rail_eng.iloc[0, :], text=df_rail_eng.iloc[0, :], textposition='auto')],
-        #     layout=go.Layout(title='Train Travel Distances Across English Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
-        # )
-        # self.eng_taxi = go.Figure(
-        #     data=[go.Bar(x=df_taxi_eng.columns, y=df_taxi_eng.iloc[0, :], text=df_taxi_eng.iloc[0, :], textposition='auto')],
-        #     layout=go.Layout(title='Taxi Travel Distances Across English Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
-        # )
-
+        """=======================England Council Distances=========================="""
         self.eng_car = go.Figure(
             data=[go.Table( header=dict(values=['Council Area', 'Distance (km)']),
                             cells=dict(values=[df_car_eng.columns, df_car_eng.iloc[0, :]]))],
@@ -498,22 +482,6 @@ class Calculator(QWidget):
 
 
         """=======================England Council Emissions=========================="""
-        # self.eng_car_emissions = go.Figure(
-        #     data=[go.Bar(x=df_car_emissions_eng.columns, y=df_car_emissions_eng.iloc[0, :], text=df_car_emissions_eng.iloc[0, :], textposition='auto')],
-        #     layout=go.Layout(title='Car Travel Emissions Across English Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
-        # )
-        # self.eng_bus_emissions = go.Figure(
-        #     data=[go.Bar(x=df_bus_emissions_eng.columns, y=df_bus_emissions_eng.iloc[0, :], text=df_bus_emissions_eng.iloc[0, :], textposition='auto')],
-        #     layout=go.Layout(title='Bus Travel Emissions Across English Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
-        # )
-        # self.eng_rail_emissions = go.Figure(
-        #     data=[go.Bar(x=df_rail_emissions_eng.columns, y=df_rail_emissions_eng.iloc[0, :], text=df_rail_emissions_eng.iloc[0, :], textposition='auto')],
-        #     layout=go.Layout(title='Train Travel Emissions Across English Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
-        # )
-        # self.eng_taxi_emissions = go.Figure(
-        #     data=[go.Bar(x=df_taxi_emissions_eng.columns, y=df_taxi_emissions_eng.iloc[0, :], text=df_taxi_emissions_eng.iloc[0, :], textposition='auto')],
-        #     layout=go.Layout(title='Taxi Travel Emissions Across English Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
-        # )
 
         self.eng_car_emissions = go.Figure(
             data=[go.Table( header=dict(values=['Council Area', 'Emissions (kg CO2)']),
@@ -558,6 +526,7 @@ class Calculator(QWidget):
         df_taxi_emissions_wales = df_taxi_wales * emission_factors['taxi']
         df_taxi_emissions_wales = df_taxi_emissions_wales.round(1)
 
+        """=======================Wales Council Distances=========================="""
         self.wales_car = go.Figure(
             data=[go.Bar(x=df_car_wales.columns, y=df_car_wales.iloc[0, :], text=df_car_wales.iloc[0, :], textposition='auto')],
             layout=go.Layout(title='Car Travel Distances Across Welsh Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
@@ -616,7 +585,7 @@ class Calculator(QWidget):
         df_taxi_emissions_ni = df_taxi_ni * emission_factors['taxi']
         df_taxi_emissions_ni = df_taxi_emissions_ni.round(1)
 
-        # Make the car figure different colours
+        """=======================Northern Ireland Council Distances=========================="""
         self.ni_car = go.Figure(
             data=[go.Bar(x=df_car_ni.columns, y=df_car_ni.iloc[0, :], text=df_car_ni.iloc[0, :], textposition='auto')],
             layout=go.Layout(title='Car Travel Distances Across Northern Irish Councils (km)', xaxis=dict(title='Council Area'), yaxis=dict(title='Distance (km)'))
