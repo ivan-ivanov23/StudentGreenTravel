@@ -18,21 +18,10 @@ import plotly.graph_objects as go
 from council_areas import get_district, group_district, find_percentage
 from style_sheets import main_stylesheet, widget_stylesheet
 
-"""
-Info:
-
-- main page is the menu that is first shown (page1)
-- page2 is the second page where the user selects the percentages of students travelling by each transport method
-  for Scotland and the rest of the UK
-- page3 is the third page where the user selects the travel assumptions for the final leg of the journey 
-  from Aberdeen transport hub to the University of Aberdeen
-- page4 is the final page where the user can see the results of distance calculations for councils and base data
-- page5 is the final page where the user can see the results of emissions calculations for councils and base data
-
-"""
 
 class Calculator(QWidget):
 
+    # Signals 
     file_selected = pyqtSignal(bool)
     hundred_percent = pyqtSignal(bool)
     hundred_percent_page3 = pyqtSignal(bool)
@@ -78,7 +67,7 @@ class Calculator(QWidget):
         self.stackedLayout.addWidget(self.page4)
         self.stackedLayout.addWidget(self.page5)
 
-
+        # Set the stacked layout as the main layout
         self.setLayout(self.stackedLayout)
 
         # Connect signals for page1
@@ -123,7 +112,7 @@ class Calculator(QWidget):
         # Set style for the windows
         self.setStyleSheet(main_stylesheet)
 
-        # Get icons from StandardPixmap
+        # Get icons from icons folder
         # Source: https://www.svgrepo.com/
         calculate_icon = QIcon('icons/calculator.svg')
         back = QIcon('icons/back.svg')
@@ -135,7 +124,7 @@ class Calculator(QWidget):
         one = QIcon('icons/1.svg')
         two = QIcon('icons/2.svg')
 
-        # Set the icon for all the back buttons
+        # Set icons for all buttons
         self.page1.button1.setIcon(dash)
         self.page1.button2.setIcon(file_button)
         self.page2.back.setIcon(back)
@@ -146,13 +135,9 @@ class Calculator(QWidget):
         self.page5.button1.setIcon(back)
         self.page5.button2.setIcon(menu)
         self.page5.button3.setIcon(one)
-        # Set the icon for the calculate button from images/calculator.png
-        
         self.page3.calculate_button.setIcon(calculate_icon)
-        # Set the icon for the submit button
         self.page2.submit.setIcon(submit)
         self.page3.submit.setIcon(submit)
-        # Set the icon for the next button
         self.page2.next_button2.setIcon(next_button)
 
 
@@ -167,8 +152,6 @@ class Calculator(QWidget):
             # Add the file name to the label text with the file name withouth the path
             self.page1.file_label.setText(f"File: {file.name.split('/')[-1]}")
             self.scotland, self.wales, self.north_ireland, self.england = determine_postcode(addresses.iloc[:, 1])
-            # Style the label
-            #self.file_label.setStyleSheet("font-size: 12px; font-weight: bold; color: #2d3436;")
             # Emit signal that a file has been selected
             self.file_selected.emit(True)
         else:
@@ -309,7 +292,6 @@ class Calculator(QWidget):
         self.pbar.setValue(0)
         QtWidgets.QApplication.processEvents()
 
-        self.stackedLayout.setCurrentIndex(3)
         # Scotland
         scot_car_fleg = self.scot_fleg[0]
         scot_taxi_fleg = self.scot_fleg[1]
@@ -661,6 +643,9 @@ class Calculator(QWidget):
         self.pbar.setValue(100)
         QtWidgets.QApplication.processEvents()
         pdg.close()
+
+        # Show the results page
+        self.stackedLayout.setCurrentIndex(3)
         
     def click_radio1(self):
         """Set the webview to show the first heatmap with the emissions data"""
@@ -758,7 +743,6 @@ class Calculator(QWidget):
         country_grouped = group_district(country_districts)
         country_percent = find_percentage(country_grouped, country_posctodes)
 
-
         # From self.total_distance_dict get the distances for Scotland
         distances = self.total_distance_dict[country]
 
@@ -768,12 +752,14 @@ class Calculator(QWidget):
         rail = distances[0]
         taxi = distances[4]
 
+        # Empty dictionaries to store the distances for each mode of transport
         car_dict = {}
         bus_dict = {}
         rail_dict = {}
         taxi_dict = {}
 
         for key, value in country_percent.items():
+            # Divide the total distance for each mode of transport by the percentage of people using it
             car_dict[key] = {'Car' : car * value / 100}
             bus_dict[key] = {'Bus' : bus * value / 100}
             rail_dict[key] = {'Rail' : rail * value / 100}

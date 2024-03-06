@@ -12,7 +12,7 @@ class ResultDistance(QWidget):
 
     def initializeUI(self):
         # Main layout of the page
-        vbox = QVBoxLayout(self)
+        vbox = QVBoxLayout()
 
         # Layout to hold the webview and radio buttons
         hbox = QHBoxLayout()
