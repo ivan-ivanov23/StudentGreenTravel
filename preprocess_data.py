@@ -23,24 +23,7 @@ airports_dict = dict(zip(airports['Unnamed: 0'], zip(airports['Latitude'], airpo
 
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
 eng_postcodes = ['AL', 'BA', 'BB', 'BD', 'BH', 'BL', 'BN', 'BR', 'BS', 'CA', 'CB', 'CH', 'CM', 'CO', 'CR', 'CT', 'CV', 'CW', 'DA', 'DE', 'DH', 'DL', 'DN', 'DT', 'DY', 'EC', 'EN', 'EX', 'FY', 'GL', 'GU', 'HA', 'HD', 'HG', 'HP', 'HR', 'HU', 'HX', 'IG', 'IP', 'KT', 'LA', 'LD', 'LE', 'LN', 'LS', 'LU', 'ME', 'MK', 'NE', 'NG', 'NN', 'NR', 'NW', 'OL', 'OX', 'PE', 'PL', 'PO', 'PR', 'RG', 'RH', 'RM', 'SE', 'SG', 'SK', 'SL', 'SM', 'SN', 'SO', 'SP', 'SR', 'SS', 'ST', 'SW', 'TA', 'TF', 'TN', 'TQ', 'TR', 'TS', 'TW', 'UB', 'WA', 'WC', 'WD', 'WF', 'WN', 'WR', 'WS', 'WV', 'YO']
-wales_postcodes = ['CF', 'LL', 'NP', 'SA', 'SY']
-
-
-def create_address_df():
-    # Open a file dialog to select the address file
-    file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
-    # If the user selected a file, then read it using pandas
-    if file:
-        # Read address file
-        addresses = pd.read_excel(file.name, engine='openpyxl')
-        # Trim the postcode column
-        addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
-
-        # Call the check_postcodes function to check for incorrect postcodes
-        return addresses.iloc[:, 1]
-    # If the user didn't select a file, then return an empty dataframe
-    else:
-        return pd.DataFrame()    
+wales_postcodes = ['CF', 'LL', 'NP', 'SA', 'SY'] 
         
 
 def determine_postcode(postcodes):
