@@ -109,8 +109,8 @@ class Travel:
                     travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_bus_stop).km
         
                 else:
-                    # For default value, set the distance to 0
-                    travel_distance = 0
+                    # For default value, calculate the distance to the university
+                    travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_uni).km
                 data[postcode] = (closest_stop_name, round(distance_to, 2), round(travel_distance, 2))
             else:
                 # If the postcode is invalid, add it to the list of invalid postcodes
@@ -129,13 +129,8 @@ class Travel:
         for postcode in addresses:
             # Find the distance between the given postcode and the university
             if postcode in postcode_coords:
-                # If the postcode is not from Aberdeen, calculate the distance to the university
-                if postcode[:2] != 'AB':
-                    distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_uni).km
-                    car_data[postcode] = round(distance, 2)
-
-                else:
-                    car_data[postcode] = 0
+                distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_uni).km
+                car_data[postcode] = round(distance, 2)
             else:
                 invalid_postcodes.append(postcode)
                 continue
