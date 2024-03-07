@@ -1,3 +1,7 @@
+# This file contains the functions used to read and preprocess the postcodes of students
+# Sources of code snippets are provided in the comments of each function.
+# Author: Ivan Ivanov
+
 import pandas as pd
 import pandas as pd
 from tkinter.filedialog import askopenfile
