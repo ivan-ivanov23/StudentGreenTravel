@@ -351,7 +351,7 @@ class Calculator(QWidget):
         df_car_emissions = df_car_emissions.round(1)
         df_bus = pd.DataFrame(bus_dict)
         df_bus = df_bus.round(1)
-        df_bus_emissions = df_bus * emission_factors['bus']
+        df_bus_emissions = df_bus * emission_factors['coach']
         df_bus_emissions = df_bus_emissions.round(1)
         df_rail = pd.DataFrame(rail_dict)
         df_rail = df_rail.round(1)
@@ -419,7 +419,7 @@ class Calculator(QWidget):
         df_car_emissions_eng = df_car_emissions_eng.round(1)
         df_bus_eng = pd.DataFrame(bus_dict_eng)
         df_bus_eng = df_bus_eng.round(1)
-        df_bus_emissions_eng = df_bus_eng * emission_factors['bus']
+        df_bus_emissions_eng = df_bus_eng * emission_factors['coach']
         df_bus_emissions_eng = df_bus_emissions_eng.round(1)
         df_rail_eng = pd.DataFrame(rail_dict_eng)
         df_rail_eng = df_rail_eng.round(1)
@@ -488,7 +488,7 @@ class Calculator(QWidget):
         df_car_emissions_wales = df_car_emissions_wales.round(1)
         df_bus_wales = pd.DataFrame(bus_dict_wales)
         df_bus_wales = df_bus_wales.round(1)
-        df_bus_emissions_wales = df_bus_wales * emission_factors['bus']
+        df_bus_emissions_wales = df_bus_wales * emission_factors['coach']
         df_bus_emissions_wales = df_bus_emissions_wales.round(1)
         df_rail_wales = pd.DataFrame(rail_dict_wales)
         df_rail_wales = df_rail_wales.round(1)
@@ -547,7 +547,7 @@ class Calculator(QWidget):
         df_car_emissions_ni = df_car_emissions_ni.round(1)
         df_bus_ni = pd.DataFrame(bus_dict_ni)
         df_bus_ni = df_bus_ni.round(1)
-        df_bus_emissions_ni = df_bus_ni * emission_factors['bus']
+        df_bus_emissions_ni = df_bus_ni * emission_factors['coach']
         df_bus_emissions_ni = df_bus_emissions_ni.round(1)
         df_rail_ni = pd.DataFrame(rail_dict_ni)
         df_rail_ni = df_rail_ni.round(1)

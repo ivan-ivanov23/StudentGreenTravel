@@ -147,7 +147,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     # Emissions are in kgCO2e
     # Scotland emissions
     rail_emissions_scotland = total_distance_rail_scotland * emission_factors['rail']
-    bus_emissions_scotland = total_distance_bus_scotland * emission_factors['bus']
+    bus_emissions_scotland = total_distance_bus_scotland * emission_factors['coach']
     car_emissions_scotland = total_distance_car_scotland * emission_factors['car']
     taxi_emissions_scotland = total_distance_taxi_scotland * emission_factors['taxi']
     walk_emissions_scotland = 0
@@ -159,7 +159,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     plane_emissions_england = total_distance_plane_eng * emission_factors['plane']
     car_emissions_england = total_distance_car_eng * emission_factors['car']
     taxi_emissions_england = total_distance_taxi_eng * emission_factors['taxi']
-    bus_emissions_england = total_distance_bus_eng * emission_factors['bus']
+    bus_emissions_england = total_distance_bus_eng * emission_factors['coach']
     walk_emissions_england = 0
     # Total emissions
     total_emissions_england = rail_emissions_england + plane_emissions_england + car_emissions_england + taxi_emissions_england + walk_emissions_england
@@ -169,7 +169,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     plane_emissions_wales = total_distance_plane_wales * emission_factors['plane']
     car_emissions_wales = total_distance_car_wales * emission_factors['car']
     taxi_emissions_wales = total_distance_taxi_wales * emission_factors['taxi']
-    bus_emissions_wales = total_distance_bus_wales * emission_factors['bus']
+    bus_emissions_wales = total_distance_bus_wales * emission_factors['coach']
     walk_emissions_wales = 0
     # Total emissions
     total_emissions_wales = rail_emissions_wales + plane_emissions_wales + car_emissions_wales + taxi_emissions_wales + walk_emissions_wales
@@ -179,7 +179,7 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
     plane_emissions_ni = total_distance_plane_ni * emission_factors['plane']
     car_emissions_ni = total_distance_car_ni * emission_factors['car']
     taxi_emissions_ni = total_distance_taxi_ni * emission_factors['taxi']
-    bus_emissions_ni = total_distance_bus_ni * emission_factors['bus']
+    bus_emissions_ni = total_distance_bus_ni * emission_factors['coach']
     walk_emissions_ni = 0
 
     # Total emissions
