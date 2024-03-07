@@ -1,3 +1,7 @@
+# Calculator class that combines all pages and functions of the application
+# Sources of code snippets/pictures are provided in the comments of each function.
+# Author: Ivan Ivanov
+
 import sys
 from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout, QProgressDialog, QProgressBar
 from PyQt6.QtCore import pyqtSignal

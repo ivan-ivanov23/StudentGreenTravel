@@ -1,4 +1,5 @@
 # Code for the main page of the application
+# Sources of code snippets/pictures are provided in the comments of each function.
 # Author: Ivan Ivanov
 
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QWidget
@@ -16,6 +17,7 @@ class MainPage(QWidget):
         # Main layout
         self.main_layout = QVBoxLayout()
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # Source: https://www.svgrepo.com/
         logo = QIcon("icons/eco.svg")
         logo_label = QLabel()
         logo_label.setPixmap(logo.pixmap(100, 100))
