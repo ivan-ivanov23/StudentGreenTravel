@@ -1,4 +1,6 @@
 # This file contains the functions to calculate the distance for each mode of transport for the students from Scotland and the rest of the UK.
+# Author: Ivan Ivanov
+
 from itertools import islice
 
 # Students is a list of students from a country
@@ -15,6 +17,7 @@ def fleg_assumptions(students: list, mode_of_transport: str, hub_uni: float, car
     p_walk = int((walk / 100) * num_students)
 
     # Divide the list of students into 4 parts based on the percentages
+    # Inspired by answer from senderle: https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
     seclist = [p_car, p_taxi, p_bus, p_walk]
     it = iter(students)
     car1, taxi1, bus1, walk1 = [list(islice(it, 0, i)) for i in seclist]

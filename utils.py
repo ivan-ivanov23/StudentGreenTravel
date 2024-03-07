@@ -1,4 +1,6 @@
 # This file contains utility functions used in other files
+# Sources of code snippets are provided in the comments of each function.
+# Author: Ivan Ivanov
 
 import numpy as np
 from itertools import islice
@@ -26,6 +28,7 @@ def init_leg(initial_distances_list: list):
     # Divide the all_initial list into 3 lists,
     # one for each mode of transport according to the percentages 
     # without overlapping
+    # Inspired by answer from senderle: https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
     seclist = [car_share, taxi_share, bus_share]
     it = iter(initial_distances_list)
     car_list, taxi_list, bus_list = [list(islice(it, 0, i)) for i in seclist]

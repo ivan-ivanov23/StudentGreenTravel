@@ -1,3 +1,6 @@
+# Code for the third page of the application (Final leg assumptions page)
+# Author: Ivan Ivanov
+
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QStackedWidget, QListWidget, 
                              QLabel, QWidget, QComboBox, QGridLayout, QGroupBox, QPushButton)
 from PyQt6.QtCore import Qt, QSize

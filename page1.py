@@ -1,3 +1,6 @@
+# Code for the main page of the application
+# Author: Ivan Ivanov
+
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon

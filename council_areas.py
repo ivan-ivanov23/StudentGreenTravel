@@ -1,7 +1,14 @@
+# This file deals with getting the admin district for a list of postcodes and then 
+# grouping them by the admin district. It also finds the percentage of postcodes in each
+# admin district in respect to all postcodes for the country.
+# Sources of code snippets are provided in the comments of each function.
+# Author: Ivan Ivanov
+
 import requests
 
 def get_district(country_postcodes):
     """Finds the admin district for a passed list with postcodes of a country.""" 
+    # Inspired by answer from ruddra: https://stackoverflow.com/questions/53472954/using-postcodes-io-api-on-django
     result = {}
     country_postcodes = split_list(country_postcodes)
     for part in country_postcodes:
@@ -10,7 +17,8 @@ def get_district(country_postcodes):
         if response.status_code == 200:
             response_json = response.json()
             for item in response_json["result"]:
-                postcode = item["query"]  # Use "query" instead of "postcode"
+                # Postcode taken from the query
+                postcode = item["query"]
                 if item["result"] is None:
                     result[postcode] = 'Uknown district'
                 else:

@@ -1,3 +1,6 @@
+# Travel class for the travel distances and closest transport hubs for each mode of transport and each student's postcode
+# Author: Ivan Ivanov
+
 import pandas as pd
 import numpy as np
 from geopy.distance import geodesic

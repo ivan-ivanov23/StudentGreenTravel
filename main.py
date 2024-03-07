@@ -1,3 +1,6 @@
+# Main function file that combines the functionality of the other files and produces the final results.
+# Author: Ivan Ivanov
+
 import pandas as pd
 import numpy as np
 from travel_class import Travel
