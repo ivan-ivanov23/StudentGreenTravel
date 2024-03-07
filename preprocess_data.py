@@ -4,7 +4,6 @@
 
 import pandas as pd
 import pandas as pd
-from tkinter.filedialog import askopenfile
 from itertools import islice
 
 # Read ukpostcodes.csv
