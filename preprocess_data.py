@@ -5,6 +5,8 @@
 import pandas as pd
 import pandas as pd
 from itertools import islice
+import requests
+from utils import split_list
 
 # Read ukpostcodes.csv
 # Source: https://www.statology.org/pandas-read_csv-usecols/ 
@@ -28,14 +30,52 @@ scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY
 eng_postcodes = ['AL', 'BA', 'BB', 'BD', 'BH', 'BL', 'BN', 'BR', 'BS', 'CA', 'CB', 'CH', 'CM', 'CO', 'CR', 'CT', 'CV', 'CW', 'DA', 'DE', 'DH', 'DL', 'DN', 'DT', 'DY', 'EC', 'EN', 'EX', 'FY', 'GL', 'GU', 'HA', 'HD', 'HG', 'HP', 'HR', 'HU', 'HX', 'IG', 'IP', 'KT', 'LA', 'LD', 'LE', 'LN', 'LS', 'LU', 'ME', 'MK', 'NE', 'NG', 'NN', 'NR', 'NW', 'OL', 'OX', 'PE', 'PL', 'PO', 'PR', 'RG', 'RH', 'RM', 'SE', 'SG', 'SK', 'SL', 'SM', 'SN', 'SO', 'SP', 'SR', 'SS', 'ST', 'SW', 'TA', 'TF', 'TN', 'TQ', 'TR', 'TS', 'TW', 'UB', 'WA', 'WC', 'WD', 'WF', 'WN', 'WR', 'WS', 'WV', 'YO']
 wales_postcodes = ['CF', 'LL', 'NP', 'SA', 'SY'] 
         
+scotland = []
+england = []
+wales = []
+north_ireland = []
 
 def determine_postcode(postcodes):
     postcodes = postcodes.dropna()  # Drop NaN values
-    scotland = postcodes[(postcodes.str[:2].isin(scot_postcodes)) | ((postcodes.str[:2] == 'G') & ~(postcodes.str[:2].isin(eng_postcodes)))]  # Postcodes starting with 'G' not in England list
+    scotland = postcodes[(postcodes.str[:2].isin(scot_postcodes)) | ((postcodes.str[:2] == 'G') & ~(postcodes.str[:2].isin(eng_postcodes)))]
     england = postcodes[(postcodes.str[:2].isin(eng_postcodes)) & ~(postcodes.str[:2].isin(scot_postcodes)) & ~(postcodes.str[:2]).isin(wales_postcodes)]
     wales = postcodes[postcodes.str[:2].isin(wales_postcodes)]
     north_ireland = postcodes[postcodes.str[:2] == 'BT']
+    # Invalid postcodes are not in scotland, england, wales or north_ireland
+    invalid = postcodes[~(postcodes.isin(scotland) | postcodes.isin(england) | postcodes.isin(wales) | postcodes.isin(north_ireland))]
+    find_country(invalid)
     return scotland, wales, north_ireland, england
+
+def find_country(postcodes):
+    """Finds the admin district for a passed list with postcodes of a country.""" 
+    # Inspired by answer from ruddra: https://stackoverflow.com/questions/53472954/using-postcodes-io-api-on-django
+    result = {}
+    country_postcodes = split_list(postcodes)
+    for part in country_postcodes:
+        data = {"postcodes": part}
+        response = requests.post("https://api.postcodes.io/postcodes", json=data)
+        if response.status_code == 200:
+            response_json = response.json()
+            for item in response_json["result"]:
+                # Postcode taken from the query
+                postcode = item["query"]
+                if item["result"] is None:
+                    result[postcode] = 'Uknown country'
+                else:
+                    if item["result"]["country"] == 'Scotland' or item["result"]["country"] == 'Isle of Man':
+                        scotland.append(postcode)
+                    elif item["result"]["country"] == 'England' or item["result"]["country"] == 'Channel Islands':
+                        england.append(postcode)
+                    elif item["result"]["country"] == 'Wales':
+                        wales.append(postcode)
+                    elif item["result"]["country"] == 'Northern Ireland':
+                        north_ireland.append(postcode)
+                    else:
+                        if item["result"]["country"]:
+                            result[postcode] = item["result"]["country"]
+                        else:
+                            result[postcode] = 'Uknown country'
+    # print(result)
 
 
 

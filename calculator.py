@@ -147,6 +147,8 @@ class Calculator(QWidget):
 
     """==============================================Methods for pages=============================================="""
     def open_file(self):
+        """Open a file explorer to select a file"""
+        self.page1.file_label.setText("Please wait while the data is being processed...")
         file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
         # If the user selected a file, then read it using pandas
         if file:

@@ -5,6 +5,7 @@
 # Author: Ivan Ivanov
 
 import requests
+from utils import split_list
 
 def get_district(country_postcodes):
     """Finds the admin district for a passed list with postcodes of a country.""" 
@@ -26,12 +27,6 @@ def get_district(country_postcodes):
                     result[postcode] = district
 
     return result
-
-def split_list(lst, chunk_size=100):
-    chunks = [[] for _ in range((len(lst) + chunk_size - 1) // chunk_size)]
-    for i, item in enumerate(lst):
-        chunks[i // chunk_size].append(item)
-    return chunks
     
 
 

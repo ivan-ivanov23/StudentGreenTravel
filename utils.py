@@ -40,3 +40,10 @@ def init_leg(initial_distances_list: list):
     total_bus = np.sum(bus_list)
 
     return total_car, total_taxi, total_bus
+
+def split_list(lst, chunk_size=100):
+    # Source: https://www.altcademy.com/blog/how-to-split-a-list-in-python/#method-4-using-the-enumerate-function
+    chunks = [[] for _ in range((len(lst) + chunk_size - 1) // chunk_size)]
+    for i, item in enumerate(lst):
+        chunks[i // chunk_size].append(item)
+    return chunks
