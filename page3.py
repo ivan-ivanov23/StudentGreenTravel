@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import *
+from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QStackedWidget, QListWidget, 
+                             QLabel, QWidget, QComboBox, QGridLayout, QGroupBox, QPushButton)
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QIcon
 
 
 class Page3(QWidget):

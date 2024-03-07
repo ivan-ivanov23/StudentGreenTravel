@@ -1,7 +1,5 @@
 import pandas as pd
 import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
 from travel_class import Travel
 from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict
 from utils import extract_distances, extract_car_distances, init_leg

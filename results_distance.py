@@ -1,7 +1,7 @@
 # This is the final page which contains the webview for the ploty heatmaps and 
 # the other widgets
 
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, QPushButton, QWidget, QLabel
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, QPushButton, QWidget
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 class ResultDistance(QWidget):
