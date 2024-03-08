@@ -37,6 +37,7 @@ class Calculator(QWidget):
         self.wales = None
         self.north_ireland = None
         self.england = None
+        self.emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach': 0.027181, 'taxi': 0.148615, 'ferry': 0.02555, 'plane': 0.03350}
 
     def initializeUI(self):
         """Set up application GUI"""
@@ -77,7 +78,9 @@ class Calculator(QWidget):
         # Connect signals for page1
         self.page1.button1.clicked.connect(lambda: self.go_to_page(1))
         self.page1.button2.clicked.connect(self.open_file)
+        self.page1.button3.clicked.connect(self.select_emission_factors)
         self.file_selected.connect(self.page1.enable_buttons1)
+        self.page1.default_radio.clicked.connect(self.click_default_radio)
 
         # Connect signals for page2
         self.page2.next_button2.clicked.connect(lambda: self.go_to_page(2))
@@ -127,10 +130,12 @@ class Calculator(QWidget):
         menu = QIcon('icons/menu.svg')
         one = QIcon('icons/1.svg')
         two = QIcon('icons/2.svg')
+        emissions = QIcon('icons/emissions.svg')
 
         # Set icons for all buttons
         self.page1.button1.setIcon(dash)
         self.page1.button2.setIcon(file_button)
+        self.page1.button3.setIcon(emissions)
         self.page2.back.setIcon(back)
         self.page3.back.setIcon(back)
         self.page4.button1.setIcon(back)
@@ -166,6 +171,30 @@ class Calculator(QWidget):
             self.page1.file_label.setText("No file was selected.")
             # Emit a signal that a file has not been selected
             self.file_selected.emit(False)
+
+    def select_emission_factors(self):
+        file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
+        # If the user selected a file, then read it using pandas
+        if file:
+        # Read emission factors file
+            factors = pd.read_excel(file.name, engine='openpyxl')
+            # Transform the dataframe to a dictionary with key the Method and value the Emission Factor
+            factors = factors.set_index('Method')['Factor'].to_dict()
+            self.emission_factors = factors
+            self.page1.default_radio.setChecked(False)
+            self.page1.custom_radio.setChecked(True)
+            
+        else:
+            self.emission_factors = self.emission_factors
+            self.page1.default_radio.setChecked(True)
+            self.page1.custom_radio.setChecked(False)
+            self.page1.custom_radio.setEnabled(False)
+
+    def click_default_radio(self):
+        """If the default radio button is clicked, then set the emission factors to the default ones"""
+        self.page1.custom_radio.setChecked(False)
+        self.emission_factors = self.emission_factors
+
 
     def go_to_page(self, i):
         self.stackedLayout.setCurrentIndex(i)
@@ -337,12 +366,10 @@ class Calculator(QWidget):
         QtWidgets.QApplication.processEvents()
 
         # Call the main function
-        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
         # Update the progress bar
         self.pbar.setValue(50)
         QtWidgets.QApplication.processEvents()
-
-        emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach': 0.027181, 'taxi': 0.148615, 'ferry': 0.02555, 'plane': 0.03350}
 
         # Scotland
         # Remove postcodes where [:2] == 'AB'
@@ -359,25 +386,25 @@ class Calculator(QWidget):
         df_car = df_car * self.num_trips
         df_car = df_car.round(1)
         # Emissions df
-        df_car_emissions = df_car * emission_factors['car']
+        df_car_emissions = df_car * self.emission_factors['car']
         df_car_emissions = df_car_emissions.round(1)
 
         df_bus = pd.DataFrame(bus_dict)
         df_bus = df_bus * self.num_trips
         df_bus = df_bus.round(1)
-        df_bus_emissions = df_bus * emission_factors['coach']
+        df_bus_emissions = df_bus * self.emission_factors['coach']
         df_bus_emissions = df_bus_emissions.round(1)
 
         df_rail = pd.DataFrame(rail_dict)
         df_rail = df_rail * self.num_trips
         df_rail = df_rail.round(1)
-        df_rail_emissions = df_rail * emission_factors['rail']
+        df_rail_emissions = df_rail * self.emission_factors['rail']
         df_rail_emissions = df_rail_emissions.round(1)
 
         df_taxi = pd.DataFrame(taxi_dict)
         df_taxi = df_taxi * self.num_trips
         df_taxi = df_taxi.round(1)
-        df_taxi_emissions = df_taxi * emission_factors['taxi']
+        df_taxi_emissions = df_taxi * self.emission_factors['taxi']
         df_taxi_emissions = df_taxi_emissions.round(1)
 
         """=======================Scotland Council Distances=========================="""
@@ -434,22 +461,22 @@ class Calculator(QWidget):
         df_car_eng = pd.DataFrame(car_dict_eng)
         df_car_eng = df_car_eng * self.num_trips
         df_car_eng = df_car_eng.round(1)
-        df_car_emissions_eng = df_car_eng * emission_factors['car']
+        df_car_emissions_eng = df_car_eng * self.emission_factors['car']
         df_car_emissions_eng = df_car_emissions_eng.round(1)
         df_bus_eng = pd.DataFrame(bus_dict_eng)
         df_bus_eng = df_bus_eng * self.num_trips
         df_bus_eng = df_bus_eng.round(1)
-        df_bus_emissions_eng = df_bus_eng * emission_factors['coach']
+        df_bus_emissions_eng = df_bus_eng * self.emission_factors['coach']
         df_bus_emissions_eng = df_bus_emissions_eng.round(1)
         df_rail_eng = pd.DataFrame(rail_dict_eng)
         df_rail_eng = df_rail_eng * self.num_trips
         df_rail_eng = df_rail_eng.round(1)
-        df_rail_emissions_eng = df_rail_eng * emission_factors['rail']
+        df_rail_emissions_eng = df_rail_eng * self.emission_factors['rail']
         df_rail_emissions_eng = df_rail_emissions_eng.round(1)
         df_taxi_eng = pd.DataFrame(taxi_dict_eng)
         df_taxi_eng = df_taxi_eng * self.num_trips
         df_taxi_eng = df_taxi_eng.round(1)
-        df_taxi_emissions_eng = df_taxi_eng * emission_factors['taxi']
+        df_taxi_emissions_eng = df_taxi_eng * self.emission_factors['taxi']
         df_taxi_emissions_eng = df_taxi_emissions_eng.round(1)
 
         """=======================England Council Distances=========================="""
@@ -507,22 +534,22 @@ class Calculator(QWidget):
         df_car_wales = pd.DataFrame(car_dict_wales)
         df_car_wales = df_car_wales * self.num_trips
         df_car_wales = df_car_wales.round(1)
-        df_car_emissions_wales = df_car_wales * emission_factors['car']
+        df_car_emissions_wales = df_car_wales * self.emission_factors['car']
         df_car_emissions_wales = df_car_emissions_wales.round(1)
         df_bus_wales = pd.DataFrame(bus_dict_wales)
         df_bus_wales = df_bus_wales * self.num_trips
         df_bus_wales = df_bus_wales.round(1)
-        df_bus_emissions_wales = df_bus_wales * emission_factors['coach']
+        df_bus_emissions_wales = df_bus_wales * self.emission_factors['coach']
         df_bus_emissions_wales = df_bus_emissions_wales.round(1)
         df_rail_wales = pd.DataFrame(rail_dict_wales)
         df_rail_wales = df_rail_wales * self.num_trips
         df_rail_wales = df_rail_wales.round(1)
-        df_rail_emissions_wales = df_rail_wales * emission_factors['rail']
+        df_rail_emissions_wales = df_rail_wales * self.emission_factors['rail']
         df_rail_emissions_wales = df_rail_emissions_wales.round(1)
         df_taxi_wales = pd.DataFrame(taxi_dict_wales)
         df_taxi_wales = df_taxi_wales * self.num_trips
         df_taxi_wales = df_taxi_wales.round(1)
-        df_taxi_emissions_wales = df_taxi_wales * emission_factors['taxi']
+        df_taxi_emissions_wales = df_taxi_wales * self.emission_factors['taxi']
         df_taxi_emissions_wales = df_taxi_emissions_wales.round(1)
 
         """=======================Wales Council Distances=========================="""
@@ -570,22 +597,22 @@ class Calculator(QWidget):
         df_car_ni = pd.DataFrame(car_dict_ni)
         df_car_ni = df_car_ni * self.num_trips
         df_car_ni = df_car_ni.round(1)
-        df_car_emissions_ni = df_car_ni * emission_factors['car']
+        df_car_emissions_ni = df_car_ni * self.emission_factors['car']
         df_car_emissions_ni = df_car_emissions_ni.round(1)
         df_bus_ni = pd.DataFrame(bus_dict_ni)
         df_bus_ni = df_bus_ni * self.num_trips
         df_bus_ni = df_bus_ni.round(1)
-        df_bus_emissions_ni = df_bus_ni * emission_factors['coach']
+        df_bus_emissions_ni = df_bus_ni * self.emission_factors['coach']
         df_bus_emissions_ni = df_bus_emissions_ni.round(1)
         df_rail_ni = pd.DataFrame(rail_dict_ni)
         df_rail_ni = df_rail_ni * self.num_trips
         df_rail_ni = df_rail_ni.round(1)
-        df_rail_emissions_ni = df_rail_ni * emission_factors['rail']
+        df_rail_emissions_ni = df_rail_ni * self.emission_factors['rail']
         df_rail_emissions_ni = df_rail_emissions_ni.round(1)
         df_taxi_ni = pd.DataFrame(taxi_dict_ni)
         df_taxi_ni = df_taxi_ni * self.num_trips
         df_taxi_ni = df_taxi_ni.round(1)
-        df_taxi_emissions_ni = df_taxi_ni * emission_factors['taxi']
+        df_taxi_emissions_ni = df_taxi_ni * self.emission_factors['taxi']
         df_taxi_emissions_ni = df_taxi_emissions_ni.round(1)
 
         """=======================Northern Ireland Council Distances=========================="""

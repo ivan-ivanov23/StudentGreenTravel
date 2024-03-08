@@ -7,7 +7,7 @@ from travel_class import Travel
 from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict
 from utils import extract_distances, extract_car_distances, init_leg
 
-def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_fleg, scot_car_fleg, scot_taxi_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg):
+def main(emission_factors, transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_fleg, scot_car_fleg, scot_taxi_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg):
     travel = Travel(stops_dict, stations_dict, airports_dict, ukpostcode_coords)
 
     """=================================Transport methods=================================="""
@@ -138,9 +138,6 @@ def main(transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_
                                     index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
 
     """=================================Emissions=================================="""
-
-    emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach': 0.027181, 'taxi': 0.148615,
-           'ferry': 0.02555, 'plane': 0.03350}
     
     # Calculate the emissions for each mode of transport
     # Emissions = distance * emission factor
