@@ -158,7 +158,7 @@ class Calculator(QWidget):
             addresses = addresses.sample(frac=1)
             addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
             # Add the file name to the label text with the file name withouth the path
-            self.page1.file_label.setText(f"Dataset: {file.name.split('/')[-1]}")
+            self.page1.file_label.setText(f"<b>Dataset:</b> {file.name.split('/')[-1]}")
             self.scotland, self.wales, self.north_ireland, self.england = determine_postcode(addresses.iloc[:, 1])
             # Emit signal that a file has been selected
             self.file_selected.emit(True)
@@ -169,6 +169,9 @@ class Calculator(QWidget):
 
     def go_to_page(self, i):
         self.stackedLayout.setCurrentIndex(i)
+
+    def check_trip_combo(self):
+        self.num_trips = int(self.page2.trips_combo.currentText())
 
 
     def check_combo_page2(self):
@@ -186,6 +189,9 @@ class Calculator(QWidget):
         # Sum the percentages for each country
         scot_sum = sum([scot_car, scot_bus, scot_rail])
         uk_sum = sum([uk_plane, uk_car, uk_rail])
+
+        # Call the check_trip_combo() to save the number of trips chosen
+        self.check_trip_combo()
 
         if scot_sum == 100 and uk_sum == 100:
             # Show a message that the data has been submitted
@@ -349,19 +355,27 @@ class Calculator(QWidget):
 
 
         df_car = pd.DataFrame(car_dict)
+        # Multiply the distances by the self.num_trips
+        df_car = df_car * self.num_trips
         df_car = df_car.round(1)
         # Emissions df
         df_car_emissions = df_car * emission_factors['car']
         df_car_emissions = df_car_emissions.round(1)
+
         df_bus = pd.DataFrame(bus_dict)
+        df_bus = df_bus * self.num_trips
         df_bus = df_bus.round(1)
         df_bus_emissions = df_bus * emission_factors['coach']
         df_bus_emissions = df_bus_emissions.round(1)
+
         df_rail = pd.DataFrame(rail_dict)
+        df_rail = df_rail * self.num_trips
         df_rail = df_rail.round(1)
         df_rail_emissions = df_rail * emission_factors['rail']
         df_rail_emissions = df_rail_emissions.round(1)
+
         df_taxi = pd.DataFrame(taxi_dict)
+        df_taxi = df_taxi * self.num_trips
         df_taxi = df_taxi.round(1)
         df_taxi_emissions = df_taxi * emission_factors['taxi']
         df_taxi_emissions = df_taxi_emissions.round(1)
@@ -418,18 +432,22 @@ class Calculator(QWidget):
         # Do same for England
         car_dict_eng, bus_dict_eng, rail_dict_eng, taxi_dict_eng = self.create_council_areas(self.england, 'England')
         df_car_eng = pd.DataFrame(car_dict_eng)
+        df_car_eng = df_car_eng * self.num_trips
         df_car_eng = df_car_eng.round(1)
         df_car_emissions_eng = df_car_eng * emission_factors['car']
         df_car_emissions_eng = df_car_emissions_eng.round(1)
         df_bus_eng = pd.DataFrame(bus_dict_eng)
+        df_bus_eng = df_bus_eng * self.num_trips
         df_bus_eng = df_bus_eng.round(1)
         df_bus_emissions_eng = df_bus_eng * emission_factors['coach']
         df_bus_emissions_eng = df_bus_emissions_eng.round(1)
         df_rail_eng = pd.DataFrame(rail_dict_eng)
+        df_rail_eng = df_rail_eng * self.num_trips
         df_rail_eng = df_rail_eng.round(1)
         df_rail_emissions_eng = df_rail_eng * emission_factors['rail']
         df_rail_emissions_eng = df_rail_emissions_eng.round(1)
         df_taxi_eng = pd.DataFrame(taxi_dict_eng)
+        df_taxi_eng = df_taxi_eng * self.num_trips
         df_taxi_eng = df_taxi_eng.round(1)
         df_taxi_emissions_eng = df_taxi_eng * emission_factors['taxi']
         df_taxi_emissions_eng = df_taxi_emissions_eng.round(1)
@@ -487,18 +505,22 @@ class Calculator(QWidget):
         # Do same for Wales
         car_dict_wales, bus_dict_wales, rail_dict_wales, taxi_dict_wales = self.create_council_areas(self.wales, 'Wales')
         df_car_wales = pd.DataFrame(car_dict_wales)
+        df_car_wales = df_car_wales * self.num_trips
         df_car_wales = df_car_wales.round(1)
         df_car_emissions_wales = df_car_wales * emission_factors['car']
         df_car_emissions_wales = df_car_emissions_wales.round(1)
         df_bus_wales = pd.DataFrame(bus_dict_wales)
+        df_bus_wales = df_bus_wales * self.num_trips
         df_bus_wales = df_bus_wales.round(1)
         df_bus_emissions_wales = df_bus_wales * emission_factors['coach']
         df_bus_emissions_wales = df_bus_emissions_wales.round(1)
         df_rail_wales = pd.DataFrame(rail_dict_wales)
+        df_rail_wales = df_rail_wales * self.num_trips
         df_rail_wales = df_rail_wales.round(1)
         df_rail_emissions_wales = df_rail_wales * emission_factors['rail']
         df_rail_emissions_wales = df_rail_emissions_wales.round(1)
         df_taxi_wales = pd.DataFrame(taxi_dict_wales)
+        df_taxi_wales = df_taxi_wales * self.num_trips
         df_taxi_wales = df_taxi_wales.round(1)
         df_taxi_emissions_wales = df_taxi_wales * emission_factors['taxi']
         df_taxi_emissions_wales = df_taxi_emissions_wales.round(1)
@@ -546,18 +568,22 @@ class Calculator(QWidget):
         # Do same for Northern Ireland
         car_dict_ni, bus_dict_ni, rail_dict_ni, taxi_dict_ni = self.create_council_areas(self.north_ireland, 'Northern Ireland')
         df_car_ni = pd.DataFrame(car_dict_ni)
+        df_car_ni = df_car_ni * self.num_trips
         df_car_ni = df_car_ni.round(1)
         df_car_emissions_ni = df_car_ni * emission_factors['car']
         df_car_emissions_ni = df_car_emissions_ni.round(1)
         df_bus_ni = pd.DataFrame(bus_dict_ni)
+        df_bus_ni = df_bus_ni * self.num_trips
         df_bus_ni = df_bus_ni.round(1)
         df_bus_emissions_ni = df_bus_ni * emission_factors['coach']
         df_bus_emissions_ni = df_bus_emissions_ni.round(1)
         df_rail_ni = pd.DataFrame(rail_dict_ni)
+        df_rail_ni = df_rail_ni * self.num_trips
         df_rail_ni = df_rail_ni.round(1)
         df_rail_emissions_ni = df_rail_ni * emission_factors['rail']
         df_rail_emissions_ni = df_rail_emissions_ni.round(1)
         df_taxi_ni = pd.DataFrame(taxi_dict_ni)
+        df_taxi_ni = df_taxi_ni * self.num_trips
         df_taxi_ni = df_taxi_ni.round(1)
         df_taxi_emissions_ni = df_taxi_ni * emission_factors['taxi']
         df_taxi_emissions_ni = df_taxi_emissions_ni.round(1)
@@ -661,6 +687,7 @@ class Calculator(QWidget):
         df = self.emissions
         # Exclude the Walk values
         df = df.drop('Walk', axis=0)
+        df = df * self.num_trips
         # Round the values to 2 decimal places
         df = df.round(1)
         # Source: https://plotly.com/python/heatmaps/
@@ -679,6 +706,7 @@ class Calculator(QWidget):
         """Set the webview to show the second heatmap with the distances data"""
         # Do the same for the distances
         df = self.distances
+        df = df * self.num_trips
         df = df.round(1)
         # Figure to store the heatmap with the distances
         self.fig2 = px.imshow(df, text_auto=True, aspect='auto', title='Total Distance (km) by Country and Mode of Transport',
@@ -695,6 +723,7 @@ class Calculator(QWidget):
          # Pie chart for the total emissions
         # Source: https://plotly.com/python/pie-charts/
         df = self.total_emissions
+        df = df * self.num_trips
         df = df.round(1)
         # take names from columns
         names = df.columns
@@ -712,6 +741,7 @@ class Calculator(QWidget):
         """Set the webview to show the pie chart with the emissions per student data"""
         # Pie chart for emissions per student by country
         df = self.total_emissions
+        df = df * self.num_trips
         # Divide the total emissions by the number of students for each country
         scot_emissions = df.iloc[0, 0] / len(self.scotland)
         eng_emissions = df.iloc[0, 1] / len(self.england)
