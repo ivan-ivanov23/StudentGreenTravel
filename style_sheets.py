@@ -1,4 +1,6 @@
 # This file contains the stylesheets for the app and its widgets
+# Author: Ivan Ivanov
+
 main_stylesheet = ("QPushButton {"
             "background-color: #A1FA80;"
             "border: none;"

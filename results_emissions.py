@@ -1,3 +1,7 @@
+# Second page with results which shows emissions by council area of countries
+# Sources of code snippets are provided in the comments of functions.
+# Author: Ivan Ivanov
+
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, QPushButton, QWidget
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 

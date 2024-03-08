@@ -1,4 +1,5 @@
 # Code for the third page of the application (Final leg assumptions page)
+# Sources of code snippets are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QStackedWidget, QListWidget, 
