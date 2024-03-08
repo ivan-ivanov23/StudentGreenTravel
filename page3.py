@@ -196,7 +196,7 @@ class Page3(QWidget):
         self.eng_walk_box_bottom = QComboBox()
         
         self.eng_combos = {'car_land': self.eng_car_box_top, 'taxi_land': self.eng_taxi_box_top, 'bus_land': self.eng_bus_box_top, 
-                           'walk_land': self.ng_walk_box_top, 'car_air': self.eng_car_box_bottom, 'taxi_air': self.eng_taxi_box_bottom, 
+                           'walk_land': self.eng_walk_box_top, 'car_air': self.eng_car_box_bottom, 'taxi_air': self.eng_taxi_box_bottom, 
                            'bus_air': self.eng_bus_box_bottom, 'walk_air': self.eng_walk_box_bottom}
      
 
