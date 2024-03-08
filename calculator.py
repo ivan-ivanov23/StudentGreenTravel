@@ -77,10 +77,10 @@ class Calculator(QWidget):
 
         # Connect signals for page1
         self.page1.button1.clicked.connect(lambda: self.go_to_page(1))
-        self.page1.button2.clicked.connect(self.page1.open_file)
-        self.page1.button3.clicked.connect(self.page1.select_emission_factors)
+        self.page1.button2.clicked.connect(self.open_file)
+        self.page1.button3.clicked.connect(self.select_emission_factors)
         self.file_selected.connect(self.page1.enable_buttons1)
-        self.page1.default_radio.clicked.connect(self.page1.click_default_radio)
+        self.page1.default_radio.clicked.connect(self.click_default_radio)
 
         # Connect signals for page2
         self.page2.next_button2.clicked.connect(lambda: self.go_to_page(2))
@@ -151,6 +151,49 @@ class Calculator(QWidget):
 
 
     """==============================================Methods for pages=============================================="""
+    def open_file(self):
+        """Open a file explorer to select a file"""
+        self.page1.file_label.setText("Please wait while the data is being processed...")
+        file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
+        # If the user selected a file, then read it using pandas
+        if file:
+        # Read address file
+            addresses = pd.read_excel(file.name, engine='openpyxl')
+            # Shuffle dataframe with addresses
+            addresses = addresses.sample(frac=1)
+            addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
+            # Add the file name to the label text with the file name withouth the path
+            self.page1.file_label.setText(f"<b>Dataset:</b> {file.name.split('/')[-1]}")
+            self.scotland, self.wales, self.north_ireland, self.england = determine_postcode(addresses.iloc[:, 1])
+            # Emit signal that a file has been selected
+            self.file_selected.emit(True)
+        else:
+            self.page1.file_label.setText("No file was selected.")
+            # Emit a signal that a file has not been selected
+            self.file_selected.emit(False)
+
+    def select_emission_factors(self):
+        file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
+        # If the user selected a file, then read it using pandas
+        if file:
+        # Read emission factors file
+            factors = pd.read_excel(file.name, engine='openpyxl')
+            # Transform the dataframe to a dictionary with key the Method and value the Emission Factor
+            factors = factors.set_index('Method')['Factor'].to_dict()
+            self.emission_factors = factors
+            self.page1.default_radio.setChecked(False)
+            self.page1.custom_radio.setChecked(True)
+        else:
+            self.emission_factors = self.emission_factors
+            self.page1.default_radio.setChecked(True)
+            self.page1.custom_radio.setChecked(False)
+            self.page1.custom_radio.setEnabled(False)
+
+    def click_default_radio(self):
+        """If the default radio button is clicked, then set the emission factors to the default ones"""
+        self.page1.custom_radio.setChecked(False)
+        self.emission_factors = self.emission_factors
+
 
     def go_to_page(self, i):
         self.stackedLayout.setCurrentIndex(i)

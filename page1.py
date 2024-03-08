@@ -6,14 +6,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QWidget, QHBoxLayo
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 
-from preprocess_data import determine_postcode
-import pandas as pd
-from tkinter.filedialog import askopenfile
-from PyQt6.QtCore import pyqtSignal
-
 class MainPage(QWidget):
-
-    file_selected = pyqtSignal(bool)
 
     def __init__(self):
         super().__init__()
@@ -43,7 +36,7 @@ class MainPage(QWidget):
         self.button1.setEnabled(False)
         self.button2 = QPushButton("Select Student Data")
         self.button2.setFixedSize(300, 50)
-        self.button3 = QPushButton("Custom Emission Factors")
+        self.button3 = QPushButton("Add Emission Factors")
         self.button3.setFixedSize(300, 50)
         button_layout.addWidget(self.button1)
         button_layout.addWidget(self.button2)
@@ -80,6 +73,7 @@ class MainPage(QWidget):
         self.main_layout.addWidget(title)
         self.main_layout.addLayout(button_layout)
         self.main_layout.addWidget(self.file_label)
+        # Add some space between the buttons and the radio buttons
         self.main_layout.addSpacing(10)
         self.main_layout.addLayout(combo_layout)
         # add stretch to push the author label to the bottom but it should not affect the other widgets
@@ -95,49 +89,3 @@ class MainPage(QWidget):
             self.button1.setEnabled(True)
         else:
             self.button1.setEnabled(False)
-
-    def open_file(self):
-        """Open a file explorer to select a file"""
-        self.file_label.setText("Please wait while the data is being processed...")
-        file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
-        # If the user selected a file, then read it using pandas
-        if file:
-        # Read address file
-            addresses = pd.read_excel(file.name, engine='openpyxl')
-            # Shuffle dataframe with addresses
-            addresses = addresses.sample(frac=1)
-            addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
-            # Add the file name to the label text with the file name withouth the path
-            self.file_label.setText(f"<b>Dataset:</b> {file.name.split('/')[-1]}")
-            self.scotland, self.wales, self.north_ireland, self.england = determine_postcode(addresses.iloc[:, 1])
-            # Emit signal that a file has been selected
-            self.file_selected.emit(True)
-        else:
-            self.file_label.setText("No file was selected.")
-            # Emit a signal that a file has not been selected
-            self.file_selected.emit(False)
-
-
-    def select_emission_factors(self):
-        file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
-        # If the user selected a file, then read it using pandas
-        if file:
-        # Read emission factors file
-            factors = pd.read_excel(file.name, engine='openpyxl')
-            # Transform the dataframe to a dictionary with key the Method and value the Emission Factor
-            factors = factors.set_index('Method')['Factor'].to_dict()
-            self.emission_factors = factors
-            self.default_radio.setChecked(False)
-            self.custom_radio.setChecked(True)
-
-        else:
-            self.emission_factors = self.emission_factors
-            self.default_radio.setChecked(True)
-            self.custom_radio.setChecked(False)
-            self.custom_radio.setEnabled(False)
-
-
-    def click_default_radio(self):
-        """If the default radio button is clicked, then set the emission factors to the default ones"""
-        self.custom_radio.setChecked(False)
-        self.emission_factors = self.emission_factors
