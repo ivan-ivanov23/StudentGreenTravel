@@ -12,6 +12,7 @@ class Page3(QWidget):
     def __init__(self):
         super().__init__()
         self.initializeUI()
+        self.get_combo_values()
 
     def initializeUI(self):
         """Create and arrange widgets for Page 3"""
@@ -135,6 +136,12 @@ class Page3(QWidget):
         scot_grid.addWidget(self.scot_bus_box, 2, 1)
         scot_grid.addWidget(self.scot_walk_box, 3, 1)
 
+        # Label to show selected percentatges
+        self.scot_select = 0
+        self.percent_scot_label = QLabel(f"Selected: {self.scot_select}%")
+        self.percent_scot_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        scot_grid.addWidget(self.percent_scot_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+
         # Create a group box for the grid layout
         scotland_group = QGroupBox("Journey from bus/rail station to university.")
         scotland_group.setLayout(scot_grid)
@@ -218,6 +225,11 @@ class Page3(QWidget):
         eng_grid_top.addWidget(self.eng_bus_box_top, 2, 1)
         eng_grid_top.addWidget(self.eng_walk_box_top, 3, 1)
 
+        # Label to show selected percentatges for left side
+        self.eng_select1 = 0
+        self.percent_eng_label1 = QLabel(f"Selected: {self.eng_select1}%")
+        self.percent_eng_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        eng_grid_top.addWidget(self.percent_eng_label1, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
         # Right side
         eng_grid_bottom.addWidget(car_bottom, 0, 0)
         eng_grid_bottom.addWidget(taxi_bottom, 1, 0)
@@ -227,6 +239,13 @@ class Page3(QWidget):
         eng_grid_bottom.addWidget(self.eng_taxi_box_bottom, 1, 1)
         eng_grid_bottom.addWidget(self.eng_bus_box_bottom, 2, 1)
         eng_grid_bottom.addWidget(self.eng_walk_box_bottom, 3, 1)
+
+        # Label to show selected percentatges for right side
+        self.eng_select2 = 0
+        self.percent_eng_label2 = QLabel(f"Selected: {self.eng_select2}%")
+        self.percent_eng_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        eng_grid_bottom.addWidget(self.percent_eng_label2, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+
 
 
         # Create a group box for the grid layout
@@ -320,6 +339,12 @@ class Page3(QWidget):
         wales_grid_top.addWidget(self.wales_bus_box_top, 2, 1)
         wales_grid_top.addWidget(self.wales_walk_box_top, 3, 1)
 
+        # Label to show selected percentatges for left side
+        self.wales_select1 = 0
+        self.percent_wales_label1 = QLabel(f"Selected: {self.wales_select1}%")
+        self.percent_wales_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        wales_grid_top.addWidget(self.percent_wales_label1, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+
         # Right side
         wales_grid_bottom.addWidget(car_bottom, 0, 0)
         wales_grid_bottom.addWidget(taxi_bottom, 1, 0)
@@ -329,6 +354,13 @@ class Page3(QWidget):
         wales_grid_bottom.addWidget(self.wales_taxi_box_bottom, 1, 1)
         wales_grid_bottom.addWidget(self.wales_bus_box_bottom, 2, 1)
         wales_grid_bottom.addWidget(self.wales_walk_box_bottom, 3, 1)
+
+        # Label to show selected percentatges for right side
+        self.wales_select2 = 0
+        self.percent_wales_label2 = QLabel(f"Selected: {self.wales_select2}%")
+        self.percent_wales_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        wales_grid_bottom.addWidget(self.percent_wales_label2, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+
 
 
         # Create a group box for the grid layout
@@ -419,6 +451,12 @@ class Page3(QWidget):
         ni_grid_top.addWidget(self.ni_bus_box_top, 2, 1)
         ni_grid_top.addWidget(self.ni_walk_box_top, 3, 1)
 
+        # Label to show selected percentatges for left side
+        self.ni_select1 = 0
+        self.percent_ni_label1 = QLabel(f"Selected: {self.ni_select1}%")
+        self.percent_ni_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        ni_grid_top.addWidget(self.percent_ni_label1, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+
         # Right side
         ni_grid_bottom.addWidget(car_bottom, 0, 0)
         ni_grid_bottom.addWidget(taxi_bottom, 1, 0)
@@ -428,6 +466,13 @@ class Page3(QWidget):
         ni_grid_bottom.addWidget(self.ni_taxi_box_bottom, 1, 1)
         ni_grid_bottom.addWidget(self.ni_bus_box_bottom, 2, 1)
         ni_grid_bottom.addWidget(self.ni_walk_box_bottom, 3, 1)
+
+        # Label to show selected percentatges for right side
+        self.ni_select2 = 0
+        self.percent_ni_label2 = QLabel(f"Selected: {self.ni_select2}%")
+        self.percent_ni_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        ni_grid_bottom.addWidget(self.percent_ni_label2, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+
 
 
         # Create a group box for the grid layout
@@ -467,4 +512,94 @@ class Page3(QWidget):
             self.calculate_button.setEnabled(True)
         else:
             self.calculate_button.setEnabled(False)
+
+    def get_combo_values(self):
+        self.scot_car_box.currentIndexChanged.connect(self.update_percent_label)
+        self.scot_taxi_box.currentIndexChanged.connect(self.update_percent_label)
+        self.scot_bus_box.currentIndexChanged.connect(self.update_percent_label)
+        self.scot_walk_box.currentIndexChanged.connect(self.update_percent_label)
+
+        self.eng_car_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.eng_taxi_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.eng_bus_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.eng_walk_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.eng_car_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+        self.eng_taxi_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+        self.eng_bus_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+        self.eng_walk_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+
+        self.wales_car_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.wales_taxi_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.wales_bus_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.wales_walk_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.wales_car_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+        self.wales_taxi_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+        self.wales_bus_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+        self.wales_walk_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+
+        self.ni_car_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.ni_taxi_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.ni_bus_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.ni_walk_box_top.currentIndexChanged.connect(self.update_percent_label)
+        self.ni_car_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+        self.ni_taxi_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+        self.ni_bus_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+        self.ni_walk_box_bottom.currentIndexChanged.connect(self.update_percent_label)
+
+    def update_percent_label(self):
+        """Update the selected percentage label"""
+        scot = int(self.scot_car_box.currentText()) + int(self.scot_taxi_box.currentText()) + int(self.scot_bus_box.currentText()) + int(self.scot_walk_box.currentText())
+        eng_top = int(self.eng_car_box_top.currentText()) + int(self.eng_taxi_box_top.currentText()) + int(self.eng_bus_box_top.currentText()) + int(self.eng_walk_box_top.currentText())
+        eng_bottom = int(self.eng_car_box_bottom.currentText()) + int(self.eng_taxi_box_bottom.currentText()) + int(self.eng_bus_box_bottom.currentText()) + int(self.eng_walk_box_bottom.currentText())
+        wales_top = int(self.wales_car_box_top.currentText()) + int(self.wales_taxi_box_top.currentText()) + int(self.wales_bus_box_top.currentText()) + int(self.wales_walk_box_top.currentText())
+        wales_bottom = int(self.wales_car_box_bottom.currentText()) + int(self.wales_taxi_box_bottom.currentText()) + int(self.wales_bus_box_bottom.currentText()) + int(self.wales_walk_box_bottom.currentText())
+        ni_top = int(self.ni_car_box_top.currentText()) + int(self.ni_taxi_box_top.currentText()) + int(self.ni_bus_box_top.currentText()) + int(self.ni_walk_box_top.currentText())
+        ni_bottom = int(self.ni_car_box_bottom.currentText()) + int(self.ni_taxi_box_bottom.currentText()) + int(self.ni_bus_box_bottom.currentText()) + int(self.ni_walk_box_bottom.currentText())
+        self.scot_select = scot
+        self.eng_select1 = eng_top
+        self.eng_select2 = eng_bottom
+        self.wales_select1 = wales_top
+        self.wales_select2 = wales_bottom
+        self.ni_select1 = ni_top
+        self.ni_select2 = ni_bottom
+
+        if scot > 100:
+            self.percent_scot_label.setStyleSheet("font-size: 14px; color: red; font: bold")
+        else:
+            self.percent_scot_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        if eng_top > 100:
+            self.percent_eng_label1.setStyleSheet("font-size: 14px; color: red; font: bold")
+        else:
+            self.percent_eng_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        if eng_bottom > 100:
+            self.percent_eng_label2.setStyleSheet("font-size: 14px; color: red; font: bold")
+        else:
+            self.percent_eng_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        if wales_top > 100:
+            self.percent_wales_label1.setStyleSheet("font-size: 14px; color: red; font: bold")
+        else:
+            self.percent_wales_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        if wales_bottom > 100:
+            self.percent_wales_label2.setStyleSheet("font-size: 14px; color: red; font: bold")
+        else:
+            self.percent_wales_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        if ni_top > 100:
+            self.percent_ni_label1.setStyleSheet("font-size: 14px; color: red; font: bold")
+        else:
+            self.percent_ni_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        if ni_bottom > 100:
+            self.percent_ni_label2.setStyleSheet("font-size: 14px; color: red; font: bold")
+        else:
+            self.percent_ni_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+
+
+        self.percent_scot_label.setText(f"Selected: {self.scot_select}%")
+        self.percent_eng_label1.setText(f"Selected: {self.eng_select1}%")
+        self.percent_eng_label2.setText(f"Selected: {self.eng_select2}%")
+        self.percent_wales_label1.setText(f"Selected: {self.wales_select1}%")
+        self.percent_wales_label2.setText(f"Selected: {self.wales_select2}%")
+        self.percent_ni_label1.setText(f"Selected: {self.ni_select1}%")
+        self.percent_ni_label2.setText(f"Selected: {self.ni_select2}%")
+
+        
         
