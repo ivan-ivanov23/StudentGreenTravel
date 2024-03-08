@@ -1,4 +1,5 @@
 # Code for the second page of the application (Mid leg assumptions page)
+# # Sources of code snippets/pictures are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QComboBox, QGridLayout, QHBoxLayout, QPushButton, QWidget
@@ -10,6 +11,8 @@ class Page2(QWidget):
     def __init__(self):
         super().__init__()
         self.initializeUI()
+        # Call the method to get the selected percentages from the combo boxes
+        self.get_percentages()
 
     def initializeUI(self):
         """Create and arrange widgets in the SecondPage"""
@@ -93,6 +96,12 @@ class Page2(QWidget):
             self.combo_rail_scot.addItem(val)
         grid.addWidget(self.combo_rail_scot, 3, 1)
 
+        # label to show the percentages out of 100 that the user has selected
+        self.scot_select = 0
+        self.percent_label = QLabel(f"Selected: {self.scot_select}%")
+        self.percent_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        grid.addWidget(self.percent_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+
 
         # UK
         uk_label = QLabel("Rest of UK", self)
@@ -123,6 +132,13 @@ class Page2(QWidget):
             self.rail_uk.addItem(str(i))
         grid.addWidget(self.rail_uk, 3, 4)
 
+        # label to show the percentages out of 100 that the user has selected
+        self.uk_select = 0
+        self.uk_percent_label = QLabel(f"Selected: {self.uk_select}%")
+        self.uk_percent_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        grid.addWidget(self.uk_percent_label, 4, 3, 1, 2, Qt.AlignmentFlag.AlignLeft)
+
+
         # Button layout
         button_layout = QHBoxLayout()
 
@@ -150,3 +166,45 @@ class Page2(QWidget):
             self.next_button2.setEnabled(True)
         else:
             self.next_button2.setEnabled(False)
+
+    def get_percentages(self):
+        """Once a value from a combo box is selected, this method will update the scot_select or uk_select labels"""
+        # Inspired by answer from Cholavendhan: https://stackoverflow.com/questions/6061893/how-do-you-get-the-current-text-contents-of-a-qcombobox
+        self.combo_bus_scot.currentIndexChanged.connect(self.update_percent_label)
+        self.combo_car_scot.currentIndexChanged.connect(self.update_percent_label)
+        self.combo_rail_scot.currentIndexChanged.connect(self.update_percent_label)
+        self.plane_uk.currentIndexChanged.connect(self.update_uk_percent_label)
+        self.car_uk.currentIndexChanged.connect(self.update_uk_percent_label)
+        self.rail_uk.currentIndexChanged.connect(self.update_uk_percent_label)
+
+    def update_percent_label(self):
+        """Update the label to show the percentages out of 100 that the user has selected"""
+        # Inspired by find() method in: https://www.geeksforgeeks.org/pyqt5-getting-the-text-of-selected-item-in-combobox/
+        scot_bus = int(self.combo_bus_scot.currentText())
+        scot_car = int(self.combo_car_scot.currentText())
+        scot_rail = int(self.combo_rail_scot.currentText())
+        self.scot_select = scot_bus + scot_car + scot_rail
+
+        # Check if the sum is over 100. If so, mark it in red
+        if self.scot_select > 100:
+            self.percent_label.setStyleSheet("font-size: 14px; color: red; font: bold")
+        else:
+            self.percent_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        
+        self.percent_label.setText(f"Selected: {self.scot_select}%")
+
+    def update_uk_percent_label(self):
+        # Inspired by find() method in: https://www.geeksforgeeks.org/pyqt5-getting-the-text-of-selected-item-in-combobox/
+        """Update the label to show the percentages out of 100 that the user has selected"""
+        uk_plane = int(self.plane_uk.currentText())
+        uk_car = int(self.car_uk.currentText())
+        uk_rail = int(self.rail_uk.currentText())
+        self.uk_select = uk_plane + uk_car + uk_rail
+        
+        # Check if the sum is over 100. If so, mark it in red
+        if self.uk_select > 100:
+            self.uk_percent_label.setStyleSheet("font-size: 14px; color: red; font: bold")
+        else:
+            self.uk_percent_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        
+        self.uk_percent_label.setText(f"Selected: {self.uk_select}%")
