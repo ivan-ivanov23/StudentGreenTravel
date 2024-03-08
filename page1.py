@@ -29,14 +29,18 @@ class MainPage(QWidget):
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         # Buttons
+        button_layout = QVBoxLayout()
+        button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.button1 = QPushButton("Calculate Emissions")
         self.button1.setFixedSize(300, 50)
         self.button1.setEnabled(False)
         self.button2 = QPushButton("Select Student Data")
         self.button2.setFixedSize(300, 50)
+        button_layout.addWidget(self.button1)
+        button_layout.addWidget(self.button2)
 
         # File label
-        self.file_label = QLabel(" ")
+        self.file_label = QLabel("")
         self.file_label.setStyleSheet("color: #2d3436; font-size: 14px")
         self.file_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -50,8 +54,7 @@ class MainPage(QWidget):
         self.main_layout.addStretch(1)
         self.main_layout.addWidget(logo_label)
         self.main_layout.addWidget(title)
-        self.main_layout.addWidget(self.button1)
-        self.main_layout.addWidget(self.button2)
+        self.main_layout.addLayout(button_layout)
         self.main_layout.addWidget(self.file_label)
         # add stretch to push the author label to the bottom but it should not affect the other widgets
         self.main_layout.addStretch(1)

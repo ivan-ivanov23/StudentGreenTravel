@@ -26,7 +26,7 @@ class Page3(QWidget):
                              <br><br>
                              Once you have selected the percentages for the middle leg of the journey, click '<b>Submit</b>' to confirm your choices.
                              """)
-        instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
 
         # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm
         # List of countries
@@ -134,12 +134,18 @@ class Page3(QWidget):
         scot_grid.addWidget(scot_bus_box, 2, 1)
         scot_grid.addWidget(scot_walk_box, 3, 1)
 
-        # reate a group box for the grid layout
+        # Create a group box for the grid layout
         scotland_group = QGroupBox("Journey from bus/rail station to university.")
         scotland_group.setLayout(scot_grid)
 
+        # Create a page indicator
+        page_label = QLabel("1/4")
+        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
+        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+
         layout.addWidget(country)
         layout.addWidget(scotland_group)
+        layout.addWidget(page_label)
         layout.addStretch(1)
 
         self.stack1.setLayout(layout)
@@ -230,11 +236,17 @@ class Page3(QWidget):
         england_group_bottom = QGroupBox("Journey from airport to university.")
         england_group_bottom.setLayout(eng_grid_bottom)
 
+        # Create a page indicator
+        page_label = QLabel("2/4")
+        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
+        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+
 
 
         layout.addWidget(country)
         layout.addWidget(england_group_top)
         layout.addWidget(england_group_bottom)
+        layout.addWidget(page_label)
         layout.addStretch(1)
             
         self.stack2.setLayout(layout)
@@ -326,11 +338,15 @@ class Page3(QWidget):
         wales_group_bottom = QGroupBox("Journey from airport to university.")
         wales_group_bottom.setLayout(wales_grid_bottom)
 
-
+        # Create a page indicator
+        page_label = QLabel("3/4")
+        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
+        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         layout.addWidget(country)
         layout.addWidget(wales_group_top)
         layout.addWidget(wales_group_bottom)
+        layout.addWidget(page_label)
         layout.addStretch(1)
     
         self.stack3.setLayout(layout)
@@ -421,11 +437,15 @@ class Page3(QWidget):
         ni_group_bottom = QGroupBox("Journey from airport to university.")
         ni_group_bottom.setLayout(ni_grid_bottom)
 
-
+        # Create a page indicator
+        page_label = QLabel("4/4")
+        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
+        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         layout.addWidget(country)
         layout.addWidget(ni_group_top)
         layout.addWidget(ni_group_bottom)
+        layout.addWidget(page_label)
         layout.addStretch(1)
         self.stack4.setLayout(layout)
 

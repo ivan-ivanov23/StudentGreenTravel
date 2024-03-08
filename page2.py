@@ -2,6 +2,7 @@
 # Author: Ivan Ivanov
 
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QComboBox, QGridLayout, QHBoxLayout, QPushButton, QWidget
+from PyQt6.QtCore import QSize, Qt
 
 
 class Page2(QWidget):
@@ -18,7 +19,25 @@ class Page2(QWidget):
         label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
         self.layout2.addWidget(label)
 
-        instruction = QLabel("""
+        instruction1 = QLabel("""
+            <b>Tip:</b> Select the number of study-related trips a student makes on average per year.""")
+        instruction1.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
+        self.layout2.addWidget(instruction1)
+
+
+        # Number of trips combo box
+        trips_label = QLabel("Number of trips")
+        trips_label.setStyleSheet("font-weight: bold; font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        trips_label.setFixedWidth(270)
+        self.trips_combo = QComboBox()
+        self.trips_combo.setFixedSize(QSize(50, 20))
+        for i in range(1, 11):
+            val = str(i)
+            self.trips_combo.addItem(val)
+        self.layout2.addWidget(trips_label)
+        self.layout2.addWidget(self.trips_combo)
+
+        instruction2 = QLabel("""
             <b>Tip:</b> Select the percentage of students traveling by each transport method 
             for the middle leg of their journey, from the transportation hub in their city to Aberdeen.
             <br><br>
@@ -32,13 +51,15 @@ class Page2(QWidget):
             <br><br>
             Once you have selected the percentages for the middle leg of the journey, click '<b>Submit</b>' to confirm your choices.
         """)
-        instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
-        self.layout2.addWidget(instruction)
+        instruction2.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
+        self.layout2.addWidget(instruction2)
+
 
         # Grid layout for the combo boxes
         grid = QGridLayout()
-        grid.setHorizontalSpacing(20)
-        grid.setRowStretch(0, 1)
+        grid.setHorizontalSpacing(50)
+        grid.setVerticalSpacing(2)
+
 
         # Scotland combo boxes and labels
         scotland_label = QLabel("Scotland")
@@ -76,31 +97,31 @@ class Page2(QWidget):
         # UK
         uk_label = QLabel("Rest of UK", self)
         uk_label.setStyleSheet("font-weight: bold; font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
-        grid.addWidget(uk_label, 0, 2)
+        grid.addWidget(uk_label, 0, 3)
 
         plane_uk_label = QLabel("Plane %", self)
         plane_uk_label.setStyleSheet("font: Arial; font-size: 12px")
-        grid.addWidget(plane_uk_label, 1, 2)
+        grid.addWidget(plane_uk_label, 1, 3)
         self.plane_uk = QComboBox(self)
         for i in range(101):
             self.plane_uk.addItem(str(i))
-        grid.addWidget(self.plane_uk, 1, 3)
+        grid.addWidget(self.plane_uk, 1, 4)
 
         car_uk_label = QLabel("Car %", self)
         car_uk_label.setStyleSheet("font: Arial; font-size: 12px")
-        grid.addWidget(car_uk_label, 2, 2)
+        grid.addWidget(car_uk_label, 2, 3)
         self.car_uk = QComboBox(self)
         for i in range(101):
             self.car_uk.addItem(str(i))
-        grid.addWidget(self.car_uk, 2, 3)
+        grid.addWidget(self.car_uk, 2, 4)
 
         rail_uk_label = QLabel("Train %", self)
         rail_uk_label.setStyleSheet("font: Arial; font-size: 12px")
-        grid.addWidget(rail_uk_label, 3, 2)
+        grid.addWidget(rail_uk_label, 3, 3)
         self.rail_uk = QComboBox(self)
         for i in range(101):
             self.rail_uk.addItem(str(i))
-        grid.addWidget(self.rail_uk, 3, 3)
+        grid.addWidget(self.rail_uk, 3, 4)
 
         # Button layout
         button_layout = QHBoxLayout()
