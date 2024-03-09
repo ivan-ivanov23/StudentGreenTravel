@@ -1,3 +1,6 @@
+# Travel class for the travel distances and closest transport hubs for each mode of transport and each student's postcode
+# Author: Ivan Ivanov
+
 import pandas as pd
 import numpy as np
 from geopy.distance import geodesic
@@ -63,7 +66,7 @@ class Travel:
         # For postcode in addresses
         for postcode in addresses:
         # Find the closest airport to the postcode
-            closest_airport_name, distance = self.closest_hub(postcode, postcodes, airports)
+            closest_airport_name, distance_to = self.closest_hub(postcode, postcodes, airports)
             
             # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is not from Scotland or London
             if closest_airport_name != 'Aberdeen' and postcode[:2] not in london_postcodes:
@@ -82,7 +85,7 @@ class Travel:
                 # If the postcode is invalid, add it to the list of invalid postcodes
                 invalid_postcodes.append(postcode)
                 continue
-            data[postcode] = (closest_airport_name, round(distance, 2), round(travel_distance, 2))
+            data[postcode] = (closest_airport_name, round(distance_to, 2), round(travel_distance, 2))
 
 
         return data, invalid_postcodes
@@ -98,7 +101,7 @@ class Travel:
         for postcode in addresses:
             # Find the closest bus stop to the given postcode and the distance to it
             if postcode in potcodes:
-                closest_stop_name, distance = self.closest_hub(postcode, potcodes, stops)
+                closest_stop_name, distance_to = self.closest_hub(postcode, potcodes, stops)
                 
                 # If the closest stop is not Aberdeen, calculate the distance to it
                 if closest_stop_name != 'Aberdeen':
@@ -106,15 +109,14 @@ class Travel:
                     travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_bus_stop).km
         
                 else:
-                    # For default value, set the distance to 0
-                    travel_distance = 0
-                data[postcode] = (closest_stop_name, round(distance, 2), round(travel_distance, 2))
+                    # For default value, calculate the distance to the university
+                    travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_uni).km
+                data[postcode] = (closest_stop_name, round(distance_to, 2), round(travel_distance, 2))
             else:
                 # If the postcode is invalid, add it to the list of invalid postcodes
                 invalid_postcodes.append(postcode)
                 continue
             
-
         return data, invalid_postcodes
 
     def car_travel(self, postcode_coords: dict, addresses: list):
@@ -127,18 +129,12 @@ class Travel:
         for postcode in addresses:
             # Find the distance between the given postcode and the university
             if postcode in postcode_coords:
-                # If the postcode is not from Aberdeen, calculate the distance to the university
-                if postcode[:2] != 'AB':
-                    distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_uni).km
-                    car_data[postcode] = round(distance, 2)
-
-                else:
-                    car_data[postcode] = 0
+                distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_uni).km
+                car_data[postcode] = round(distance, 2)
             else:
                 invalid_postcodes.append(postcode)
                 continue
 
         return car_data, invalid_postcodes
             
-    
     
