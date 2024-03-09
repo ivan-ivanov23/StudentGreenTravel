@@ -5,6 +5,9 @@
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QWidget, QHBoxLayout, QRadioButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
+import os
+
+basedir = os.path.dirname(__file__)
 
 class MainPage(QWidget):
 
@@ -18,7 +21,7 @@ class MainPage(QWidget):
         self.main_layout = QVBoxLayout()
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         # Source: https://www.svgrepo.com/
-        logo = QIcon("icons/eco.svg")
+        logo = QIcon(os.path.join(basedir, 'icons/eco.svg'))
         logo_label = QLabel()
         logo_label.setPixmap(logo.pixmap(100, 100))
         logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)

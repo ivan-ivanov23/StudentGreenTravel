@@ -7,24 +7,35 @@ import pandas as pd
 from itertools import islice
 import requests
 from utils import split_list
+import os
+
+# Get the absolute path to the directory containing the script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the absolute path to the data directory
+data_dir = os.path.join(script_dir, 'data')
 
 # Read ukpostcodes.csv
-# Source: https://www.statology.org/pandas-read_csv-usecols/ 
-ukpostcodes = pd.read_csv('data/ukpostcodes.csv', usecols=['postcode', 'latitude', 'longitude'])
+ukpostcodes_path = os.path.join(data_dir, 'ukpostcodes.csv')
+ukpostcodes = pd.read_csv(ukpostcodes_path, usecols=['postcode', 'latitude', 'longitude'])
 ukpostcodes['postcode'] = ukpostcodes['postcode'].str.replace(' ', '')
 ukpostcode_coords = dict(zip(ukpostcodes['postcode'], zip(ukpostcodes['latitude'], ukpostcodes['longitude'])))
 
 # Read Scotland_Bus_Stations.csv
-bus_stops = pd.read_csv("data/Scotland_Bus_Stations.csv", usecols=['StationName', 'Latitude', 'Longitude'])
+bus_stops_path = os.path.join(data_dir, 'Scotland_Bus_Stations.csv')
+bus_stops = pd.read_csv(bus_stops_path, usecols=['StationName', 'Latitude', 'Longitude'])
 stops_dict = dict(zip(bus_stops['StationName'], zip(bus_stops['Latitude'], bus_stops['Longitude'])))
 
 # Read Railway Stations
-rail_stations = pd.read_csv("data/stations.csv", usecols=['Station', 'Lat', 'Long'])
+rail_stations_path = os.path.join(data_dir, 'stations.csv')
+rail_stations = pd.read_csv(rail_stations_path, usecols=['Station', 'Lat', 'Long'])
 stations_dict = dict(zip(rail_stations['Station'], zip(rail_stations['Lat'], rail_stations['Long'])))
 
 # Read airports
-airports = pd.read_csv("data/GBairports.csv", usecols=['Unnamed: 0', 'Latitude', 'Longitude'])
+airports_path = os.path.join(data_dir, 'GBairports.csv')
+airports = pd.read_csv(airports_path, usecols=['Unnamed: 0', 'Latitude', 'Longitude'])
 airports_dict = dict(zip(airports['Unnamed: 0'], zip(airports['Latitude'], airports['Longitude'])))
+
 
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
 eng_postcodes = ['AL', 'BA', 'BB', 'BD', 'BH', 'BL', 'BN', 'BR', 'BS', 'CA', 'CB', 'CH', 'CM', 'CO', 'CR', 'CT', 'CV', 'CW', 'DA', 'DE', 'DH', 'DL', 'DN', 'DT', 'DY', 'EC', 'EN', 'EX', 'FY', 'GL', 'GU', 'HA', 'HD', 'HG', 'HP', 'HR', 'HU', 'HX', 'IG', 'IP', 'KT', 'LA', 'LD', 'LE', 'LN', 'LS', 'LU', 'ME', 'MK', 'NE', 'NG', 'NN', 'NR', 'NW', 'OL', 'OX', 'PE', 'PL', 'PO', 'PR', 'RG', 'RH', 'RM', 'SE', 'SG', 'SK', 'SL', 'SM', 'SN', 'SO', 'SP', 'SR', 'SS', 'ST', 'SW', 'TA', 'TF', 'TN', 'TQ', 'TR', 'TS', 'TW', 'UB', 'WA', 'WC', 'WD', 'WF', 'WN', 'WR', 'WS', 'WV', 'YO']

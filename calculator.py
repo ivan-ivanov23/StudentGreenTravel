@@ -3,6 +3,7 @@
 # Author: Ivan Ivanov
 
 import sys
+import os
 from PyQt6.QtWidgets import QApplication, QVBoxLayout, QWidget, QStackedLayout, QMessageBox, QHBoxLayout, QProgressDialog, QProgressBar
 from PyQt6.QtCore import pyqtSignal
 from PyQt6 import QtWidgets
@@ -22,6 +23,7 @@ import plotly.graph_objects as go
 from council_areas import get_district, group_district, find_percentage
 from style_sheets import main_stylesheet, widget_stylesheet
 
+basedir = os.path.dirname(__file__)
 
 class Calculator(QWidget):
 
@@ -43,7 +45,7 @@ class Calculator(QWidget):
         """Set up application GUI"""
         self.setMinimumSize(1200, 720)
         self.setWindowTitle("StudentGreenTravel")
-        main_icon = QIcon('icons/eco.svg')
+        main_icon = QIcon(os.path.join(basedir, 'icons/eco.svg'))
         self.setWindowIcon(main_icon)
 
 
@@ -121,16 +123,17 @@ class Calculator(QWidget):
 
         # Get icons from icons folder
         # Source: https://www.svgrepo.com/
-        calculate_icon = QIcon('icons/calculator.svg')
-        back = QIcon('icons/back.svg')
-        submit = QIcon('icons/submit.svg')
-        next_button = QIcon('icons/next.svg')
-        file_button = QIcon('icons/file.svg')
-        dash = QIcon('icons/dash.svg')
-        menu = QIcon('icons/menu.svg')
-        one = QIcon('icons/1.svg')
-        two = QIcon('icons/2.svg')
-        emissions = QIcon('icons/emissions.svg')
+        calculate_icon = QIcon(os.path.join(basedir, 'icons/calculator.svg'))
+        back = QIcon(os.path.join(basedir, 'icons/back.svg'))
+        submit = QIcon(os.path.join(basedir, 'icons/submit.svg'))
+        next_button = QIcon(os.path.join(basedir, 'icons/next.svg'))
+        file_button = QIcon(os.path.join(basedir, 'icons/file.svg'))
+        dash = QIcon(os.path.join(basedir, 'icons/dash.svg'))
+        menu = QIcon(os.path.join(basedir, 'icons/menu.svg'))
+        one = QIcon(os.path.join(basedir, 'icons/1.svg'))
+        two = QIcon(os.path.join(basedir, 'icons/2.svg'))
+        emissions = QIcon(os.path.join(basedir, 'icons/emissions.svg'))
+
 
         # Set icons for all buttons
         self.page1.button1.setIcon(dash)
