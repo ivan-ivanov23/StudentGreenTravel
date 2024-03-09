@@ -12,7 +12,13 @@ class Page3(QWidget):
     def __init__(self):
         super().__init__()
         self.initializeUI()
-        self.get_combo_values()
+        self.get_combo_values(self.scot_combos, self.scot_select, self.percent_scot_label)
+        self.get_combo_values(self.eng_combos1, self.eng_select1, self.percent_eng_label1)
+        self.get_combo_values(self.eng_combos2, self.eng_select2, self.percent_eng_label2)
+        self.get_combo_values(self.wales_combos1, self.wales_select1, self.percent_wales_label1)
+        self.get_combo_values(self.wales_combos2, self.wales_select2, self.percent_wales_label2)
+        self.get_combo_values(self.ni_combos1, self.ni_select1, self.percent_ni_label1)
+        self.get_combo_values(self.ni_combos2, self.ni_select2, self.percent_ni_label2)
 
     def initializeUI(self):
         """Create and arrange widgets for Page 3"""
@@ -205,6 +211,10 @@ class Page3(QWidget):
         self.eng_combos = {'car_land': self.eng_car_box_top, 'taxi_land': self.eng_taxi_box_top, 'bus_land': self.eng_bus_box_top, 
                            'walk_land': self.eng_walk_box_top, 'car_air': self.eng_car_box_bottom, 'taxi_air': self.eng_taxi_box_bottom, 
                            'bus_air': self.eng_bus_box_bottom, 'walk_air': self.eng_walk_box_bottom}
+        
+        # Dictionary to be used for percentage counters
+        self.eng_combos1 = {'car_land': self.eng_car_box_top, 'taxi_land': self.eng_taxi_box_top, 'bus_land': self.eng_bus_box_top, 'walk_land': self.eng_walk_box_top}
+        self.eng_combos2 = {'car_air': self.eng_car_box_bottom, 'taxi_air': self.eng_taxi_box_bottom, 'bus_air': self.eng_bus_box_bottom, 'walk_air': self.eng_walk_box_bottom}
      
 
         # Values for combo boxes
@@ -319,6 +329,10 @@ class Page3(QWidget):
         self.wales_combos = {'car_land': self.wales_car_box_top, 'taxi_land': self.wales_taxi_box_top, 'bus_land': self.wales_bus_box_top,
                                 'walk_land': self.wales_walk_box_top, 'car_air': self.wales_car_box_bottom, 'taxi_air': self.wales_taxi_box_bottom,
                                 'bus_air': self.wales_bus_box_bottom, 'walk_air': self.wales_walk_box_bottom}
+        
+        # Dictionary to be used for percentage counters
+        self.wales_combos1 = {'car_land': self.wales_car_box_top, 'taxi_land': self.wales_taxi_box_top, 'bus_land': self.wales_bus_box_top, 'walk_land': self.wales_walk_box_top}
+        self.wales_combos2 = {'car_air': self.wales_car_box_bottom, 'taxi_air': self.wales_taxi_box_bottom, 'bus_air': self.wales_bus_box_bottom, 'walk_air': self.wales_walk_box_bottom}
 
 
         # Values for combo boxes
@@ -431,6 +445,10 @@ class Page3(QWidget):
         self.ni_combos = {'car_land': self.ni_car_box_top, 'taxi_land': self.ni_taxi_box_top, 'bus_land': self.ni_bus_box_top,
                                 'walk_land': self.ni_walk_box_top, 'car_air': self.ni_car_box_bottom, 'taxi_air': self.ni_taxi_box_bottom,
                                 'bus_air': self.ni_bus_box_bottom, 'walk_air': self.ni_walk_box_bottom}
+        
+        # Dictionary to be used for percentage counters
+        self.ni_combos1 = {'car_land': self.ni_car_box_top, 'taxi_land': self.ni_taxi_box_top, 'bus_land': self.ni_bus_box_top, 'walk_land': self.ni_walk_box_top}
+        self.ni_combos2 = {'car_air': self.ni_car_box_bottom, 'taxi_air': self.ni_taxi_box_bottom, 'bus_air': self.ni_bus_box_bottom, 'walk_air': self.ni_walk_box_bottom}
 
 
         # Values for combo boxes
@@ -513,93 +531,30 @@ class Page3(QWidget):
         else:
             self.calculate_button.setEnabled(False)
 
-    def get_combo_values(self):
-        self.scot_car_box.currentIndexChanged.connect(self.update_percent_label)
-        self.scot_taxi_box.currentIndexChanged.connect(self.update_percent_label)
-        self.scot_bus_box.currentIndexChanged.connect(self.update_percent_label)
-        self.scot_walk_box.currentIndexChanged.connect(self.update_percent_label)
+    def get_combo_values(self, combo_dict: dict, country_select, country_label):
+        """Get the changed index of the combo boxes and call method to update the selected percentage label"""
+        for key, combo_box in combo_dict.items():
+            # Connect each combo box to the update_percent_label function
+            combo_box.currentIndexChanged.connect(lambda: self.update_percent_label(combo_dict, country_select, country_label))     
 
-        self.eng_car_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.eng_taxi_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.eng_bus_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.eng_walk_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.eng_car_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-        self.eng_taxi_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-        self.eng_bus_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-        self.eng_walk_box_bottom.currentIndexChanged.connect(self.update_percent_label)
 
-        self.wales_car_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.wales_taxi_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.wales_bus_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.wales_walk_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.wales_car_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-        self.wales_taxi_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-        self.wales_bus_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-        self.wales_walk_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-
-        self.ni_car_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.ni_taxi_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.ni_bus_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.ni_walk_box_top.currentIndexChanged.connect(self.update_percent_label)
-        self.ni_car_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-        self.ni_taxi_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-        self.ni_bus_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-        self.ni_walk_box_bottom.currentIndexChanged.connect(self.update_percent_label)
-
-    def update_percent_label(self):
-        """Update the selected percentage label"""
-        scot = int(self.scot_car_box.currentText()) + int(self.scot_taxi_box.currentText()) + int(self.scot_bus_box.currentText()) + int(self.scot_walk_box.currentText())
-        eng_top = int(self.eng_car_box_top.currentText()) + int(self.eng_taxi_box_top.currentText()) + int(self.eng_bus_box_top.currentText()) + int(self.eng_walk_box_top.currentText())
-        eng_bottom = int(self.eng_car_box_bottom.currentText()) + int(self.eng_taxi_box_bottom.currentText()) + int(self.eng_bus_box_bottom.currentText()) + int(self.eng_walk_box_bottom.currentText())
-        wales_top = int(self.wales_car_box_top.currentText()) + int(self.wales_taxi_box_top.currentText()) + int(self.wales_bus_box_top.currentText()) + int(self.wales_walk_box_top.currentText())
-        wales_bottom = int(self.wales_car_box_bottom.currentText()) + int(self.wales_taxi_box_bottom.currentText()) + int(self.wales_bus_box_bottom.currentText()) + int(self.wales_walk_box_bottom.currentText())
-        ni_top = int(self.ni_car_box_top.currentText()) + int(self.ni_taxi_box_top.currentText()) + int(self.ni_bus_box_top.currentText()) + int(self.ni_walk_box_top.currentText())
-        ni_bottom = int(self.ni_car_box_bottom.currentText()) + int(self.ni_taxi_box_bottom.currentText()) + int(self.ni_bus_box_bottom.currentText()) + int(self.ni_walk_box_bottom.currentText())
-        self.scot_select = scot
-        self.eng_select1 = eng_top
-        self.eng_select2 = eng_bottom
-        self.wales_select1 = wales_top
-        self.wales_select2 = wales_bottom
-        self.ni_select1 = ni_top
-        self.ni_select2 = ni_bottom
-
-        if scot > 100:
-            self.percent_scot_label.setStyleSheet("font-size: 14px; color: red; font: bold")
+    def update_percent_label(self, combo_dict: dict, country_select, country_label):
+        """Sum percentages of combo boxes and update the label accordingly"""
+        sum_percent = 0
+        for combo_box in combo_dict.values():
+            # Get the current value of a combo box
+            country = int(combo_box.currentText())
+            # Add it to the total sum of the combo boxes in that dict
+            sum_percent += country
+            
+        # Country select variable = sum_percent
+        country_select = sum_percent
+        if sum_percent > 100:
+            country_label.setStyleSheet("font-size: 14px; color: red; font: bold")
+        elif sum_percent == 100:
+            country_label.setStyleSheet("font-size: 14px; color: green; font: bold")
         else:
-            self.percent_scot_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        if eng_top > 100:
-            self.percent_eng_label1.setStyleSheet("font-size: 14px; color: red; font: bold")
-        else:
-            self.percent_eng_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        if eng_bottom > 100:
-            self.percent_eng_label2.setStyleSheet("font-size: 14px; color: red; font: bold")
-        else:
-            self.percent_eng_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        if wales_top > 100:
-            self.percent_wales_label1.setStyleSheet("font-size: 14px; color: red; font: bold")
-        else:
-            self.percent_wales_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        if wales_bottom > 100:
-            self.percent_wales_label2.setStyleSheet("font-size: 14px; color: red; font: bold")
-        else:
-            self.percent_wales_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        if ni_top > 100:
-            self.percent_ni_label1.setStyleSheet("font-size: 14px; color: red; font: bold")
-        else:
-            self.percent_ni_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        if ni_bottom > 100:
-            self.percent_ni_label2.setStyleSheet("font-size: 14px; color: red; font: bold")
-        else:
-            self.percent_ni_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+            country_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
 
-
-        self.percent_scot_label.setText(f"Selected: {self.scot_select}%")
-        self.percent_eng_label1.setText(f"Selected: {self.eng_select1}%")
-        self.percent_eng_label2.setText(f"Selected: {self.eng_select2}%")
-        self.percent_wales_label1.setText(f"Selected: {self.wales_select1}%")
-        self.percent_wales_label2.setText(f"Selected: {self.wales_select2}%")
-        self.percent_ni_label1.setText(f"Selected: {self.ni_select1}%")
-        self.percent_ni_label2.setText(f"Selected: {self.ni_select2}%")
-
-        
-        
+        # Set the country 'Selected' label represent the sum of percentages among combo boxes
+        country_label.setText(f"Selected: {country_select}%")
