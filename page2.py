@@ -188,6 +188,8 @@ class Page2(QWidget):
         # Check if the sum is over 100. If so, mark it in red
         if self.scot_select > 100:
             self.percent_label.setStyleSheet("font-size: 14px; color: red; font: bold")
+        elif self.scot_select == 100:
+            self.percent_label.setStyleSheet("font-size: 14px; color: green; font: bold")
         else:
             self.percent_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
         
@@ -204,6 +206,8 @@ class Page2(QWidget):
         # Check if the sum is over 100. If so, mark it in red
         if self.uk_select > 100:
             self.uk_percent_label.setStyleSheet("font-size: 14px; color: red; font: bold")
+        elif self.uk_select == 100:
+            self.uk_percent_label.setStyleSheet("font-size: 14px; color: green; font: bold")
         else:
             self.uk_percent_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
         
