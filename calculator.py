@@ -125,6 +125,7 @@ class Calculator(QWidget):
         # Connect signals for page6
         self.page6.button1.clicked.connect(lambda: self.go_to_page(3))
         self.page6.button2.clicked.connect(lambda: self.page6.find_invalid_values(self.addresses, self.invalid))
+        self.page6.button3.clicked.connect(self.page6.clear)
     
 
         # Set style for the widgets in the application
@@ -146,6 +147,7 @@ class Calculator(QWidget):
         two = QIcon(os.path.join(basedir, 'icons/2.svg'))
         emissions = QIcon(os.path.join(basedir, 'icons/emissions.svg'))
         error = QIcon(os.path.join(basedir, 'icons/error.svg'))
+        clear = QIcon(os.path.join(basedir, 'icons/clear.svg'))
 
 
         # Set icons for all buttons
@@ -168,6 +170,7 @@ class Calculator(QWidget):
         self.page5.button4.setIcon(error)
         self.page6.button1.setIcon(back)
         self.page6.button2.setIcon(error)
+        self.page6.button3.setIcon(clear)
 
 
     """==============================================Methods for pages=============================================="""

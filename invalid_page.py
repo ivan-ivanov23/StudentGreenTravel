@@ -24,8 +24,10 @@ class InvalidPage(QWidget):
         self.button_layout = QHBoxLayout()
         self.button1 = QPushButton("Back")
         self.button2 = QPushButton("Show Invalid Postcodes")
+        self.button3 = QPushButton("Clear")
         self.button_layout.addWidget(self.button1)
         self.button_layout.addWidget(self.button2)
+        self.button_layout.addWidget(self.button3)
 
         # Add button layout to main layout
         layout.addLayout(self.button_layout)
@@ -46,4 +48,6 @@ class InvalidPage(QWidget):
                     if value in invalid_postcodes:
                         self.invalid_list.addItem(f"{index + 2}: {row.tolist()}")
                         break
-        
+    
+    def clear(self):
+        self.invalid_list.clear()
