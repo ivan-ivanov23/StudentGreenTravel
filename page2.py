@@ -30,7 +30,7 @@ class Page2(QWidget):
 
         # Number of trips combo box
         trips_label = QLabel("Number of trips")
-        trips_label.setStyleSheet("font-weight: bold; font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        trips_label.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
         trips_label.setFixedWidth(270)
         self.trips_combo = QComboBox()
         self.trips_combo.setFixedSize(QSize(50, 20))
@@ -66,11 +66,11 @@ class Page2(QWidget):
 
         # Scotland combo boxes and labels
         scotland_label = QLabel("Scotland")
-        scotland_label.setStyleSheet("font-weight: bold; font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        scotland_label.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
         grid.addWidget(scotland_label, 0, 0)
 
         bus_scotland_label = QLabel("Bus %")
-        bus_scotland_label.setStyleSheet("font: Arial; font-size: 12px")
+        bus_scotland_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(bus_scotland_label, 1, 0)
         self.combo_bus_scot = QComboBox()
         for i in range(101):
@@ -79,7 +79,7 @@ class Page2(QWidget):
         grid.addWidget(self.combo_bus_scot, 1, 1)
 
         car_scotland_label = QLabel("Car %", self)
-        car_scotland_label.setStyleSheet("font: Arial; font-size: 12px")
+        car_scotland_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(car_scotland_label, 2, 0)
         self.combo_car_scot = QComboBox(self)
         for i in range(101):
@@ -88,7 +88,7 @@ class Page2(QWidget):
         grid.addWidget(self.combo_car_scot, 2, 1)
 
         rail_scotland_label = QLabel("Train %", self)
-        rail_scotland_label.setStyleSheet("font: Arial; font-size: 12px")
+        rail_scotland_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(rail_scotland_label, 3, 0)
         self.combo_rail_scot = QComboBox(self)
         for i in range(101):
@@ -105,11 +105,11 @@ class Page2(QWidget):
 
         # UK
         uk_label = QLabel("Rest of UK", self)
-        uk_label.setStyleSheet("font-weight: bold; font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        uk_label.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
         grid.addWidget(uk_label, 0, 3)
 
         plane_uk_label = QLabel("Plane %", self)
-        plane_uk_label.setStyleSheet("font: Arial; font-size: 12px")
+        plane_uk_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(plane_uk_label, 1, 3)
         self.plane_uk = QComboBox(self)
         for i in range(101):
@@ -117,7 +117,7 @@ class Page2(QWidget):
         grid.addWidget(self.plane_uk, 1, 4)
 
         car_uk_label = QLabel("Car %", self)
-        car_uk_label.setStyleSheet("font: Arial; font-size: 12px")
+        car_uk_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(car_uk_label, 2, 3)
         self.car_uk = QComboBox(self)
         for i in range(101):
@@ -125,7 +125,7 @@ class Page2(QWidget):
         grid.addWidget(self.car_uk, 2, 4)
 
         rail_uk_label = QLabel("Train %", self)
-        rail_uk_label.setStyleSheet("font: Arial; font-size: 12px")
+        rail_uk_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(rail_uk_label, 3, 3)
         self.rail_uk = QComboBox(self)
         for i in range(101):
