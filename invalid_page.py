@@ -35,12 +35,15 @@ class InvalidPage(QWidget):
         self.invalid_list.clear()
         # Combine the list of lists invalid_values into a single list
         invalid_postcodes = [item for sublist in invalid_values for item in sublist]
-        
-        # Iterate over each row in the dataframe
-        for index, row in dataframe.iterrows():
-            # Check each value in the row for validity
-            for value in row:
-                if value in invalid_postcodes:
-                    self.invalid_list.addItem(f"{index + 2}: {row.tolist()}")
-                    break
+
+        if len(invalid_postcodes) == 0:
+            self.invalid_list.addItem("No invalid postcodes found.")
+        else:
+            # Iterate over each row in the dataframe
+            for index, row in dataframe.iterrows():
+                # Check each value in the row for validity
+                for value in row:
+                    if value in invalid_postcodes:
+                        self.invalid_list.addItem(f"{index + 2}: {row.tolist()}")
+                        break
         
