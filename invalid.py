@@ -22,7 +22,7 @@ def find_invalid_values(excel_file, invalid_values):
 # Example usage
 if __name__ == "__main__":
     # Provide the path to your Excel file
-    excel_file = "data/Sample Data - 2019 - UK & Home Students.xlsx"
+    excel_file = "datasets/Sample Data - 2019 - UK & Home Students.xlsx"
     
     # List of invalid values to search for
     invalid_values =  ['AZ1078', 'BE3319', 'ED548JP', 'F92HK7F', 'H91VSKW', 'L1533', 'L-4150', 'L-6462', 'LT-93260', 'LV2016', 'R7A0R9', 'T9W1T5', 'V2T4W4']

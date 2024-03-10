@@ -17,6 +17,7 @@ from page2 import Page2
 from page3 import Page3
 from results_distance import ResultDistance
 from results_emissions import ResultEmissions
+from invalid_page import InvalidPage
 from main import main
 import plotly.express as px
 import plotly.graph_objects as go
@@ -40,6 +41,7 @@ class Calculator(QWidget):
         self.north_ireland = None
         self.england = None
         self.emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach': 0.027181, 'taxi': 0.148615, 'ferry': 0.02555, 'plane': 0.03350}
+        self.invalid = []
 
     def initializeUI(self):
         """Set up application GUI"""
@@ -55,6 +57,7 @@ class Calculator(QWidget):
         self.layout3 = QVBoxLayout()
         self.layout4 = QHBoxLayout()
         self.layout5 = QVBoxLayout()
+        self.layout6 = QVBoxLayout()
 
         # Stacked layout to hold the pages
         # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm 
@@ -66,6 +69,8 @@ class Calculator(QWidget):
         self.page3 = Page3()
         self.page4 = ResultDistance()
         self.page5 = ResultEmissions()
+        self.page6 = InvalidPage()
+
 
         # Add the pages to the stacked layout and set the stacked layout as the main layout
         self.stackedLayout.addWidget(self.page1)
@@ -73,6 +78,7 @@ class Calculator(QWidget):
         self.stackedLayout.addWidget(self.page3)
         self.stackedLayout.addWidget(self.page4)
         self.stackedLayout.addWidget(self.page5)
+        self.stackedLayout.addWidget(self.page6)
 
         # Set the stacked layout as the main layout
         self.setLayout(self.stackedLayout)
@@ -100,6 +106,7 @@ class Calculator(QWidget):
         self.page4.button1.clicked.connect(lambda: self.go_to_page(2))
         self.page4.button2.clicked.connect(lambda: self.go_to_page(0))
         self.page4.button3.clicked.connect(lambda: self.go_to_page(4))
+        self.page4.button4.clicked.connect(lambda: self.go_to_page(5))
         self.page4.radio1.clicked.connect(self.click_radio1)
         self.page4.radio2.clicked.connect(self.click_radio2)
         self.page4.radio3.clicked.connect(self.click_radio3)
@@ -109,10 +116,15 @@ class Calculator(QWidget):
         self.page5.button1.clicked.connect(lambda: self.go_to_page(2))
         self.page5.button2.clicked.connect(lambda: self.go_to_page(0))
         self.page5.button3.clicked.connect(lambda: self.go_to_page(3))
+        self.page5.button4.clicked.connect(lambda: self.go_to_page(5))
         self.page5.radio1.clicked.connect(self.click_radio1)
         self.page5.radio2.clicked.connect(self.click_radio2)
         self.page5.radio3.clicked.connect(self.click_radio3)
         self.page5.radio4.clicked.connect(self.click_radio4)
+
+        # Connect signals for page6
+        self.page6.button1.clicked.connect(lambda: self.go_to_page(3))
+        self.page6.button2.clicked.connect(lambda: self.page6.find_invalid_values(self.addresses, self.invalid))
     
 
         # Set style for the widgets in the application
@@ -133,6 +145,7 @@ class Calculator(QWidget):
         one = QIcon(os.path.join(basedir, 'icons/1.svg'))
         two = QIcon(os.path.join(basedir, 'icons/2.svg'))
         emissions = QIcon(os.path.join(basedir, 'icons/emissions.svg'))
+        error = QIcon(os.path.join(basedir, 'icons/error.svg'))
 
 
         # Set icons for all buttons
@@ -151,6 +164,10 @@ class Calculator(QWidget):
         self.page2.submit.setIcon(submit)
         self.page3.submit.setIcon(submit)
         self.page2.next_button2.setIcon(next_button)
+        self.page4.button4.setIcon(error)
+        self.page5.button4.setIcon(error)
+        self.page6.button1.setIcon(back)
+        self.page6.button2.setIcon(error)
 
 
     """==============================================Methods for pages=============================================="""
@@ -161,13 +178,16 @@ class Calculator(QWidget):
         # If the user selected a file, then read it using pandas
         if file:
         # Read address file
-            addresses = pd.read_excel(file.name, engine='openpyxl')
+            self.addresses = pd.read_excel(file.name, engine='openpyxl')
             # Shuffle dataframe with addresses
-            addresses = addresses.sample(frac=1)
-            addresses.iloc[:, 1] = addresses.iloc[:, 1].str.replace(' ', '')
-            # Add the file name to the label text with the file name withouth the path
+            self.addresses = self.addresses.sample(frac=1)
+            self.addresses.iloc[:, 1] = self.addresses.iloc[:, 1].str.replace(' ', '')
+            # Add the file name to the label text with the file name without the path
             self.page1.file_label.setText(f"<b>Dataset:</b> {file.name.split('/')[-1]}")
-            self.scotland, self.wales, self.north_ireland, self.england = determine_postcode(addresses.iloc[:, 1])
+            self.scotland, self.wales, self.north_ireland, self.england, self.invalid1 = determine_postcode(self.addresses.iloc[:, 1])
+            # Call the add_invalid function from the invalid page to add the invalid postcodes
+            # pass the invalid postcodes as list 
+            self.invalid.extend([self.invalid1])
             # Emit signal that a file has been selected
             self.file_selected.emit(True)
         else:
@@ -368,7 +388,9 @@ class Calculator(QWidget):
         QtWidgets.QApplication.processEvents()
 
         # Call the main function
-        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        self.emissions, self.distances, self.total_emissions, self.total_distance_dict, self.invalid2 = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        # Call the add_invalid function from the invalid page to add the invalid postcodes
+        self.invalid.extend(self.invalid2)
         # Update the progress bar
         self.pbar.setValue(50)
         QtWidgets.QApplication.processEvents()

@@ -23,7 +23,7 @@ class Page2(QWidget):
         self.layout2.addWidget(label)
 
         instruction1 = QLabel("""
-            <b>Tip:</b> Select the number of study-related trips a student makes on average per year.""")
+            <b>Tip:</b> Select or enter the number of study-related trips a student makes on average per year.""")
         instruction1.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
         self.layout2.addWidget(instruction1)
 
@@ -41,7 +41,7 @@ class Page2(QWidget):
         self.layout2.addWidget(self.trips_combo)
 
         instruction2 = QLabel("""
-            <b>Tip:</b> Select the percentage of students traveling by each transport method 
+            <b>Tip:</b> Select or enter the percentage of students traveling by each transport method 
             for the middle leg of their journey, from the transportation hub in their city to Aberdeen.
             <br><br>
             The percentages selected under the 'Scotland' section will be used for the Scottish students,
