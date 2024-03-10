@@ -14,12 +14,19 @@ class InvalidPage(QWidget):
         self.invalid_label = QLabel(f"Invalid Postcodes")
         self.invalid_label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
         layout.addWidget(self.invalid_label)
-        self.setLayout(layout)
 
         # Create list widget to hold invalid postcodes
         self.invalid_list = QListWidget()
         self.invalid_list.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
-        layout.addWidget(self.invalid_list)
+
+        instruction = QLabel("""
+            <b>Tip:</b> Click the '<b>Show Invalid Postcodes</b>' button to display the invalid postcodes.
+            <br>
+            The list below will display the row number in the used dataset and its contents.
+            <br>
+            Click the '<b>Clear</b>' button to clear the list of invalid postcodes.
+        """)
+        instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
 
         # Layout for buttons
         self.button_layout = QHBoxLayout()
@@ -31,6 +38,9 @@ class InvalidPage(QWidget):
         self.button_layout.addWidget(self.button3)
 
         # Add button layout to main layout
+        layout.addWidget(self.invalid_label)
+        layout.addWidget(instruction)
+        layout.addWidget(self.invalid_list)
         layout.addLayout(self.button_layout)
         self.setLayout(layout)
 
