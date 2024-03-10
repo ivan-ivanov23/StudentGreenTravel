@@ -54,8 +54,8 @@ def determine_postcode(postcodes):
     north_ireland = postcodes[postcodes.str[:2] == 'BT']
     # Invalid postcodes are not in scotland, england, wales or north_ireland
     invalid = postcodes[~(postcodes.isin(scotland) | postcodes.isin(england) | postcodes.isin(wales) | postcodes.isin(north_ireland))]
-    find_country(invalid)
-    return scotland, wales, north_ireland, england
+    new_invalid = find_country(invalid)
+    return scotland, wales, north_ireland, england, new_invalid
 
 def find_country(postcodes):
     """Finds the admin district for a passed list with postcodes of a country.""" 
@@ -86,7 +86,7 @@ def find_country(postcodes):
                             result[postcode] = item["result"]["country"]
                         else:
                             result[postcode] = 'Uknown country'
-    # print(result)
+    return result
 
 
 

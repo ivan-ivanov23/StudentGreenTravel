@@ -27,7 +27,7 @@ class Page3(QWidget):
         label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
 
         instruction = QLabel("""
-                             <b>Tip:</b> Select the percentage of students traveling by each transport method 
+                             <b>Tip:</b> Select or enter the percentage of students traveling by each transport method 
                              for the final leg of their journey. That is from the bus/rail station or airport to the university.
                              <br>
                              Please, do this for each of the countries in the list on the left. 

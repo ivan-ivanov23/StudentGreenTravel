@@ -122,8 +122,10 @@ class ResultEmissions(QWidget):
         self.button1 = QPushButton("Back")
         self.button2 = QPushButton("Menu")
         self.button3 = QPushButton("Show Council Distances")
+        self.button4 = QPushButton("Show Invalid Data")
         button_layout.addWidget(self.button1)
         button_layout.addWidget(self.button2)
+        button_layout.addWidget(self.button4)
         button_layout.addWidget(self.button3)
         
         # Add hbox layout to main layout
