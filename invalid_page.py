@@ -12,12 +12,13 @@ class InvalidPage(QWidget):
     def initializeUI(self):
         layout = QVBoxLayout()
         self.invalid_label = QLabel(f"Invalid Postcodes")
-        self.invalid_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.invalid_label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
         layout.addWidget(self.invalid_label)
         self.setLayout(layout)
 
         # Create list widget to hold invalid postcodes
         self.invalid_list = QListWidget()
+        self.invalid_list.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
         layout.addWidget(self.invalid_list)
 
         # Layout for buttons
