@@ -2,12 +2,12 @@
 # Sources of code snippets are provided in the comments of functions.
 # Author: Ivan Ivanov
 
+import math
 import pandas as pd
-import pandas as pd
-from itertools import islice
-import requests
+from itertools import islice, accumulate
 from utils import split_list
 import os
+import requests
 
 # Get the absolute path to the directory containing the script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -93,44 +93,30 @@ def find_country(postcodes):
 def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
     """The function divides the list of Scottish postcodes into 3 parts based on the percentages of each transport method."""
 
-    # Calculate the number of postcodes for each transport method
-    p_bus_scotland = int(len(scot_addresses) * (p_bus / 100))
-    p_car_scotland = int(len(scot_addresses) * (p_car / 100))
-    p_rail_scotland = int(len(scot_addresses) * (p_rail / 100))
+    p_bus_scot = math.ceil(len(scot_addresses) * (p_bus / 100))
+    p_car_scot = math.ceil(len(scot_addresses) * (p_car / 100))   
+    p_rail_scot = len(scot_addresses) - p_bus_scot - p_car_scot
 
-    # Source: https://stackoverflow.com/questions/38861457/splitting-a-list-into-uneven-groups
-    seclist = [p_bus_scotland, p_car_scotland, p_rail_scotland]
-    it = iter(scot_addresses)
-    remaining = list(it)
-    # randomly divide 'scotland' into 3 parts based on the percentages and make sure they don't overlap with islice
-    bus, car, rail = [list(islice(it, 0, i)) for i in seclist]
-    if remaining:
-        bus.extend(remaining)
+    split_list = [p_bus_scot, p_car_scot, p_rail_scot]
 
-    # List of lists to store the postcodes for each transport method
-    transport_scot = [bus, car, rail]
+    # Source: Method 3 in https://www.geeksforgeeks.org/python-split-list-in-uneven-groups/
+    res = [list(islice(scot_addresses, start, end)) for start, end in zip([0]+list(accumulate(split_list)), accumulate(split_list))]
 
-    return transport_scot
+    return res
 
 def divide_uk_addresses(country: list, p_plane, p_car, p_rail):
     """The function divides the list of UK postcodes into 3 parts based on the percentages of each transport method.
         It is used for England, Wales and Northern Ireland."""
 
     # Calculate the number of postcodes for each transport method
-    p_plane_uk = int(len(country) * (p_plane / 100))
-    p_car_uk = int(len(country) * (p_car / 100))
-    p_rail_uk = int(len(country) * (p_rail / 100))
+    p_plane_uk = math.ceil(len(country) * (p_plane / 100))
+    p_car_uk = math.ceil(len(country) * (p_car / 100))
+    p_rail_uk = len(country) - p_plane_uk - p_car_uk 
+
     # randomly divide 'uk' into 3 parts based on the percentages
     seclist_uk = [p_plane_uk, p_car_uk, p_rail_uk]
-    # Iterator to split the list into 3 parts
-    it = iter(country)
-    remaining = list(it)
-    # randomly divide 'england' into 3 parts based on the percentages and make sure they don't overlap with islice
-    plane_uk, car_uk, rail_uk = [list(islice(it, 0, i)) for i in seclist_uk]
-    if remaining:
-        plane_uk.extend(remaining)
 
-    # List of lists to store the postcodes for each transport method
-    transport = [plane_uk, car_uk, rail_uk]
+    # Source: Method 3 in https://www.geeksforgeeks.org/python-split-list-in-uneven-groups/
+    res_uk = [list(islice(country, start, end)) for start, end in zip([0]+list(accumulate(seclist_uk)), accumulate(seclist_uk))]
 
-    return transport
+    return res_uk

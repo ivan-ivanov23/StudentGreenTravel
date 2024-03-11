@@ -2,7 +2,8 @@
 # Sources of code snippets are provided in the comments of functions.
 # Author: Ivan Ivanov
 
-from itertools import islice
+from itertools import islice, accumulate
+import math
 
 # Students is a list of students from a country
 # mode_of_transport is a string representing the mode of transport the students use to travel from home to Aberdeen
@@ -12,26 +13,21 @@ def fleg_assumptions(students: list, mode_of_transport: str, hub_uni: float, car
     num_students = len(students)
     
     # Calculate the number of students for each mode of transport
-    p_car = int((car / 100) * num_students)
-    p_taxi = int((taxi / 100) * num_students)
-    p_bus = int((bus / 100) * num_students)
-    p_walk = int((walk / 100) * num_students)
+    p_car = math.ceil((car / 100) * num_students)
+    p_taxi = math.ceil((taxi / 100) * num_students)
+    p_bus = math.ceil((bus / 100) * num_students)
+    p_walk = num_students - p_car - p_taxi - p_bus
 
-    # Divide the list of students into 4 parts based on the percentages
-    # Inspired by answer from senderle: https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
+    
     seclist = [p_car, p_taxi, p_bus, p_walk]
-    it = iter(students)
-    remaining = list(it)
-    car1, taxi1, bus1, walk1 = [list(islice(it, 0, i)) for i in seclist]
-    # If there are remaining students, add them to the taxi list
-    if remaining:
-        taxi1.extend(remaining)
+    # Source: Method 3 in https://www.geeksforgeeks.org/python-split-list-in-uneven-groups/
+    res = [list(islice(students, start, end)) for start, end in zip([0]+list(accumulate(seclist)), accumulate(seclist))]
 
     # Calculate the total distance for each mode of transport
-    total_car = len(car1)
-    total_taxi = len(taxi1)
-    total_bus = len(bus1)
-    total_walk = len(walk1)
+    total_car = len(res[0])
+    total_taxi = len(res[1])
+    total_bus = len(res[2])
+    total_walk = len(res[3])
 
     # Add the distance to the university from the bus/rail station or airport
     if mode_of_transport == "bus/rail":
