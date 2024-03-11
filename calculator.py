@@ -313,7 +313,6 @@ class Calculator(QWidget):
             self.hundred_percent_page3.emit(True)
             # Combine the bus and rail postcodes for Scotland in a list to be used in the final leg function
             scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
-            # Call the select_country function
             # Scotland
             self.scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
 
