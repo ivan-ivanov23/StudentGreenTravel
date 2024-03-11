@@ -21,7 +21,11 @@ def fleg_assumptions(students: list, mode_of_transport: str, hub_uni: float, car
     # Inspired by answer from senderle: https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
     seclist = [p_car, p_taxi, p_bus, p_walk]
     it = iter(students)
+    remaining = list(it)
     car1, taxi1, bus1, walk1 = [list(islice(it, 0, i)) for i in seclist]
+    # If there are remaining students, add them to the taxi list
+    if remaining:
+        taxi1.extend(remaining)
 
     # Calculate the total distance for each mode of transport
     total_car = len(car1)

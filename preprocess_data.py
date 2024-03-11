@@ -101,8 +101,11 @@ def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
     # Source: https://stackoverflow.com/questions/38861457/splitting-a-list-into-uneven-groups
     seclist = [p_bus_scotland, p_car_scotland, p_rail_scotland]
     it = iter(scot_addresses)
+    remaining = list(it)
     # randomly divide 'scotland' into 3 parts based on the percentages and make sure they don't overlap with islice
     bus, car, rail = [list(islice(it, 0, i)) for i in seclist]
+    if remaining:
+        bus.extend(remaining)
 
     # List of lists to store the postcodes for each transport method
     transport_scot = [bus, car, rail]
@@ -119,11 +122,13 @@ def divide_uk_addresses(country: list, p_plane, p_car, p_rail):
     p_rail_uk = int(len(country) * (p_rail / 100))
     # randomly divide 'uk' into 3 parts based on the percentages
     seclist_uk = [p_plane_uk, p_car_uk, p_rail_uk]
-
     # Iterator to split the list into 3 parts
     it = iter(country)
+    remaining = list(it)
     # randomly divide 'england' into 3 parts based on the percentages and make sure they don't overlap with islice
     plane_uk, car_uk, rail_uk = [list(islice(it, 0, i)) for i in seclist_uk]
+    if remaining:
+        plane_uk.extend(remaining)
 
     # List of lists to store the postcodes for each transport method
     transport = [plane_uk, car_uk, rail_uk]
