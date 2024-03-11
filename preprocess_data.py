@@ -92,15 +92,11 @@ def find_country(postcodes):
 
 def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
     """The function divides the list of Scottish postcodes into 3 parts based on the percentages of each transport method."""
-    # Scotland
-    percent_bus = p_bus
-    percent_car = p_car
-    percent_rail = p_rail
 
     # Calculate the number of postcodes for each transport method
-    p_bus_scotland = int(len(scot_addresses) * (percent_bus / 100))
-    p_car_scotland = int(len(scot_addresses) * (percent_car / 100))
-    p_rail_scotland = int(len(scot_addresses) * (percent_rail / 100))
+    p_bus_scotland = int(len(scot_addresses) * (p_bus / 100))
+    p_car_scotland = int(len(scot_addresses) * (p_car / 100))
+    p_rail_scotland = int(len(scot_addresses) * (p_rail / 100))
 
     # Source: https://stackoverflow.com/questions/38861457/splitting-a-list-into-uneven-groups
     seclist = [p_bus_scotland, p_car_scotland, p_rail_scotland]
@@ -116,14 +112,11 @@ def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
 def divide_uk_addresses(country: list, p_plane, p_car, p_rail):
     """The function divides the list of UK postcodes into 3 parts based on the percentages of each transport method.
         It is used for England, Wales and Northern Ireland."""
-    percent_plane_uk = p_plane
-    percent_car_uk = p_car
-    percent_rail_uk = p_rail
 
     # Calculate the number of postcodes for each transport method
-    p_plane_uk = int(len(country) * (percent_plane_uk / 100))
-    p_car_uk = int(len(country) * (percent_car_uk / 100))
-    p_rail_uk = int(len(country) * (percent_rail_uk / 100))
+    p_plane_uk = int(len(country) * (p_plane / 100))
+    p_car_uk = int(len(country) * (p_car / 100))
+    p_rail_uk = int(len(country) * (p_rail / 100))
     # randomly divide 'uk' into 3 parts based on the percentages
     seclist_uk = [p_plane_uk, p_car_uk, p_rail_uk]
 
