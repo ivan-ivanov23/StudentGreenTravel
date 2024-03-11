@@ -58,18 +58,18 @@ def fleg_assumptions(students: list, mode_of_transport: str, hub_uni: float, car
         fleg_assumptions(students, mode_of_transport, hub_uni)
 
 
-def assign_scotland(bus_rail_students, pcar, ptaxi, pbus, pwalk):
+def assign_scotland(bus_rail_students, p_car, p_taxi, p_bus, p_walk):
     """The function assigns the students from Scotland to the mode of transport they use to travel from home to Aberdeen.
        It calls the fleg_assumptions function to calculate the distance for each mode of transport for Scotland."""
     station_uni = 3.0
-    bus_rail = fleg_assumptions(bus_rail_students, "bus/rail", station_uni, pcar, ptaxi, pbus, pwalk)
+    bus_rail = fleg_assumptions(bus_rail_students, "bus/rail", station_uni, p_car, p_taxi, p_bus, p_walk)
     return bus_rail
 
-def assign_uk(bus_rail_students, plane_students, pcar, ptaxi, pbus, pwalk, pcar_plane, ptaxi_plane, pbus_plane, pwalk_plane):
+def assign_uk(bus_rail_students, plane_students, p_car, p_taxi, p_bus, p_walk, p_car_plane, p_taxi_plane, p_bus_plane, p_walk_plane):
     """The function assigns the students from England, Wales and Northern Ireland to the mode of transport they use to travel from home to Aberdeen.
          It calls the fleg_assumptions function to calculate the distance for each mode of transport for England, Wales and Northern Ireland."""
     station_uni = 3.0
     airport_uni = 8.1
-    bus_rail = fleg_assumptions(bus_rail_students, "bus/rail", station_uni, pcar, ptaxi, pbus, pwalk)
-    plane = fleg_assumptions(plane_students, "plane", airport_uni, pcar_plane, ptaxi_plane, pbus_plane, pwalk_plane)
+    bus_rail = fleg_assumptions(bus_rail_students, "bus/rail", station_uni, p_car, p_taxi, p_bus, p_walk)
+    plane = fleg_assumptions(plane_students, "plane", airport_uni, p_car_plane, p_taxi_plane, p_bus_plane, p_walk_plane)
     return bus_rail, plane
