@@ -73,6 +73,7 @@ class Page2(QWidget):
         bus_scotland_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(bus_scotland_label, 1, 0)
         self.combo_bus_scot = QComboBox()
+        self.combo_bus_scot.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             val = str(i)
             self.combo_bus_scot.addItem(val)
@@ -82,6 +83,7 @@ class Page2(QWidget):
         car_scotland_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(car_scotland_label, 2, 0)
         self.combo_car_scot = QComboBox(self)
+        self.combo_car_scot.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             val = str(i)
             self.combo_car_scot.addItem(val)
@@ -91,6 +93,7 @@ class Page2(QWidget):
         rail_scotland_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(rail_scotland_label, 3, 0)
         self.combo_rail_scot = QComboBox(self)
+        self.combo_rail_scot.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             val = str(i)
             self.combo_rail_scot.addItem(val)
@@ -112,6 +115,7 @@ class Page2(QWidget):
         plane_uk_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(plane_uk_label, 1, 3)
         self.plane_uk = QComboBox(self)
+        self.plane_uk.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             self.plane_uk.addItem(str(i))
         grid.addWidget(self.plane_uk, 1, 4)
@@ -120,6 +124,7 @@ class Page2(QWidget):
         car_uk_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(car_uk_label, 2, 3)
         self.car_uk = QComboBox(self)
+        self.car_uk.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             self.car_uk.addItem(str(i))
         grid.addWidget(self.car_uk, 2, 4)
@@ -128,6 +133,7 @@ class Page2(QWidget):
         rail_uk_label.setStyleSheet("font: Arial; font-size: 14px")
         grid.addWidget(rail_uk_label, 3, 3)
         self.rail_uk = QComboBox(self)
+        self.rail_uk.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             self.rail_uk.addItem(str(i))
         grid.addWidget(self.rail_uk, 3, 4)
