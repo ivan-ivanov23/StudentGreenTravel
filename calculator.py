@@ -40,6 +40,7 @@ class Calculator(QWidget):
         self.wales = None
         self.north_ireland = None
         self.england = None
+        self.aberdeen = None
         self.emission_factors = {'car': 0.18264,  'rail': 0.035463, 'bus': 0.118363, 'coach': 0.027181, 'taxi': 0.148615, 'ferry': 0.02555, 'plane': 0.03350}
         self.invalid = []
 
@@ -187,7 +188,7 @@ class Calculator(QWidget):
             self.addresses.iloc[:, 1] = self.addresses.iloc[:, 1].str.replace(' ', '')
             # Add the file name to the label text with the file name without the path
             self.page1.file_label.setText(f"<b>Dataset:</b> {file.name.split('/')[-1]}")
-            self.scotland, self.wales, self.north_ireland, self.england, self.invalid1 = determine_postcode(self.addresses.iloc[:, 1])
+            self.scotland, self.wales, self.north_ireland, self.england, self.aberdeen, self.invalid1 = determine_postcode(self.addresses.iloc[:, 1])
             # Call the add_invalid function from the invalid page to add the invalid postcodes
             # pass the invalid postcodes as list 
             self.invalid.extend([self.invalid1])
@@ -390,9 +391,7 @@ class Calculator(QWidget):
         QtWidgets.QApplication.processEvents()
 
         # Call the main function
-        self.emissions, self.distances, self.total_emissions, self.total_distance_dict, self.invalid2 = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
-        # Call the add_invalid function from the invalid page to add the invalid postcodes
-        self.invalid.extend(self.invalid2)
+        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
         # Update the progress bar
         self.pbar.setValue(50)
         QtWidgets.QApplication.processEvents()
