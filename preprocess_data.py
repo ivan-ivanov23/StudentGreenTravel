@@ -37,7 +37,7 @@ airports = pd.read_csv(airports_path, usecols=['Unnamed: 0', 'Latitude', 'Longit
 airports_dict = dict(zip(airports['Unnamed: 0'], zip(airports['Latitude'], airports['Longitude'])))
 
 
-scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
+scot_postcodes = ['DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
 eng_postcodes = ['AL', 'BA', 'BB', 'BD', 'BH', 'BL', 'BN', 'BR', 'BS', 'CA', 'CB', 'CH', 'CM', 'CO', 'CR', 'CT', 'CV', 'CW', 'DA', 'DE', 'DH', 'DL', 'DN', 'DT', 'DY', 'EC', 'EN', 'EX', 'FY', 'GL', 'GU', 'HA', 'HD', 'HG', 'HP', 'HR', 'HU', 'HX', 'IG', 'IP', 'KT', 'LA', 'LD', 'LE', 'LN', 'LS', 'LU', 'ME', 'MK', 'NE', 'NG', 'NN', 'NR', 'NW', 'OL', 'OX', 'PE', 'PL', 'PO', 'PR', 'RG', 'RH', 'RM', 'SE', 'SG', 'SK', 'SL', 'SM', 'SN', 'SO', 'SP', 'SR', 'SS', 'ST', 'SW', 'TA', 'TF', 'TN', 'TQ', 'TR', 'TS', 'TW', 'UB', 'WA', 'WC', 'WD', 'WF', 'WN', 'WR', 'WS', 'WV', 'YO']
 wales_postcodes = ['CF', 'LL', 'NP', 'SA', 'SY'] 
         
@@ -52,10 +52,11 @@ def determine_postcode(postcodes):
     england = postcodes[(postcodes.str[:2].isin(eng_postcodes)) & ~(postcodes.str[:2].isin(scot_postcodes)) & ~(postcodes.str[:2]).isin(wales_postcodes)]
     wales = postcodes[postcodes.str[:2].isin(wales_postcodes)]
     north_ireland = postcodes[postcodes.str[:2] == 'BT']
+    aberdeen = postcodes[postcodes.str[:2] == 'AB']
     # Invalid postcodes are not in scotland, england, wales or north_ireland
     invalid = postcodes[~(postcodes.isin(scotland) | postcodes.isin(england) | postcodes.isin(wales) | postcodes.isin(north_ireland))]
     new_invalid = find_country(invalid)
-    return scotland, wales, north_ireland, england, new_invalid
+    return scotland, wales, north_ireland, england, aberdeen, new_invalid
 
 def find_country(postcodes):
     """Finds the admin district for a passed list with postcodes of a country.""" 
