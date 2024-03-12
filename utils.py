@@ -3,7 +3,8 @@
 # Author: Ivan Ivanov
 
 import numpy as np
-from itertools import islice
+from itertools import islice, accumulate
+import math
 
 def extract_distances(data: dict):
     """Used for extracting bus, plane and train distances from the data dictionary"""
@@ -21,23 +22,22 @@ def init_leg(initial_distances_list: list):
     p_bus = 20
 
     # Share of students travelling by each method
-    car_share = int(len(initial_distances_list) * (p_car / 100))
-    taxi_share = int(len(initial_distances_list) * (p_taxi / 100))
-    bus_share = int(len(initial_distances_list) * (p_bus / 100))
+    car_share = math.ceil(len(initial_distances_list) * (p_car / 100))
+    taxi_share = math.ceil(len(initial_distances_list) * (p_taxi / 100))
+    bus_share = len(initial_distances_list) - car_share - taxi_share
 
     # Divide the all_initial list into 3 lists,
     # one for each mode of transport according to the percentages 
     # without overlapping
-    # Inspired by answer from senderle: https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
+    # Inspired by  Method 3 in https://www.geeksforgeeks.org/python-split-list-in-uneven-groups/
     seclist = [car_share, taxi_share, bus_share]
-    it = iter(initial_distances_list)
-    car_list, taxi_list, bus_list = [list(islice(it, 0, i)) for i in seclist]
+    res = [list(islice(initial_distances_list, start, end)) for start, end in zip([0]+list(accumulate(seclist)), accumulate(seclist))]
 
     # Sum the distances to get total travelled distances
     # by each method of transport
-    total_car = np.sum(car_list)
-    total_taxi = np.sum(taxi_list)
-    total_bus = np.sum(bus_list)
+    total_car = np.sum(res[0])
+    total_taxi = np.sum(res[1])
+    total_bus = np.sum(res[2])
 
     return total_car, total_taxi, total_bus
 
