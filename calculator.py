@@ -23,6 +23,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from council_areas import get_district, group_district, find_percentage
 from style_sheets import main_stylesheet, widget_stylesheet
+from utils import create_dfs
+import numpy as np
 
 basedir = os.path.dirname(__file__)
 
@@ -93,7 +95,7 @@ class Calculator(QWidget):
 
         # Connect signals for page2
         self.page2.next_button2.clicked.connect(lambda: self.go_to_page(2))
-        self.page2.submit.clicked.connect(self.check_combo_page2)
+        self.page2.submit.clicked.connect(self.check_combo_mid_leg)
         self.page2.back.clicked.connect(lambda: self.go_to_page(0))
         self.hundred_percent.connect(self.page2.enable_page2)
 
@@ -175,6 +177,13 @@ class Calculator(QWidget):
 
 
     """==============================================Methods for pages=============================================="""
+    """@@@ Navigation between pages @@@"""
+    def go_to_page(self, i):
+        self.stackedLayout.setCurrentIndex(i)
+
+############################################################################################################################################
+
+    """@@@ Main Page (Menu) Methods @@@"""	
     def open_file(self):
         """Open a file explorer to select a file"""
         self.page1.file_label.setText("Please wait while the data is being processed...")
@@ -221,19 +230,20 @@ class Calculator(QWidget):
         self.page1.custom_radio.setChecked(False)
         self.emission_factors = self.emission_factors
 
-
-    def go_to_page(self, i):
-        self.stackedLayout.setCurrentIndex(i)
-
+############################################################################################################################################
+    
+    """@@@ Page2 (Mid Leg Journey) Methods @@@"""
     def check_trip_combo(self):
+        """Check the number of trips chosen by the user"""
         self.num_trips = int(self.page2.trips_combo.currentText())
 
 
-    def check_combo_page2(self):
+    def check_combo_mid_leg(self):
         """Check if the sum of the percentages for each country is 100. 
         If it is, then call the menu function. 
         If not, show a message box with an error.""" 
-        # Get the percentages for each country
+        # Get the percentages for Scotland and Rest of UK
+        # Rest of UK percentages are the same for England, Wales and Northern Ireland
         scot_car = int(self.page2.combo_car_scot.currentText())
         scot_bus = int(self.page2.combo_bus_scot.currentText())
         scot_rail = int(self.page2.combo_rail_scot.currentText())
@@ -258,14 +268,14 @@ class Calculator(QWidget):
             # Add a success icon to the message box
             msg.setIcon(QMessageBox.Icon.Information)
             msg.exec()
-            # take the returns from the file explorer function without running it again
-            scotland, wales, north_ireland, england = self.get_country_data()
+
             self.hundred_percent.emit(True)
+
             # call the divide_address functions for each country
-            self.travel_scotland = divide_scot_addresses(scotland, scot_bus, scot_car, scot_rail)
-            self.travel_england = divide_uk_addresses(england, uk_plane, uk_car, uk_rail)
-            self.travel_wales = divide_uk_addresses(wales, uk_plane, uk_car, uk_rail)
-            self.travel_ni = divide_uk_addresses(north_ireland, uk_plane, uk_car, uk_rail)
+            self.travel_scotland = divide_scot_addresses(self.scotland, scot_bus, scot_car, scot_rail)
+            self.travel_england = divide_uk_addresses(self.england, uk_plane, uk_car, uk_rail)
+            self.travel_wales = divide_uk_addresses(self.wales, uk_plane, uk_car, uk_rail)
+            self.travel_ni = divide_uk_addresses(self.north_ireland, uk_plane, uk_car, uk_rail)
 
         else:
             self.hundred_percent.emit(False)
@@ -278,11 +288,9 @@ class Calculator(QWidget):
             msg.setIcon(QMessageBox.Icon.Warning)
             msg.exec()
 
-    def get_country_data(self):
-        """Return the data from the file explorer function"""
-        return self.scotland, self.wales, self.north_ireland, self.england
+############################################################################################################################################
     
-    
+    """@@@  Page 3 (Final Leg of Journey) Methods @@@"""
     def check_combo_page3(self):
         """Check if the sum of the percentages for each country is 100. If it is, then call the menu function. If not, show a message box with an error.""" 
         # call extract function from page3 to get the percentages for each country
@@ -312,24 +320,46 @@ class Calculator(QWidget):
             msg.setIcon(QMessageBox.Icon.Information)
             msg.exec()
             self.hundred_percent_page3.emit(True)
+
+            # Scotland
             # Combine the bus and rail postcodes for Scotland in a list to be used in the final leg function
             scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
-            # Scotland
-            self.scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
+            scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
+
+            self.scot_car_fleg = scot_fleg[0]
+            self.scot_taxi_fleg = scot_fleg[1]
+            self.scot_bus_fleg = scot_fleg[2]
+            self.scot_walk_fleg = scot_fleg[3]
 
             # England
             eng_rail = self.travel_england[2]
             eng_plane = self.travel_england[0]
-            self.eng_fleg_bus_rail, self.eng_fleg_plane = assign_uk(eng_rail, eng_plane, eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
+            eng_fleg_bus_rail, eng_fleg_plane = assign_uk(eng_rail, eng_plane, eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
+            
+            self.eng_car_fleg = eng_fleg_bus_rail[0] + eng_fleg_plane[0]
+            self.eng_taxi_fleg = eng_fleg_bus_rail[1] + eng_fleg_plane[1]
+            self.eng_bus_fleg = eng_fleg_bus_rail[2] + eng_fleg_plane[2]
+            self.eng_walk_fleg = eng_fleg_bus_rail[3] + eng_fleg_plane[3]
+
             # Wales
             wales_rail = self.travel_wales[2]
             wales_plane = self.travel_wales[0]
-            self.wales_fleg_bus_rail, self.wales_fleg_plane = assign_uk(wales_rail, wales_plane, wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
+            wales_fleg_bus_rail, wales_fleg_plane = assign_uk(wales_rail, wales_plane, wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
+
+            self.wales_car_fleg = wales_fleg_bus_rail[0] + wales_fleg_plane[0]
+            self.wales_taxi_fleg = wales_fleg_bus_rail[1] + wales_fleg_plane[1]
+            self.wales_bus_fleg = wales_fleg_bus_rail[2] + wales_fleg_plane[2]
+            self.wales_walk_fleg = wales_fleg_bus_rail[3] + wales_fleg_plane[3]
 
             # Northern Ireland
             ni_rail = self.travel_ni[2]
             ni_plane = self.travel_ni[0]
-            self.ni_fleg_bus_rail, self.ni_fleg_plane = assign_uk(ni_rail, ni_plane, ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
+            ni_fleg_bus_rail, ni_fleg_plane = assign_uk(ni_rail, ni_plane, ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
+
+            self.ni_car_fleg = ni_fleg_bus_rail[0] + ni_fleg_plane[0]
+            self.ni_taxi_fleg = ni_fleg_bus_rail[1] + ni_fleg_plane[1]
+            self.ni_bus_fleg = ni_fleg_bus_rail[2] + ni_fleg_plane[2]
+            self.ni_walk_fleg = ni_fleg_bus_rail[3] + ni_fleg_plane[3]
 
         else:
             self.hundred_percent_page3.emit(False)
@@ -357,80 +387,32 @@ class Calculator(QWidget):
         pdg.setMaximum(100)
         pdg.show()
 
-        self.pbar.setValue(0)
-        QtWidgets.QApplication.processEvents()
-
-        # Scotland
-        scot_car_fleg = self.scot_fleg[0]
-        scot_taxi_fleg = self.scot_fleg[1]
-        scot_bus_fleg = self.scot_fleg[2]
-        scot_walk_fleg = self.scot_fleg[3]
-
-        # England
-        eng_car_fleg = self.eng_fleg_bus_rail[0] + self.eng_fleg_plane[0]
-        eng_taxi_fleg = self.eng_fleg_bus_rail[1] + self.eng_fleg_plane[1]
-        eng_bus_fleg = self.eng_fleg_bus_rail[2] + self.eng_fleg_plane[2]
-        eng_walk_fleg = self.eng_fleg_bus_rail[3] + self.eng_fleg_plane[3]
-
-        # Wales
-        wales_car_fleg = self.wales_fleg_bus_rail[0] + self.wales_fleg_plane[0]
-        wales_taxi_fleg = self.wales_fleg_bus_rail[1] + self.wales_fleg_plane[1]
-        wales_bus_fleg = self.wales_fleg_bus_rail[2] + self.wales_fleg_plane[2]
-        wales_walk_fleg = self.wales_fleg_bus_rail[3] + self.wales_fleg_plane[3]
-
-        # Northern Ireland
-        ni_car_fleg = self.ni_fleg_bus_rail[0] + self.ni_fleg_plane[0]
-        ni_taxi_fleg = self.ni_fleg_bus_rail[1] + self.ni_fleg_plane[1]
-        ni_bus_fleg = self.ni_fleg_bus_rail[2] + self.ni_fleg_plane[2]
-        ni_walk_fleg = self.ni_fleg_bus_rail[3] + self.ni_fleg_plane[3]
-
-        # Update the progress bar
-        self.pbar.setValue(25)
+        self.pbar.setValue(15)
         # This is necessary for showing and updating the progress bar
         # Source: https://stackoverflow.com/questions/30823863/pyqt-progress-bar-not-updating-or-appearing-until-100
         QtWidgets.QApplication.processEvents()
 
         # Call the main function
-        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, self.scot_car_fleg, self.scot_taxi_fleg, self.scot_bus_fleg, self.scot_walk_fleg, self.eng_car_fleg, self.eng_taxi_fleg, self.eng_bus_fleg, self.eng_walk_fleg, self.wales_car_fleg, self.wales_taxi_fleg, self.wales_bus_fleg, self.wales_walk_fleg, self.ni_car_fleg, self.ni_taxi_fleg, self.ni_bus_fleg, self.ni_walk_fleg)
         # Update the progress bar
-        self.pbar.setValue(50)
+        self.pbar.setValue(25)
         QtWidgets.QApplication.processEvents()
 
         # Scotland
-        # Remove postcodes where [:2] == 'AB'
-        self.scotland = [i for i in self.scotland if i[:2] != 'AB']
         car_dict, bus_dict, rail_dict, taxi_dict = self.create_council_areas(self.scotland, 'Scotland')
 
         # Update the progress bar
-        self.pbar.setValue(65)
+        self.pbar.setValue(45)
         QtWidgets.QApplication.processEvents()
 
+        df_car, df_car_emissions = create_dfs(car_dict, self.emission_factors['car'], self.num_trips)
+        df_bus, df_bus_emissions = create_dfs(bus_dict, self.emission_factors['coach'], self.num_trips)
+        df_rail, df_rail_emissions = create_dfs(rail_dict, self.emission_factors['rail'], self.num_trips)
+        df_taxi, df_taxi_emissions = create_dfs(taxi_dict, self.emission_factors['taxi'], self.num_trips)
 
-        df_car = pd.DataFrame(car_dict)
-        # Multiply the distances by the self.num_trips
-        df_car = df_car * self.num_trips
-        df_car = df_car.round(1)
-        # Emissions df
-        df_car_emissions = df_car * self.emission_factors['car']
-        df_car_emissions = df_car_emissions.round(1)
-
-        df_bus = pd.DataFrame(bus_dict)
-        df_bus = df_bus * self.num_trips
-        df_bus = df_bus.round(1)
-        df_bus_emissions = df_bus * self.emission_factors['coach']
-        df_bus_emissions = df_bus_emissions.round(1)
-
-        df_rail = pd.DataFrame(rail_dict)
-        df_rail = df_rail * self.num_trips
-        df_rail = df_rail.round(1)
-        df_rail_emissions = df_rail * self.emission_factors['rail']
-        df_rail_emissions = df_rail_emissions.round(1)
-
-        df_taxi = pd.DataFrame(taxi_dict)
-        df_taxi = df_taxi * self.num_trips
-        df_taxi = df_taxi.round(1)
-        df_taxi_emissions = df_taxi * self.emission_factors['taxi']
-        df_taxi_emissions = df_taxi_emissions.round(1)
+        # Update the progress bar
+        self.pbar.setValue(50)
+        QtWidgets.QApplication.processEvents()
 
         """=======================Scotland Council Distances=========================="""
         self.scot_car = go.Figure(
@@ -478,31 +460,17 @@ class Calculator(QWidget):
         )
 
 
-        self.pbar.setValue(75)
-        QtWidgets.QApplication.processEvents()
+
 
         # Do same for England
         car_dict_eng, bus_dict_eng, rail_dict_eng, taxi_dict_eng = self.create_council_areas(self.england, 'England')
-        df_car_eng = pd.DataFrame(car_dict_eng)
-        df_car_eng = df_car_eng * self.num_trips
-        df_car_eng = df_car_eng.round(1)
-        df_car_emissions_eng = df_car_eng * self.emission_factors['car']
-        df_car_emissions_eng = df_car_emissions_eng.round(1)
-        df_bus_eng = pd.DataFrame(bus_dict_eng)
-        df_bus_eng = df_bus_eng * self.num_trips
-        df_bus_eng = df_bus_eng.round(1)
-        df_bus_emissions_eng = df_bus_eng * self.emission_factors['coach']
-        df_bus_emissions_eng = df_bus_emissions_eng.round(1)
-        df_rail_eng = pd.DataFrame(rail_dict_eng)
-        df_rail_eng = df_rail_eng * self.num_trips
-        df_rail_eng = df_rail_eng.round(1)
-        df_rail_emissions_eng = df_rail_eng * self.emission_factors['rail']
-        df_rail_emissions_eng = df_rail_emissions_eng.round(1)
-        df_taxi_eng = pd.DataFrame(taxi_dict_eng)
-        df_taxi_eng = df_taxi_eng * self.num_trips
-        df_taxi_eng = df_taxi_eng.round(1)
-        df_taxi_emissions_eng = df_taxi_eng * self.emission_factors['taxi']
-        df_taxi_emissions_eng = df_taxi_emissions_eng.round(1)
+        df_car_eng, df_car_emissions_eng = create_dfs(car_dict_eng, self.emission_factors['car'], self.num_trips)
+        df_bus_eng, df_bus_emissions_eng = create_dfs(bus_dict_eng, self.emission_factors['coach'], self.num_trips)
+        df_rail_eng, df_rail_emissions_eng = create_dfs(rail_dict_eng, self.emission_factors['rail'], self.num_trips)
+        df_taxi_eng, df_taxi_emissions_eng = create_dfs(taxi_dict_eng, self.emission_factors['taxi'], self.num_trips)
+
+        self.pbar.setValue(55)
+        QtWidgets.QApplication.processEvents()
 
         """=======================England Council Distances=========================="""
         self.eng_car = go.Figure(
@@ -551,31 +519,15 @@ class Calculator(QWidget):
             layout=go.Layout(title='Taxi Travel Emissions Across English Councils (kg CO2)')
         )
 
-        self.pbar.setValue(85)
-        QtWidgets.QApplication.processEvents()
-
         # Do same for Wales
         car_dict_wales, bus_dict_wales, rail_dict_wales, taxi_dict_wales = self.create_council_areas(self.wales, 'Wales')
-        df_car_wales = pd.DataFrame(car_dict_wales)
-        df_car_wales = df_car_wales * self.num_trips
-        df_car_wales = df_car_wales.round(1)
-        df_car_emissions_wales = df_car_wales * self.emission_factors['car']
-        df_car_emissions_wales = df_car_emissions_wales.round(1)
-        df_bus_wales = pd.DataFrame(bus_dict_wales)
-        df_bus_wales = df_bus_wales * self.num_trips
-        df_bus_wales = df_bus_wales.round(1)
-        df_bus_emissions_wales = df_bus_wales * self.emission_factors['coach']
-        df_bus_emissions_wales = df_bus_emissions_wales.round(1)
-        df_rail_wales = pd.DataFrame(rail_dict_wales)
-        df_rail_wales = df_rail_wales * self.num_trips
-        df_rail_wales = df_rail_wales.round(1)
-        df_rail_emissions_wales = df_rail_wales * self.emission_factors['rail']
-        df_rail_emissions_wales = df_rail_emissions_wales.round(1)
-        df_taxi_wales = pd.DataFrame(taxi_dict_wales)
-        df_taxi_wales = df_taxi_wales * self.num_trips
-        df_taxi_wales = df_taxi_wales.round(1)
-        df_taxi_emissions_wales = df_taxi_wales * self.emission_factors['taxi']
-        df_taxi_emissions_wales = df_taxi_emissions_wales.round(1)
+        df_car_wales, df_car_emissions_wales = create_dfs(car_dict_wales, self.emission_factors['car'], self.num_trips)
+        df_bus_wales, df_bus_emissions_wales = create_dfs(bus_dict_wales, self.emission_factors['coach'], self.num_trips)
+        df_rail_wales, df_rail_emissions_wales = create_dfs(rail_dict_wales, self.emission_factors['rail'], self.num_trips)
+        df_taxi_wales, df_taxi_emissions_wales = create_dfs(taxi_dict_wales, self.emission_factors['taxi'], self.num_trips)
+
+        self.pbar.setValue(65)
+        QtWidgets.QApplication.processEvents()
 
         """=======================Wales Council Distances=========================="""
         self.wales_car = go.Figure(
@@ -614,31 +566,17 @@ class Calculator(QWidget):
             layout=go.Layout(title='Taxi Travel Emissions Across Welsh Councils (kg CO2)', xaxis=dict(title='Council Area'), yaxis=dict(title='Emissions (kg CO2)'))
         )
 
-        self.pbar.setValue(95)
-        QtWidgets.QApplication.processEvents()
+
         
         # Do same for Northern Ireland
         car_dict_ni, bus_dict_ni, rail_dict_ni, taxi_dict_ni = self.create_council_areas(self.north_ireland, 'Northern Ireland')
-        df_car_ni = pd.DataFrame(car_dict_ni)
-        df_car_ni = df_car_ni * self.num_trips
-        df_car_ni = df_car_ni.round(1)
-        df_car_emissions_ni = df_car_ni * self.emission_factors['car']
-        df_car_emissions_ni = df_car_emissions_ni.round(1)
-        df_bus_ni = pd.DataFrame(bus_dict_ni)
-        df_bus_ni = df_bus_ni * self.num_trips
-        df_bus_ni = df_bus_ni.round(1)
-        df_bus_emissions_ni = df_bus_ni * self.emission_factors['coach']
-        df_bus_emissions_ni = df_bus_emissions_ni.round(1)
-        df_rail_ni = pd.DataFrame(rail_dict_ni)
-        df_rail_ni = df_rail_ni * self.num_trips
-        df_rail_ni = df_rail_ni.round(1)
-        df_rail_emissions_ni = df_rail_ni * self.emission_factors['rail']
-        df_rail_emissions_ni = df_rail_emissions_ni.round(1)
-        df_taxi_ni = pd.DataFrame(taxi_dict_ni)
-        df_taxi_ni = df_taxi_ni * self.num_trips
-        df_taxi_ni = df_taxi_ni.round(1)
-        df_taxi_emissions_ni = df_taxi_ni * self.emission_factors['taxi']
-        df_taxi_emissions_ni = df_taxi_emissions_ni.round(1)
+        df_car_ni, df_car_emissions_ni = create_dfs(car_dict_ni, self.emission_factors['car'], self.num_trips)
+        df_bus_ni, df_bus_emissions_ni = create_dfs(bus_dict_ni, self.emission_factors['coach'], self.num_trips)
+        df_rail_ni, df_rail_emissions_ni = create_dfs(rail_dict_ni, self.emission_factors['rail'], self.num_trips)
+        df_taxi_ni, df_taxi_emissions_ni = create_dfs(taxi_dict_ni, self.emission_factors['taxi'], self.num_trips)
+
+        self.pbar.setValue(75)
+        QtWidgets.QApplication.processEvents()
 
         """=======================Northern Ireland Council Distances=========================="""
         self.ni_car = go.Figure(
@@ -723,8 +661,6 @@ class Calculator(QWidget):
         self.page5.radio19.clicked.connect(lambda: self.set_webpage5(self.ni_rail_emissions))
         self.page5.radio20.clicked.connect(lambda: self.set_webpage5(self.ni_taxi_emissions))
 
-
-
         #Update the progress bar
         self.pbar.setValue(100)
         QtWidgets.QApplication.processEvents()
@@ -738,10 +674,10 @@ class Calculator(QWidget):
         # Create the heatmaps
         df = self.emissions
         # Exclude the Walk values
-        df = df.drop('Walk', axis=0)
+        # df = df.drop('Walk', axis=0)
         df = df * self.num_trips
         # Round the values to 2 decimal places
-        df = df.round(1)
+        # df = df.round(1)
         # Source: https://plotly.com/python/heatmaps/
         # Figure to store the heatmap with the emissions
         self.fig1 = px.imshow(df, text_auto=True, aspect='auto', title='Total Emissions (kgCO2e) by Country and Mode of Transport',
@@ -759,7 +695,7 @@ class Calculator(QWidget):
         # Do the same for the distances
         df = self.distances
         df = df * self.num_trips
-        df = df.round(1)
+        # df = df.round(1)
         # Figure to store the heatmap with the distances
         self.fig2 = px.imshow(df, text_auto=True, aspect='auto', title='Total Distance (km) by Country and Mode of Transport',
                         labels=dict(x="Country", y="Transport", color="Distance (km)"),
@@ -847,10 +783,22 @@ class Calculator(QWidget):
 
         for key, value in country_percent.items():
             # Divide the total distance for each mode of transport by the percentage of people using it
-            car_dict[key] = {'Car' : car * value / 100}
-            bus_dict[key] = {'Bus' : bus * value / 100}
-            rail_dict[key] = {'Rail' : rail * value / 100}
-            taxi_dict[key] = {'Taxi' : taxi * value / 100}
+            car_dict[key] = {'Car' : car * (value / 100)}
+            bus_dict[key] = {'Bus' : bus * (value / 100)}
+            rail_dict[key] = {'Rail' : rail * (value / 100)}
+            taxi_dict[key] = {'Taxi' : taxi * (value / 100)}
+
+        total_car = sum(car_dict[key]['Car'] for key in car_dict)
+        total_bus = sum(bus_dict[key]['Bus'] for key in bus_dict)
+        total_rail = sum(rail_dict[key]['Rail'] for key in rail_dict)
+
+        # If the total distance for each mode of transport is different than the one from the total_distance_dict, then add the difference to Uknown district
+        if total_car != car:
+            car_dict['Unknown'] = {'Car' : self.total_distance_dict[country]['Car'] - total_car}
+        if total_bus != bus:
+            bus_dict['Unknown'] = {'Bus' : self.total_distance_dict[country]['Bus'] - total_bus}
+        if total_rail != rail:
+            rail_dict['Unknown'] = {'Rail' : self.total_distance_dict[country]['Rail'] - total_rail}
 
         return car_dict, bus_dict, rail_dict, taxi_dict
 

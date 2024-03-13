@@ -5,6 +5,7 @@
 import numpy as np
 from itertools import islice, accumulate
 import math
+import pandas as pd
 
 def extract_distances(data: dict):
     """Used for extracting bus, plane and train distances from the data dictionary"""
@@ -47,3 +48,13 @@ def split_list(lst, chunk_size=100):
     for i, item in enumerate(lst):
         chunks[i // chunk_size].append(item)
     return chunks
+
+def create_dfs(transport: dict, emission_factor: float, num_trips: int):
+    df_transport = pd.DataFrame(transport)
+    # Multiply the distances by the number of trips to get the total distance
+    df_transport = df_transport * num_trips
+    # Multiply the distances by the emission factor to get the emissions
+    df_emissions = df_transport * emission_factor
+    df_transport = round(df_transport, 2)
+    df_emissions = round(df_emissions, 2)
+    return df_transport, df_emissions
