@@ -674,10 +674,10 @@ class Calculator(QWidget):
         # Create the heatmaps
         df = self.emissions
         # Exclude the Walk values
-        # df = df.drop('Walk', axis=0)
+        df = df.drop('Walk', axis=0)
         df = df * self.num_trips
         # Round the values to 2 decimal places
-        # df = df.round(1)
+        df = df.round(1)
         # Source: https://plotly.com/python/heatmaps/
         # Figure to store the heatmap with the emissions
         self.fig1 = px.imshow(df, text_auto=True, aspect='auto', title='Total Emissions (kgCO2e) by Country and Mode of Transport',
@@ -695,7 +695,7 @@ class Calculator(QWidget):
         # Do the same for the distances
         df = self.distances
         df = df * self.num_trips
-        # df = df.round(1)
+        df = df.round(1)
         # Figure to store the heatmap with the distances
         self.fig2 = px.imshow(df, text_auto=True, aspect='auto', title='Total Distance (km) by Country and Mode of Transport',
                         labels=dict(x="Country", y="Transport", color="Distance (km)"),
@@ -792,13 +792,20 @@ class Calculator(QWidget):
         total_bus = sum(bus_dict[key]['Bus'] for key in bus_dict)
         total_rail = sum(rail_dict[key]['Rail'] for key in rail_dict)
 
-        # If the total distance for each mode of transport is different than the one from the total_distance_dict, then add the difference to Uknown district
-        if total_car != car:
-            car_dict['Unknown'] = {'Car' : self.total_distance_dict[country]['Car'] - total_car}
-        if total_bus != bus:
-            bus_dict['Unknown'] = {'Bus' : self.total_distance_dict[country]['Bus'] - total_bus}
-        if total_rail != rail:
-            rail_dict['Unknown'] = {'Rail' : self.total_distance_dict[country]['Rail'] - total_rail}
+        # Get the total distance for each mode of transport for the country from self.total_distances
+        init_total_car = self.total_distance_dict[country][3]
+        init_total_bus = self.total_distance_dict[country][2]
+        init_total_rail = self.total_distance_dict[country][0]
+
+        # If the total distance for each mode of transport is not the same as the sum of the distances for each council area
+        # add the difference to the Uknown council area
+        if total_car != init_total_car:
+            car_dict['Unknown'] = {'Car' : init_total_car - total_car}
+        if total_bus != init_total_bus:
+            bus_dict['Unknown'] = {'Bus' : init_total_bus - total_bus}
+        if total_rail != init_total_rail:
+            rail_dict['Unknown'] = {'Rail' : init_total_rail - total_rail}
+
 
         return car_dict, bus_dict, rail_dict, taxi_dict
 

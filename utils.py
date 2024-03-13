@@ -55,6 +55,6 @@ def create_dfs(transport: dict, emission_factor: float, num_trips: int):
     df_transport = df_transport * num_trips
     # Multiply the distances by the emission factor to get the emissions
     df_emissions = df_transport * emission_factor
-    df_transport = round(df_transport, 2)
-    df_emissions = round(df_emissions, 2)
+    df_transport = round(df_transport, 1)
+    df_emissions = round(df_emissions, 1)
     return df_transport, df_emissions
