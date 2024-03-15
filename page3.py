@@ -19,6 +19,7 @@ class Page3(QWidget):
         self.get_combo_values(self.wales_combos2, self.wales_select2, self.percent_wales_label2)
         self.get_combo_values(self.ni_combos1, self.ni_select1, self.percent_ni_label1)
         self.get_combo_values(self.ni_combos2, self.ni_select2, self.percent_ni_label2)
+        self.get_combo_values(self.aberdeen_combos, self.aberdeen_select, self.percent_aberdeen_label)
 
     def initializeUI(self):
         """Create and arrange widgets for Page 3"""
@@ -32,6 +33,9 @@ class Page3(QWidget):
                              <br>
                              Please, do this for each of the countries in the list on the left. 
                              <br><br>
+                             Additionally, you can check the '<b>Include Aberdeen</b>' box to include the city of Aberdeen in the list and 
+                             make assumptions for students living there.
+                            <br><br>
                              Once you have selected the percentages for the middle leg of the journey, click '<b>Submit</b>' to confirm your choices.
                              """)
         instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
@@ -43,6 +47,7 @@ class Page3(QWidget):
         self.leftlist.insertItem(1, 'England')
         self.leftlist.insertItem(2, 'Wales')
         self.leftlist.insertItem(3, 'Northern Ireland')
+        self.leftlist.insertItem(4, 'Include Aberdeen')
         self.leftlist.setFixedWidth(150)
         self.leftlist.setStyleSheet("background-color: #dfe6e9; border-radius: 5px; font-size: 14px; color: #2d3436; padding: 5px; margin-bottom: 10px;")
 
@@ -51,12 +56,14 @@ class Page3(QWidget):
         self.stack2 = QWidget()
         self.stack3 = QWidget()
         self.stack4 = QWidget()
+        self.stack5 = QWidget()
 
         # Creating the right side widgets
         self.scotlandUI()
         self.englandUI()
         self.walesUI()
         self.niUI()
+        self.aberdeenUI()
 
         # Adding the widgets to a stacked widget
         self.Stack = QStackedWidget()
@@ -64,6 +71,7 @@ class Page3(QWidget):
         self.Stack.addWidget(self.stack2)
         self.Stack.addWidget(self.stack3)
         self.Stack.addWidget(self.stack4)
+        self.Stack.addWidget(self.stack5)
 
         hbox = QHBoxLayout()
         hbox.addWidget(self.leftlist)
@@ -548,6 +556,73 @@ class Page3(QWidget):
         layout.addStretch(1)
         self.stack4.setLayout(layout)
 
+    def aberdeenUI(self):
+        """UI same as Scotland but for Aberdeen"""
+        layout = QVBoxLayout()
+        country = QLabel("Aberdeen City")
+        country.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        aberdeen_grid = QGridLayout()
+        # Reduce space between labels and combo box columns
+        aberdeen_grid.setHorizontalSpacing(20)
+        aberdeen_grid.setVerticalSpacing(2)
+        aberdeen_grid.setRowStretch(0, 1)
+        # Align the labels to the right
+        aberdeen_grid.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+
+        car = QLabel("Car %")
+        taxi = QLabel("Taxi %")
+        bus = QLabel("Bus %")
+        walk = QLabel("Walk %")
+      
+        # Combo boxes
+        self.aberdeen_car_box = QComboBox()
+        self.aberdeen_taxi_box = QComboBox()
+        self.aberdeen_bus_box = QComboBox()
+        self.aberdeen_walk_box = QComboBox()
+        
+        self.aberdeen_combos = {'car': self.aberdeen_car_box, 'taxi': self.aberdeen_taxi_box, 'bus': self.aberdeen_bus_box, 'walk': self.aberdeen_walk_box}
+
+
+        # Values for combo boxes
+        values = [str(i) for i in range(101)]
+        # Add % string to the end of each value
+        for key, combo_box in self.aberdeen_combos.items():
+            combo_box.addItems(values)
+            # Set fixed width
+            combo_box.setFixedSize(QSize(50, 20))
+
+        aberdeen_grid.addWidget(car, 0, 0)
+        aberdeen_grid.addWidget(taxi, 1, 0)
+        aberdeen_grid.addWidget(bus, 2, 0)
+        aberdeen_grid.addWidget(walk, 3, 0)
+        aberdeen_grid.addWidget(self.aberdeen_car_box, 0, 1)
+        aberdeen_grid.addWidget(self.aberdeen_taxi_box, 1, 1)
+        aberdeen_grid.addWidget(self.aberdeen_bus_box, 2, 1)
+        aberdeen_grid.addWidget(self.aberdeen_walk_box, 3, 1)
+
+        # Label to show selected percentatges
+        self.aberdeen_select = 0
+        self.percent_aberdeen_label = QLabel(f"Selected: {self.scot_select}%")
+        self.percent_aberdeen_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
+        aberdeen_grid.addWidget(self.percent_aberdeen_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+
+        # Create a group box for the grid layout
+        aberdeen_group = QGroupBox("Journey from home to university.")
+        aberdeen_group.setLayout(aberdeen_grid)
+
+        # Create a page indicator
+        page_label = QLabel("1/1")
+        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
+        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
+
+        layout.addWidget(country)
+        layout.addWidget(aberdeen_group)
+        layout.addWidget(page_label)
+        layout.addStretch(1)
+
+        self.stack5.setLayout(layout)
+
     def display(self, i):
         self.Stack.setCurrentIndex(i)
 
@@ -557,6 +632,7 @@ class Page3(QWidget):
         eng = {key: int(combo_box.currentText()) for key, combo_box in self.eng_combos.items()}
         wales = {key: int(combo_box.currentText()) for key, combo_box in self.wales_combos.items()}
         ni = {key: int(combo_box.currentText()) for key, combo_box in self.ni_combos.items()}
+        abe = {key: int(combo_box.currentText()) for key, combo_box in self.aberdeen_combos.items()}
         return scot, eng, wales, ni
     
     def enable_page3(self, hundred_percent_page3):
