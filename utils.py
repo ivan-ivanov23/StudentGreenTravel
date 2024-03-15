@@ -6,6 +6,8 @@ import numpy as np
 from itertools import islice, accumulate
 import math
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 
 def extract_distances(data: dict):
     """Used for extracting bus, plane and train distances from the data dictionary"""
@@ -58,3 +60,26 @@ def create_dfs(transport: dict, emission_factor: float, num_trips: int):
     df_transport = round(df_transport, 1)
     df_emissions = round(df_emissions, 1)
     return df_transport, df_emissions
+
+def create_px(df: pd.DataFrame, title: str, color_vals: str, color_scheme: str):
+    fig = px.imshow(df, text_auto=True, aspect='auto', title=title,
+                    labels=dict(x="Country", y="Transport", color=color_vals),
+                    color_continuous_scale=color_scheme)
+    fig.update_traces(textfont_size=16)
+
+    return fig
+
+def create_go_bar(df: pd.DataFrame, title, ytitle):
+    fig = go.Figure(
+        data=[go.Bar(x=df.columns, y=df.iloc[0, :], text=df.iloc[0, :], textposition='auto')],
+        layout=go.Layout(title=title, xaxis=dict(title='Council Area'), yaxis=dict(title=ytitle))
+    )
+    return fig
+
+def create_go_table(df: pd.DataFrame, values: list, title: str):
+    fig = go.Figure(
+            data=[go.Table( header=dict(values=values),
+                            cells=dict(values=[df.columns, df.iloc[0, :]]))],
+            layout=go.Layout(title=title)
+        )
+    return fig
