@@ -372,6 +372,8 @@ class Calculator(QWidget):
             msg.exec()
 
 ############################################################################################################################################
+    
+    """@@@  Page 4&5 (Results) Methods @@@"""
     def go_to_results(self):
         """Extract the final leg of the journey for each country"""
         # Crate a progress dialog
