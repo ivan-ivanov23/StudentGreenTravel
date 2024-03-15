@@ -24,6 +24,7 @@ import plotly.graph_objects as go
 from council_areas import get_district, group_district, find_percentage
 from style_sheets import main_stylesheet, widget_stylesheet
 from utils import create_px, create_dfs, create_go_bar, create_go_table
+from aberdeen import distance_home_uni, divide_aberdeen
 
 basedir = os.path.dirname(__file__)
 
@@ -303,6 +304,8 @@ class Calculator(QWidget):
         wales_air = [int(i) for key, i in wales.items()][4:]
         ni_land = [int(i) for key, i in ni.items()][:4]
         ni_air = [int(i) for key, i in ni.items()][4:]
+        # Divide the percentages into lists for Aberdeen
+        abe = [int(i) for key, i in abe.items()]
 
         # Sum of all
         sum_all = sum(scot) + sum(eng_land) + sum(eng_air) + sum(wales_land) + sum(wales_air) + sum(ni_land) + sum(ni_air)
