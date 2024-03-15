@@ -156,7 +156,7 @@ class Page3(QWidget):
 
         # Label to show selected percentatges
         self.aberdeen_select = 0
-        self.percent_aberdeen_label = QLabel(f"Selected: {self.scot_select}%")
+        self.percent_aberdeen_label = QLabel(f"Selected: {self.aberdeen_select}%")
         self.percent_aberdeen_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
         aberdeen_grid.addWidget(self.percent_aberdeen_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
 
