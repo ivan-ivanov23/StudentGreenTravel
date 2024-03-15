@@ -110,20 +110,12 @@ class Calculator(QWidget):
         self.page4.button2.clicked.connect(lambda: self.go_to_page(0))
         self.page4.button3.clicked.connect(lambda: self.go_to_page(4))
         self.page4.button4.clicked.connect(lambda: self.go_to_page(5))
-        # self.page4.radio1.clicked.connect(self.click_radio1)
-        # self.page4.radio2.clicked.connect(self.click_radio2)
-        # self.page4.radio3.clicked.connect(self.click_radio3)
-        # self.page4.radio4.clicked.connect(self.click_radio4)
 
         # Connect signals for page5
         self.page5.button1.clicked.connect(lambda: self.go_to_page(2))
         self.page5.button2.clicked.connect(lambda: self.go_to_page(0))
         self.page5.button3.clicked.connect(lambda: self.go_to_page(3))
         self.page5.button4.clicked.connect(lambda: self.go_to_page(5))
-        # self.page5.radio1.clicked.connect(self.click_radio1)
-        # self.page5.radio2.clicked.connect(self.click_radio2)
-        # self.page5.radio3.clicked.connect(self.click_radio3)
-        # self.page5.radio4.clicked.connect(self.click_radio4)
 
         # Connect signals for page6
         self.page6.button1.clicked.connect(lambda: self.go_to_page(3))
@@ -294,7 +286,7 @@ class Calculator(QWidget):
     def check_combo_page3(self):
         """Check if the sum of the percentages for each country is 100. If it is, then call the menu function. If not, show a message box with an error.""" 
         # call extract function from page3 to get the percentages for each country
-        scot, eng, wales, ni = self.page3.extract_percentages()
+        scot, eng, wales, ni, abe = self.page3.extract_percentages()
         # Divide the percentages into lists for each country
         scot = [int(i) for key, i in scot.items()]
         # [:4] for land and [4:] for air transport
@@ -308,10 +300,10 @@ class Calculator(QWidget):
         abe = [int(i) for key, i in abe.items()]
 
         # Sum of all
-        sum_all = sum(scot) + sum(eng_land) + sum(eng_air) + sum(wales_land) + sum(wales_air) + sum(ni_land) + sum(ni_air)
+        sum_all = sum(scot) + sum(eng_land) + sum(eng_air) + sum(wales_land) + sum(wales_air) + sum(ni_land) + sum(ni_air) + sum(abe)
 
         # If the sum of the percentages for each country is 700 (7 elements * 100), then call the menu function.
-        if sum_all == 700:
+        if sum_all == 800:
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
@@ -323,15 +315,20 @@ class Calculator(QWidget):
             msg.exec()
             self.hundred_percent_page3.emit(True)
 
+            # Aberdeen
+            self.aberdeen = self.aberdeen.values.tolist()
+            self.aberdeen_distances = distance_home_uni(self.aberdeen)
+            self.aberdeen_fleg = divide_aberdeen(self.aberdeen_distances, abe[0], abe[1], abe[2], abe[3])
+
             # Scotland
             # Combine the bus and rail postcodes for Scotland in a list to be used in the final leg function
             scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
             scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
 
-            self.scot_car_fleg = scot_fleg[0]
-            self.scot_taxi_fleg = scot_fleg[1]
-            self.scot_bus_fleg = scot_fleg[2]
-            self.scot_walk_fleg = scot_fleg[3]
+            self.scot_car_fleg = scot_fleg[0] + self.aberdeen_fleg[0]
+            self.scot_taxi_fleg = scot_fleg[1] + self.aberdeen_fleg[1]
+            self.scot_bus_fleg = scot_fleg[2] + self.aberdeen_fleg[2]
+            self.scot_walk_fleg = scot_fleg[3] + self.aberdeen_fleg[3]
 
             # England
             eng_rail = self.travel_england[2]
@@ -404,6 +401,15 @@ class Calculator(QWidget):
 
         """-------------Create the dataframes & figures for Base Data-------------"""	
         # Base emissions
+        # Add Aberdeen emissions to the Scotland emissions
+        aberdeen_car_emissions = self.aberdeen_fleg[0] * self.emission_factors['car']
+        aberdeen_taxi_emissions = self.aberdeen_fleg[1] * self.emission_factors['taxi']
+        aberdeen_bus_emissions = self.aberdeen_fleg[2] * self.emission_factors['bus']
+        aberdeen_total_emissions = sum([aberdeen_car_emissions, aberdeen_taxi_emissions, aberdeen_bus_emissions])
+        # Add the emissions for each mode of transport to the Scotland emissions
+        scot_car_emissions = self.emissions['Scotland'].iloc[3] + aberdeen_car_emissions
+        scot_taxi_emissions = self.emissions['Scotland'].iloc[4] + aberdeen_taxi_emissions
+        scot_bus_emissions = self.emissions['Scotland'].iloc[2] + aberdeen_bus_emissions
         base_emissions = self.emissions
         base_emissions = base_emissions.drop('Walk', axis=0)
         base_emissions = base_emissions * self.num_trips
@@ -413,6 +419,12 @@ class Calculator(QWidget):
         self.page5.radio1.clicked.connect(lambda: self.display_figure(self.page5, base_emissions_fig))
 
         # Base distances
+        # Add Aberdeen distances to the Scotland distances
+        self.distances['Scotland'].iloc[3] += self.aberdeen_fleg[0]
+        self.distances['Scotland'].iloc[2] += self.aberdeen_fleg[2]
+        self.distances['Scotland'].iloc[4] += self.aberdeen_fleg[1]
+        self.distances['Scotland'].iloc[5] += self.aberdeen_fleg[3]
+
         base_distances = self.distances
         base_distances = base_distances * self.num_trips
         base_distances_fig = create_px(base_distances, 'Total Distance (km) by Country and Method of Transport', 'Distance (km)', 'bugn')
@@ -421,6 +433,8 @@ class Calculator(QWidget):
         self.page5.radio2.clicked.connect(lambda: self.display_figure(self.page5, base_distances_fig))
 
         # Total emissions pie
+        # Add the Aberdeen emissions to the Scotland emissions
+        self.total_emissions['Scotland'] = self.total_emissions['Scotland'] + aberdeen_total_emissions
         total_emissions = self.total_emissions
         total_emissions = total_emissions * self.num_trips
         names = total_emissions.columns
@@ -435,7 +449,8 @@ class Calculator(QWidget):
         per_student = self.total_emissions
         per_student = per_student * self.num_trips
          # Divide the total emissions by the number of students for each country
-        scot_emissions = per_student.iloc[0, 0] / len(self.scotland)
+        total_scot_students = len(self.scotland) + len(self.aberdeen)
+        scot_emissions = per_student.iloc[0, 0] / total_scot_students
         eng_emissions = per_student.iloc[0, 1] / len(self.england)
         wales_emissions = per_student.iloc[0, 2] / len(self.wales)
         ni_emissions = per_student.iloc[0, 3] / len(self.north_ireland)
@@ -463,10 +478,25 @@ class Calculator(QWidget):
         # Scotland
         car_dict, bus_dict, rail_dict, taxi_dict = self.create_council_areas(self.scotland, 'Scotland')
 
-        df_car, df_car_emissions = create_dfs(car_dict, self.emission_factors['car'], self.num_trips)
-        df_bus, df_bus_emissions = create_dfs(bus_dict, self.emission_factors['coach'], self.num_trips)
+        
+        # Create a dictionary with the total distance for each mode of transport for Scotland + Aberdeen
+        new_car = {}
+        new_car.update(car_dict)
+        new_car['Aberdeen City'] = self.aberdeen_fleg[0]
+
+        new_bus = {}
+        new_bus.update(bus_dict)
+        new_bus['Aberdeen City'] = self.aberdeen_fleg[2]
+
+        new_taxi = {}
+        new_taxi.update(taxi_dict)
+        new_taxi['Aberdeen City'] = self.aberdeen_fleg[1]
+
+
+        df_car, df_car_emissions = create_dfs(new_car, self.emission_factors['car'], self.num_trips)
+        df_bus, df_bus_emissions = create_dfs(new_bus, self.emission_factors['coach'], self.num_trips)
         df_rail, df_rail_emissions = create_dfs(rail_dict, self.emission_factors['rail'], self.num_trips)
-        df_taxi, df_taxi_emissions = create_dfs(taxi_dict, self.emission_factors['taxi'], self.num_trips)
+        df_taxi, df_taxi_emissions = create_dfs(new_taxi, self.emission_factors['taxi'], self.num_trips)
 
         # Council distances
         scot_car = create_go_bar(df_car, 'Car Travel Distances Across Scottish Councils', 'Distance (km)')
