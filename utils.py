@@ -74,6 +74,7 @@ def create_go_bar(df: pd.DataFrame, title, ytitle):
         data=[go.Bar(x=df.columns, y=df.iloc[0, :], text=df.iloc[0, :], textposition='auto')],
         layout=go.Layout(title=title, xaxis=dict(title='Council Area'), yaxis=dict(title=ytitle))
     )
+    fig.update_xaxes(categoryorder='category ascending')
     return fig
 
 def create_go_table(df: pd.DataFrame, values: list, title: str):
@@ -82,4 +83,5 @@ def create_go_table(df: pd.DataFrame, values: list, title: str):
                             cells=dict(values=[df.columns, df.iloc[0, :]]))],
             layout=go.Layout(title=title)
         )
+    fig.update_xaxes(categoryorder='category ascending')
     return fig
