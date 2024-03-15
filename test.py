@@ -63,6 +63,7 @@ total_train = sum(train.values())
 # Round the total distance
 total_new = round(total_car + total_bus + total_train)
 
+
 # Compare total distances
 if total_distance == total_new:
     print('The total distance is the same')
