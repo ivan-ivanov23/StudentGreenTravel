@@ -46,6 +46,9 @@ england = []
 wales = []
 north_ireland = []
 
+# Dictionary to store postcodes and coordinates which are not found in initial csv file
+additional_coords = {}
+
 def determine_postcode(postcodes):
     postcodes = postcodes.dropna()  # Drop NaN values
     scotland = postcodes[(postcodes.str[:2].isin(scot_postcodes)) | ((postcodes.str[:2] == 'G') & ~(postcodes.str[:2].isin(eng_postcodes)))]
@@ -76,12 +79,16 @@ def find_country(postcodes):
                 else:
                     if item["result"]["country"] == 'Scotland' or item["result"]["country"] == 'Isle of Man':
                         scotland.append(postcode)
+                        additional_coords[postcode] = [item["result"]["latitude"], item["result"]["longitude"]]
                     elif item["result"]["country"] == 'England' or item["result"]["country"] == 'Channel Islands':
                         england.append(postcode)
+                        additional_coords[postcode] = [item["result"]["latitude"], item["result"]["longitude"]]
                     elif item["result"]["country"] == 'Wales':
                         wales.append(postcode)
+                        additional_coords[postcode] = [item["result"]["latitude"], item["result"]["longitude"]]
                     elif item["result"]["country"] == 'Northern Ireland':
                         north_ireland.append(postcode)
+                        additional_coords[postcode] = [item["result"]["latitude"], item["result"]["longitude"]]
                     else:
                         if item["result"]["country"]:
                             result[postcode] = item["result"]["country"]

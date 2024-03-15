@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np
 from geopy.distance import geodesic
+from preprocess_data import additional_coords
 
 # Constant locations and their coordinates
 aberdeen_uni = (-2.0999, 57.1645)
@@ -112,6 +113,13 @@ class Travel:
                     # For default value, calculate the distance to the university
                     travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_uni).km
                 data[postcode] = (closest_stop_name, distance_to, travel_distance)
+            elif postcode in additional_coords:
+                # If the code is not in csv file, use the additional_coords dictionary to find the coordinates
+                # And calculate the distance to the university
+                code_latitude = additional_coords[postcode][0]
+                code_longitude = additional_coords[postcode][1]
+                travel_distance = geodesic((code_longitude, code_latitude), aberdeen_uni).km
+                data[postcode] = (closest_stop_name, distance_to, travel_distance)
             else:
                 # If the postcode is invalid, add it to the list of invalid postcodes
                 invalid_postcodes.append(postcode)
@@ -131,7 +139,15 @@ class Travel:
             if postcode in postcode_coords:
                 distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_uni).km
                 car_data[postcode] = distance
+            elif postcode in additional_coords:
+                # If the code is not in csv file, use the additional_coords dictionary to find the coordinates
+                # And calculate the distance to the university
+                code_latitude = additional_coords[postcode][0]
+                code_longitude = additional_coords[postcode][1]
+                distance = geodesic((code_longitude, code_latitude), aberdeen_uni).km
+                car_data[postcode] = distance
             else:
+                # If the postcode is invalid, add it to the list of invalid postcodes
                 invalid_postcodes.append(postcode)
                 continue
 
