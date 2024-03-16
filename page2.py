@@ -4,6 +4,10 @@
 
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QComboBox, QGridLayout, QHBoxLayout, QPushButton, QWidget
 from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtGui import QPixmap
+import os
+
+basedir = os.path.dirname(__file__)
 
 
 class Page2(QWidget):
@@ -21,6 +25,19 @@ class Page2(QWidget):
         label = QLabel("Assumptions for Middle Leg of the Journey")
         label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
         self.layout2.addWidget(label)
+
+        # Picture of the middle leg of the journey 
+        mid_leg_pic = QLabel()
+        mid_leg_pic.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        mid_leg_pic.setFixedSize(QSize(785, 107))
+        pixmap = QPixmap(os.path.join(basedir, "pictures/mid.png"))
+        # Resize the pixmap to fit within the label size while maintaining aspect ratio
+        scaled_pixmap = pixmap.scaled(mid_leg_pic.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        # Set the pixmap to the label
+        mid_leg_pic.setPixmap(scaled_pixmap)
+        mid_leg_pic.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layout2.addWidget(mid_leg_pic)
+
 
         instruction1 = QLabel("""
             <b>Tip:</b> Select or enter the number of study-related trips a student makes on average per year.""")

@@ -5,7 +5,10 @@
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QStackedWidget, QListWidget, 
                              QLabel, QWidget, QComboBox, QGridLayout, QGroupBox, QPushButton)
 from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QPixmap
+import os
 
+basedir = os.path.dirname(__file__)
 
 class Page3(QWidget):
 
@@ -27,6 +30,17 @@ class Page3(QWidget):
         label = QLabel("Assumptions for Final Leg of the Journey")
         label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
 
+        # Picture of the final leg of the journey
+        fin_leg_pic = QLabel()
+        # Load the pixmap
+        fin_leg_pic.setFixedSize(QSize(785, 107))
+        pixmap = QPixmap(os.path.join(basedir, "pictures/fin.png"))
+        # Resize the pixmap to fit within the label size while maintaining aspect ratio
+        scaled_pixmap = pixmap.scaled(fin_leg_pic.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        # Set the pixmap to the label
+        fin_leg_pic.setPixmap(scaled_pixmap)
+        
+        
         instruction = QLabel("""
                              <b>Tip:</b> Select or enter the percentage of students traveling by each transport method 
                              for the final leg of their journey. That is from the bus/rail station or airport to the university.
@@ -50,6 +64,7 @@ class Page3(QWidget):
         self.leftlist.insertItem(4, 'Northern Ireland')
 
         self.leftlist.setFixedWidth(150)
+        self.leftlist.setFixedHeight(250)
         self.leftlist.setStyleSheet("background-color: #dfe6e9; border-radius: 5px; font-size: 14px; color: #2d3436; padding: 5px; margin-bottom: 10px;")
 
         # Right side widgets
@@ -96,6 +111,7 @@ class Page3(QWidget):
         button_layout.addWidget(self.calculate_button)
 
         self.layout3.addWidget(label)
+        self.layout3.addWidget(fin_leg_pic)
         self.layout3.addWidget(instruction)
         self.layout3.addLayout(hbox)
         self.layout3.addStretch(1)
@@ -113,10 +129,10 @@ class Page3(QWidget):
         aberdeen_grid = QGridLayout()
         # Reduce space between labels and combo box columns
         aberdeen_grid.setHorizontalSpacing(20)
-        aberdeen_grid.setVerticalSpacing(2)
+        aberdeen_grid.setVerticalSpacing(6)
         aberdeen_grid.setRowStretch(0, 1)
         # Align the labels to the right
-        aberdeen_grid.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        aberdeen_grid.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
 
         car = QLabel("Car %")
@@ -158,20 +174,28 @@ class Page3(QWidget):
         self.aberdeen_select = 0
         self.percent_aberdeen_label = QLabel(f"Selected: {self.aberdeen_select}%")
         self.percent_aberdeen_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        aberdeen_grid.addWidget(self.percent_aberdeen_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+        aberdeen_grid.addWidget(self.percent_aberdeen_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
         # Create a group box for the grid layout
         aberdeen_group = QGroupBox("Journey from home to university.")
         aberdeen_group.setStyleSheet("font-size: 14px")
         aberdeen_group.setLayout(aberdeen_grid)
 
+        # Adjust the sizes of the grids and group boxes to fit the window
+        aberdeen_group.setFixedSize(300, 200)
+
+        # Put the group boxes next to each other
+        lay1 = QHBoxLayout()
+        lay1.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        lay1.addWidget(aberdeen_group)
+
         # Create a page indicator
-        page_label = QLabel("1/1")
+        page_label = QLabel("1/5")
         page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
         page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         layout.addWidget(city)
-        layout.addWidget(aberdeen_group)
+        layout.addLayout(lay1)
         layout.addWidget(page_label)
         layout.addStretch(1)
 
@@ -189,7 +213,7 @@ class Page3(QWidget):
         scot_grid.setVerticalSpacing(6)
         scot_grid.setRowStretch(0, 1)
         # Align the labels to the right
-        scot_grid.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        scot_grid.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
 
         car = QLabel("Car %")
@@ -231,20 +255,28 @@ class Page3(QWidget):
         self.scot_select = 0
         self.percent_scot_label = QLabel(f"Selected: {self.scot_select}%")
         self.percent_scot_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        scot_grid.addWidget(self.percent_scot_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+        scot_grid.addWidget(self.percent_scot_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
         # Create a group box for the grid layout
         scotland_group = QGroupBox("Journey from bus/rail station to university.")
         scotland_group.setStyleSheet("font-size: 14px")
         scotland_group.setLayout(scot_grid)
 
+        # Adjust the sizes of the grids and group boxes to fit the window
+        scotland_group.setFixedSize(300, 200)
+
+        # Put the group boxes next to each other
+        lay1 = QHBoxLayout()
+        lay1.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        lay1.addWidget(scotland_group)
+
         # Create a page indicator
-        page_label = QLabel("1/4")
+        page_label = QLabel("2/5")
         page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
         page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         layout.addWidget(country)
-        layout.addWidget(scotland_group)
+        layout.addLayout(lay1)
         layout.addWidget(page_label)
         layout.addStretch(1)
 
@@ -261,7 +293,7 @@ class Page3(QWidget):
         eng_grid_top.setVerticalSpacing(6)
         eng_grid_top.setRowStretch(0, 1)
         # Align the labels to the right
-        eng_grid_top.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        eng_grid_top.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         eng_grid_bottom = QGridLayout()
         # Reduce space between labels and combo box columns
@@ -269,7 +301,7 @@ class Page3(QWidget):
         eng_grid_bottom.setVerticalSpacing(6)
         eng_grid_bottom.setRowStretch(0, 1)
         # Align the labels to the right
-        eng_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        eng_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
 
         car_top = QLabel("Car %")
@@ -333,7 +365,7 @@ class Page3(QWidget):
         self.eng_select1 = 0
         self.percent_eng_label1 = QLabel(f"Selected: {self.eng_select1}%")
         self.percent_eng_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        eng_grid_top.addWidget(self.percent_eng_label1, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+        eng_grid_top.addWidget(self.percent_eng_label1, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
         # Right side
         eng_grid_bottom.addWidget(car_bottom, 0, 0)
         eng_grid_bottom.addWidget(taxi_bottom, 1, 0)
@@ -348,7 +380,7 @@ class Page3(QWidget):
         self.eng_select2 = 0
         self.percent_eng_label2 = QLabel(f"Selected: {self.eng_select2}%")
         self.percent_eng_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        eng_grid_bottom.addWidget(self.percent_eng_label2, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+        eng_grid_bottom.addWidget(self.percent_eng_label2, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
 
 
@@ -362,16 +394,22 @@ class Page3(QWidget):
         england_group_bottom.setStyleSheet("font-size: 14px")
         england_group_bottom.setLayout(eng_grid_bottom)
 
+        # Adjust the sizes of the grids and group boxes to fit the window
+        england_group_top.setFixedSize(300, 200)
+        england_group_bottom.setFixedSize(300, 200)
+
+        # Put the group boxes next to each other
+        lay1 = QHBoxLayout()
+        lay1.addWidget(england_group_top)
+        lay1.addWidget(england_group_bottom)
+
         # Create a page indicator
-        page_label = QLabel("2/4")
+        page_label = QLabel("3/5")
         page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
         page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
-
-
         layout.addWidget(country)
-        layout.addWidget(england_group_top)
-        layout.addWidget(england_group_bottom)
+        layout.addLayout(lay1)
         layout.addWidget(page_label)
         layout.addStretch(1)
             
@@ -388,7 +426,7 @@ class Page3(QWidget):
         wales_grid_top.setVerticalSpacing(6)
         wales_grid_top.setRowStretch(0, 1)
         # Align the labels to the right
-        wales_grid_top.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        wales_grid_top.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         wales_grid_bottom = QGridLayout()
         # Reduce space between labels and combo box columns
@@ -396,7 +434,7 @@ class Page3(QWidget):
         wales_grid_bottom.setVerticalSpacing(6)
         wales_grid_bottom.setRowStretch(0, 1)
         # Align the labels to the right
-        wales_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        wales_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
 
         car_top = QLabel("Car %")
@@ -461,7 +499,7 @@ class Page3(QWidget):
         self.wales_select1 = 0
         self.percent_wales_label1 = QLabel(f"Selected: {self.wales_select1}%")
         self.percent_wales_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        wales_grid_top.addWidget(self.percent_wales_label1, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+        wales_grid_top.addWidget(self.percent_wales_label1, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
         # Right side
         wales_grid_bottom.addWidget(car_bottom, 0, 0)
@@ -477,7 +515,7 @@ class Page3(QWidget):
         self.wales_select2 = 0
         self.percent_wales_label2 = QLabel(f"Selected: {self.wales_select2}%")
         self.percent_wales_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        wales_grid_bottom.addWidget(self.percent_wales_label2, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+        wales_grid_bottom.addWidget(self.percent_wales_label2, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
 
 
@@ -491,14 +529,22 @@ class Page3(QWidget):
         wales_group_bottom.setStyleSheet("font-size: 14px")
         wales_group_bottom.setLayout(wales_grid_bottom)
 
+        # Adjust the sizes of the grids and group boxes to fit the window
+        wales_group_top.setFixedSize(300, 200)	
+        wales_group_bottom.setFixedSize(300, 200)
+
+        # Put the group boxes next to each other
+        lay1 = QHBoxLayout()
+        lay1.addWidget(wales_group_top)
+        lay1.addWidget(wales_group_bottom)
+
         # Create a page indicator
-        page_label = QLabel("3/4")
+        page_label = QLabel("4/5")
         page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
         page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         layout.addWidget(country)
-        layout.addWidget(wales_group_top)
-        layout.addWidget(wales_group_bottom)
+        layout.addLayout(lay1)
         layout.addWidget(page_label)
         layout.addStretch(1)
     
@@ -515,7 +561,7 @@ class Page3(QWidget):
         ni_grid_top.setVerticalSpacing(6)
         ni_grid_top.setRowStretch(0, 1)
         # Align the labels to the right
-        ni_grid_top.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        ni_grid_top.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         ni_grid_bottom = QGridLayout()
         # Reduce space between labels and combo box columns
@@ -523,7 +569,7 @@ class Page3(QWidget):
         ni_grid_bottom.setVerticalSpacing(6)
         ni_grid_bottom.setRowStretch(0, 1)
         # Align the labels to the right
-        ni_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        ni_grid_bottom.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
 
         car_top = QLabel("Car %")
@@ -587,7 +633,7 @@ class Page3(QWidget):
         self.ni_select1 = 0
         self.percent_ni_label1 = QLabel(f"Selected: {self.ni_select1}%")
         self.percent_ni_label1.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        ni_grid_top.addWidget(self.percent_ni_label1, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+        ni_grid_top.addWidget(self.percent_ni_label1, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
         # Right side
         ni_grid_bottom.addWidget(car_bottom, 0, 0)
@@ -603,9 +649,7 @@ class Page3(QWidget):
         self.ni_select2 = 0
         self.percent_ni_label2 = QLabel(f"Selected: {self.ni_select2}%")
         self.percent_ni_label2.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        ni_grid_bottom.addWidget(self.percent_ni_label2, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
-
-
+        ni_grid_bottom.addWidget(self.percent_ni_label2, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
         # Create a group box for the grid layout
         ni_group_top = QGroupBox("Journey from bus/rail station to university.")
@@ -617,14 +661,22 @@ class Page3(QWidget):
         ni_group_bottom.setStyleSheet("font-size: 14px")
         ni_group_bottom.setLayout(ni_grid_bottom)
 
+        # Adjust the sizes of the grids and group boxes to fit the window
+        ni_group_top.setFixedSize(300, 200)
+        ni_group_bottom.setFixedSize(300, 200)
+
+        # Put the group boxes next to each other
+        lay1 = QHBoxLayout()
+        lay1.addWidget(ni_group_top)
+        lay1.addWidget(ni_group_bottom)
+
         # Create a page indicator
-        page_label = QLabel("4/4")
+        page_label = QLabel("5/5")
         page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
         page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         layout.addWidget(country)
-        layout.addWidget(ni_group_top)
-        layout.addWidget(ni_group_bottom)
+        layout.addLayout(lay1)
         layout.addWidget(page_label)
         layout.addStretch(1)
         self.stack5.setLayout(layout)
