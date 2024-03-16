@@ -345,49 +345,49 @@ class Calculator(QWidget):
         ni_land, ni_air = divide_combo_percentages(self.p_ni)
 
         # Aberdeen
-        self.aberdeen = self.aberdeen.values.tolist()
-        self.aberdeen_distances = distance_home_uni(self.aberdeen)
-        self.aberdeen_fleg = divide_aberdeen(self.aberdeen_distances, abe[0], abe[1], abe[2], abe[3])
+        aberdeen_values = self.aberdeen.values.tolist()
+        aberdeen_distances = distance_home_uni(aberdeen_values)
+        aberdeen_fleg = divide_aberdeen(aberdeen_distances, abe[0], abe[1], abe[2], abe[3])
 
         # Scotland
         # Combine the bus and rail postcodes for Scotland in a list to be used in the final leg function
         scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
-        self.scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
+        scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
 
-        self.scot_car_fleg = self.scot_fleg[0] + self.aberdeen_fleg[0]
-        self.scot_taxi_fleg = self.scot_fleg[1] + self.aberdeen_fleg[1]
-        self.scot_bus_fleg = self.scot_fleg[2] + self.aberdeen_fleg[2]
-        self.scot_walk_fleg = self.scot_fleg[3] + self.aberdeen_fleg[3]
+        scot_car_fleg = scot_fleg[0] + aberdeen_fleg[0]
+        scot_taxi_fleg = scot_fleg[1] + aberdeen_fleg[1]
+        scot_bus_fleg = scot_fleg[2] + aberdeen_fleg[2]
+        scot_walk_fleg = scot_fleg[3] + aberdeen_fleg[3]
 
         # England
         eng_rail = self.travel_england[2]
         eng_plane = self.travel_england[0]
         eng_fleg_bus_rail, eng_fleg_plane = assign_uk(eng_rail, eng_plane, eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
         
-        self.eng_car_fleg = eng_fleg_bus_rail[0] + eng_fleg_plane[0]
-        self.eng_taxi_fleg = eng_fleg_bus_rail[1] + eng_fleg_plane[1]
-        self.eng_bus_fleg = eng_fleg_bus_rail[2] + eng_fleg_plane[2]
-        self.eng_walk_fleg = eng_fleg_bus_rail[3] + eng_fleg_plane[3]
+        eng_car_fleg = eng_fleg_bus_rail[0] + eng_fleg_plane[0]
+        eng_taxi_fleg = eng_fleg_bus_rail[1] + eng_fleg_plane[1]
+        eng_bus_fleg = eng_fleg_bus_rail[2] + eng_fleg_plane[2]
+        eng_walk_fleg = eng_fleg_bus_rail[3] + eng_fleg_plane[3]
 
         # Wales
         wales_rail = self.travel_wales[2]
         wales_plane = self.travel_wales[0]
         wales_fleg_bus_rail, wales_fleg_plane = assign_uk(wales_rail, wales_plane, wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
 
-        self.wales_car_fleg = wales_fleg_bus_rail[0] + wales_fleg_plane[0]
-        self.wales_taxi_fleg = wales_fleg_bus_rail[1] + wales_fleg_plane[1]
-        self.wales_bus_fleg = wales_fleg_bus_rail[2] + wales_fleg_plane[2]
-        self.wales_walk_fleg = wales_fleg_bus_rail[3] + wales_fleg_plane[3]
+        wales_car_fleg = wales_fleg_bus_rail[0] + wales_fleg_plane[0]
+        wales_taxi_fleg = wales_fleg_bus_rail[1] + wales_fleg_plane[1]
+        wales_bus_fleg = wales_fleg_bus_rail[2] + wales_fleg_plane[2]
+        wales_walk_fleg = wales_fleg_bus_rail[3] + wales_fleg_plane[3]
 
         # Northern Ireland
         ni_rail = self.travel_ni[2]
         ni_plane = self.travel_ni[0]
         ni_fleg_bus_rail, ni_fleg_plane = assign_uk(ni_rail, ni_plane, ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
 
-        self.ni_car_fleg = ni_fleg_bus_rail[0] + ni_fleg_plane[0]
-        self.ni_taxi_fleg = ni_fleg_bus_rail[1] + ni_fleg_plane[1]
-        self.ni_bus_fleg = ni_fleg_bus_rail[2] + ni_fleg_plane[2]
-        self.ni_walk_fleg = ni_fleg_bus_rail[3] + ni_fleg_plane[3]
+        ni_car_fleg = ni_fleg_bus_rail[0] + ni_fleg_plane[0]
+        ni_taxi_fleg = ni_fleg_bus_rail[1] + ni_fleg_plane[1]
+        ni_bus_fleg = ni_fleg_bus_rail[2] + ni_fleg_plane[2]
+        ni_walk_fleg = ni_fleg_bus_rail[3] + ni_fleg_plane[3]
 
         self.pbar.setValue(15)
         # This is necessary for showing and updating the progress bar
@@ -395,7 +395,7 @@ class Calculator(QWidget):
         QtWidgets.QApplication.processEvents()
 
         # Call the main function
-        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, self.scot_car_fleg, self.scot_taxi_fleg, self.scot_bus_fleg, self.scot_walk_fleg, self.eng_car_fleg, self.eng_taxi_fleg, self.eng_bus_fleg, self.eng_walk_fleg, self.wales_car_fleg, self.wales_taxi_fleg, self.wales_bus_fleg, self.wales_walk_fleg, self.ni_car_fleg, self.ni_taxi_fleg, self.ni_bus_fleg, self.ni_walk_fleg)
+        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
         # Update the progress bar
         self.pbar.setValue(25)
         QtWidgets.QApplication.processEvents()
@@ -403,9 +403,9 @@ class Calculator(QWidget):
         """-------------Create the dataframes & figures for Base Data-------------"""	
         # Base emissions
         # Add Aberdeen emissions to the Scotland emissions
-        aberdeen_car_emissions = self.aberdeen_fleg[0] * self.emission_factors['car']
-        aberdeen_taxi_emissions = self.aberdeen_fleg[1] * self.emission_factors['taxi']
-        aberdeen_bus_emissions = self.aberdeen_fleg[2] * self.emission_factors['bus']
+        aberdeen_car_emissions = aberdeen_fleg[0] * self.emission_factors['car']
+        aberdeen_taxi_emissions = aberdeen_fleg[1] * self.emission_factors['taxi']
+        aberdeen_bus_emissions = aberdeen_fleg[2] * self.emission_factors['bus']
         aberdeen_total_emissions = sum([aberdeen_car_emissions, aberdeen_taxi_emissions, aberdeen_bus_emissions])
         # Add the emissions for each mode of transport to the Scotland emissions
         scot_car_emissions = self.emissions['Scotland'].iloc[3] + aberdeen_car_emissions
@@ -421,10 +421,10 @@ class Calculator(QWidget):
 
         # Base distances
         # Add Aberdeen distances to the Scotland distances
-        self.distances['Scotland'].iloc[3] += self.aberdeen_fleg[0]
-        self.distances['Scotland'].iloc[2] += self.aberdeen_fleg[2]
-        self.distances['Scotland'].iloc[4] += self.aberdeen_fleg[1]
-        self.distances['Scotland'].iloc[5] += self.aberdeen_fleg[3]
+        self.distances['Scotland'].iloc[3] += aberdeen_fleg[0]
+        self.distances['Scotland'].iloc[2] += aberdeen_fleg[2]
+        self.distances['Scotland'].iloc[4] += aberdeen_fleg[1]
+        self.distances['Scotland'].iloc[5] += aberdeen_fleg[3]
 
         base_distances = self.distances
         base_distances = base_distances * self.num_trips
@@ -483,15 +483,15 @@ class Calculator(QWidget):
         # Create a dictionary with the total distance for each mode of transport for Scotland + Aberdeen
         new_car = {}
         new_car.update(car_dict)
-        new_car['Aberdeen City'] = self.aberdeen_fleg[0]
+        new_car['Aberdeen City'] = aberdeen_fleg[0]
 
         new_bus = {}
         new_bus.update(bus_dict)
-        new_bus['Aberdeen City'] = self.aberdeen_fleg[2]
+        new_bus['Aberdeen City'] = aberdeen_fleg[2]
 
         new_taxi = {}
         new_taxi.update(taxi_dict)
-        new_taxi['Aberdeen City'] = self.aberdeen_fleg[1]
+        new_taxi['Aberdeen City'] = aberdeen_fleg[1]
 
 
         df_car, df_car_emissions = create_dfs(new_car, self.emission_factors['car'], self.num_trips)
