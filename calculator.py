@@ -23,7 +23,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from council_areas import get_district, group_district, find_percentage
 from style_sheets import main_stylesheet, widget_stylesheet
-from utils import create_px, create_dfs, create_go_bar, create_go_table
+from utils import create_px, create_dfs, create_go_bar, create_go_table, divide_combo_percentages
 from aberdeen import distance_home_uni, divide_aberdeen
 
 basedir = os.path.dirname(__file__)
@@ -286,23 +286,12 @@ class Calculator(QWidget):
     def check_combo_page3(self):
         """Check if the sum of the percentages for each country is 100. If it is, then call the menu function. If not, show a message box with an error.""" 
         # call extract function from page3 to get the percentages for each country
-        scot, eng, wales, ni, abe = self.page3.extract_percentages()
-        # Divide the percentages into lists for each country
-        scot = [int(i) for key, i in scot.items()]
-        # [:4] for land and [4:] for air transport
-        eng_land = [int(i) for key, i in eng.items()][:4]
-        eng_air = [int(i) for key, i in eng.items()][4:]
-        wales_land = [int(i) for key, i in wales.items()][:4]
-        wales_air = [int(i) for key, i in wales.items()][4:]
-        ni_land = [int(i) for key, i in ni.items()][:4]
-        ni_air = [int(i) for key, i in ni.items()][4:]
-        # Divide the percentages into lists for Aberdeen
-        abe = [int(i) for key, i in abe.items()]
+        self.p_scot, self.p_eng, self.p_wales, self.p_ni, self.p_abe = self.page3.extract_percentages()
 
         # Sum of all
-        sum_all = sum(scot) + sum(eng_land) + sum(eng_air) + sum(wales_land) + sum(wales_air) + sum(ni_land) + sum(ni_air) + sum(abe)
+        sum_all = sum(self.p_scot.values()) + sum(self.p_eng.values()) + sum(self.p_wales.values()) + sum(self.p_ni.values()) + sum(self.p_abe.values())
 
-        # If the sum of the percentages for each country is 700 (7 elements * 100), then call the menu function.
+        # If the sum of the percentages for each country is 800 (8 elements * 100), then call the menu function.
         if sum_all == 800:
             # Show a message that the data has been submitted
             msg = QMessageBox()
@@ -315,50 +304,6 @@ class Calculator(QWidget):
             msg.exec()
             self.hundred_percent_page3.emit(True)
 
-            # Aberdeen
-            self.aberdeen = self.aberdeen.values.tolist()
-            self.aberdeen_distances = distance_home_uni(self.aberdeen)
-            self.aberdeen_fleg = divide_aberdeen(self.aberdeen_distances, abe[0], abe[1], abe[2], abe[3])
-
-            # Scotland
-            # Combine the bus and rail postcodes for Scotland in a list to be used in the final leg function
-            scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
-            scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
-
-            self.scot_car_fleg = scot_fleg[0] + self.aberdeen_fleg[0]
-            self.scot_taxi_fleg = scot_fleg[1] + self.aberdeen_fleg[1]
-            self.scot_bus_fleg = scot_fleg[2] + self.aberdeen_fleg[2]
-            self.scot_walk_fleg = scot_fleg[3] + self.aberdeen_fleg[3]
-
-            # England
-            eng_rail = self.travel_england[2]
-            eng_plane = self.travel_england[0]
-            eng_fleg_bus_rail, eng_fleg_plane = assign_uk(eng_rail, eng_plane, eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
-            
-            self.eng_car_fleg = eng_fleg_bus_rail[0] + eng_fleg_plane[0]
-            self.eng_taxi_fleg = eng_fleg_bus_rail[1] + eng_fleg_plane[1]
-            self.eng_bus_fleg = eng_fleg_bus_rail[2] + eng_fleg_plane[2]
-            self.eng_walk_fleg = eng_fleg_bus_rail[3] + eng_fleg_plane[3]
-
-            # Wales
-            wales_rail = self.travel_wales[2]
-            wales_plane = self.travel_wales[0]
-            wales_fleg_bus_rail, wales_fleg_plane = assign_uk(wales_rail, wales_plane, wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
-
-            self.wales_car_fleg = wales_fleg_bus_rail[0] + wales_fleg_plane[0]
-            self.wales_taxi_fleg = wales_fleg_bus_rail[1] + wales_fleg_plane[1]
-            self.wales_bus_fleg = wales_fleg_bus_rail[2] + wales_fleg_plane[2]
-            self.wales_walk_fleg = wales_fleg_bus_rail[3] + wales_fleg_plane[3]
-
-            # Northern Ireland
-            ni_rail = self.travel_ni[2]
-            ni_plane = self.travel_ni[0]
-            ni_fleg_bus_rail, ni_fleg_plane = assign_uk(ni_rail, ni_plane, ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
-
-            self.ni_car_fleg = ni_fleg_bus_rail[0] + ni_fleg_plane[0]
-            self.ni_taxi_fleg = ni_fleg_bus_rail[1] + ni_fleg_plane[1]
-            self.ni_bus_fleg = ni_fleg_bus_rail[2] + ni_fleg_plane[2]
-            self.ni_walk_fleg = ni_fleg_bus_rail[3] + ni_fleg_plane[3]
 
         else:
             self.hundred_percent_page3.emit(False)
@@ -387,6 +332,62 @@ class Calculator(QWidget):
         pdg.setMinimum(0)
         pdg.setMaximum(100)
         pdg.show()
+
+        """-------------Get Final Leg Data-------------"""
+
+        # Divide the percentages into lists for each country
+        scot = [int(i) for key, i in self.p_scot.items()]
+        # Divide the percentages into lists for Aberdeen
+        abe = [int(i) for key, i in self.p_abe.items()]
+        # Call the divide_percentages function to divide the percentages into lists for each country and mode of transport
+        eng_land, eng_air = divide_combo_percentages(self.p_eng)
+        wales_land, wales_air = divide_combo_percentages(self.p_wales)
+        ni_land, ni_air = divide_combo_percentages(self.p_ni)
+
+        # Aberdeen
+        self.aberdeen = self.aberdeen.values.tolist()
+        self.aberdeen_distances = distance_home_uni(self.aberdeen)
+        self.aberdeen_fleg = divide_aberdeen(self.aberdeen_distances, abe[0], abe[1], abe[2], abe[3])
+
+        # Scotland
+        # Combine the bus and rail postcodes for Scotland in a list to be used in the final leg function
+        scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
+        self.scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
+
+        self.scot_car_fleg = self.scot_fleg[0] + self.aberdeen_fleg[0]
+        self.scot_taxi_fleg = self.scot_fleg[1] + self.aberdeen_fleg[1]
+        self.scot_bus_fleg = self.scot_fleg[2] + self.aberdeen_fleg[2]
+        self.scot_walk_fleg = self.scot_fleg[3] + self.aberdeen_fleg[3]
+
+        # England
+        eng_rail = self.travel_england[2]
+        eng_plane = self.travel_england[0]
+        eng_fleg_bus_rail, eng_fleg_plane = assign_uk(eng_rail, eng_plane, eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
+        
+        self.eng_car_fleg = eng_fleg_bus_rail[0] + eng_fleg_plane[0]
+        self.eng_taxi_fleg = eng_fleg_bus_rail[1] + eng_fleg_plane[1]
+        self.eng_bus_fleg = eng_fleg_bus_rail[2] + eng_fleg_plane[2]
+        self.eng_walk_fleg = eng_fleg_bus_rail[3] + eng_fleg_plane[3]
+
+        # Wales
+        wales_rail = self.travel_wales[2]
+        wales_plane = self.travel_wales[0]
+        wales_fleg_bus_rail, wales_fleg_plane = assign_uk(wales_rail, wales_plane, wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
+
+        self.wales_car_fleg = wales_fleg_bus_rail[0] + wales_fleg_plane[0]
+        self.wales_taxi_fleg = wales_fleg_bus_rail[1] + wales_fleg_plane[1]
+        self.wales_bus_fleg = wales_fleg_bus_rail[2] + wales_fleg_plane[2]
+        self.wales_walk_fleg = wales_fleg_bus_rail[3] + wales_fleg_plane[3]
+
+        # Northern Ireland
+        ni_rail = self.travel_ni[2]
+        ni_plane = self.travel_ni[0]
+        ni_fleg_bus_rail, ni_fleg_plane = assign_uk(ni_rail, ni_plane, ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
+
+        self.ni_car_fleg = ni_fleg_bus_rail[0] + ni_fleg_plane[0]
+        self.ni_taxi_fleg = ni_fleg_bus_rail[1] + ni_fleg_plane[1]
+        self.ni_bus_fleg = ni_fleg_bus_rail[2] + ni_fleg_plane[2]
+        self.ni_walk_fleg = ni_fleg_bus_rail[3] + ni_fleg_plane[3]
 
         self.pbar.setValue(15)
         # This is necessary for showing and updating the progress bar
