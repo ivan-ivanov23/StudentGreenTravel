@@ -85,3 +85,8 @@ def create_go_table(df: pd.DataFrame, values: list, title: str):
         )
     fig.update_xaxes(categoryorder='category ascending')
     return fig
+
+def divide_combo_percentages(dict1: dict):
+    dict_land = [int(i) for key, i in dict1.items()][:4]
+    dict_air = [int(i) for key, i in dict1.items()][4:]
+    return dict_land, dict_air
