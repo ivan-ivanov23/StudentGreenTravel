@@ -29,17 +29,12 @@ class Page3(QWidget):
         self.layout3 = QVBoxLayout()
         label = QLabel("Assumptions for Final Leg of the Journey")
         label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
-
-        # Picture of the final leg of the journey
-        fin_leg_pic = QLabel()
-        # Load the pixmap
-        fin_leg_pic.setFixedSize(QSize(785, 107))
-        pixmap = QPixmap(os.path.join(basedir, "pictures/fin.png"))
-        # Resize the pixmap to fit within the label size while maintaining aspect ratio
-        scaled_pixmap = pixmap.scaled(fin_leg_pic.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-        # Set the pixmap to the label
-        fin_leg_pic.setPixmap(scaled_pixmap)
         
+        # Picture of the final leg of the journey
+        fin_leg_pic = QLabel(self)
+        pixmap = QPixmap(os.path.join(basedir, "pictures/fin.png"))
+        fin_leg_pic.setPixmap(pixmap)
+        fin_leg_pic.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         instruction = QLabel("""
                              <b>Tip:</b> Select or enter the percentage of students traveling by each transport method 
