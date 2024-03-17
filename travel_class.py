@@ -87,8 +87,8 @@ class Travel:
                 continue
             data[postcode] = (closest_airport_name, distance_to,travel_distance)
 
-
-        return data
+        print(invalid_postcodes)
+        return data, invalid_postcodes
     
     def land_travel(self, potcodes: dict, stops: dict, addresses: list):
         """Returns a dictionary with postcodes as keys and closest airports as values"""
@@ -123,8 +123,9 @@ class Travel:
                 # If the postcode is invalid, add it to the list of invalid postcodes
                 invalid_postcodes.append(postcode)
                 continue
-            
-        return data
+
+        print(invalid_postcodes)    
+        return data, invalid_postcodes
 
     def car_travel(self, postcode_coords: dict, addresses: list):
         # Dictionary to store postcode and distance to the university
@@ -150,6 +151,7 @@ class Travel:
                 invalid_postcodes.append(postcode)
                 continue
 
-        return car_data
+        print(invalid_postcodes)
+        return car_data, invalid_postcodes
             
     

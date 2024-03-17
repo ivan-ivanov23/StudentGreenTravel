@@ -333,6 +333,9 @@ class Calculator(QWidget):
         pdg.setMaximum(100)
         pdg.show()
 
+        self.pbar.setValue(5)
+        QtWidgets.QApplication.processEvents()
+
         """-------------Get Final Leg Data-------------"""
 
         # Divide the percentages into lists for each country
@@ -395,7 +398,8 @@ class Calculator(QWidget):
         QtWidgets.QApplication.processEvents()
 
         # Call the main function
-        self.emissions, self.distances, self.total_emissions, self.total_distance_dict = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        self.emissions, self.distances, self.total_emissions, self.total_distance_dict, all_invalid = main(self.emission_factors, self.travel_scotland, self.travel_england, self.travel_wales, self.travel_ni, scot_car_fleg, scot_taxi_fleg, scot_bus_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg)
+        self.invalid.extend([all_invalid])
         # Update the progress bar
         self.pbar.setValue(25)
         QtWidgets.QApplication.processEvents()

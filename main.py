@@ -30,32 +30,35 @@ def main(emission_factors, transport_scot, transport_eng, transport_wales, trans
 
     """=================================Distance calculations=================================="""
     # Call the land_travel function to get the train travel distances for each postcode
-    scotland_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_scotland)
+    scotland_rail_data, invalid_scot_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_scotland)	
+
    
-    eng_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_eng)
+    eng_rail_data, invalid_eng_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_eng)
 
-    wales_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_wales)
+    wales_rail_data, invalid_wales_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_wales)
 
-    ni_rail_data = travel.land_travel(ukpostcode_coords, stations_dict, rail_ni)
+    ni_rail_data, invalid_ni_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_ni)
 
     # Call the land_travel function to get the bus travel distances for each postcode
-    scotland_bus_data = travel.land_travel(ukpostcode_coords, stops_dict, bus_scotland)
+    scotland_bus_data, invalid_scot_bus = travel.land_travel(ukpostcode_coords, stops_dict, bus_scotland)
 
     # Call air_travel function to get the distance to Aberdeen airport for each postcode
-    eng_flying_data = travel.air_travel(ukpostcode_coords, airports_dict, plane_eng)
+    eng_flying_data, invalid_eng_fly = travel.air_travel(ukpostcode_coords, airports_dict, plane_eng)
 
-    wales_flying_data = travel.air_travel(ukpostcode_coords, airports_dict, plane_wales)
+    wales_flying_data, invalid_wales_fly = travel.air_travel(ukpostcode_coords, airports_dict, plane_wales)
 
-    ni_flying_data = travel.air_travel(ukpostcode_coords, airports_dict, plane_ni)
+    ni_flying_data, invalid_ni_fly = travel.air_travel(ukpostcode_coords, airports_dict, plane_ni)
 
     # Call car_travel function to get the distance to the university for each postcode
-    scotland_car_data = travel.car_travel(ukpostcode_coords, car_scotland)
+    scotland_car_data, invalid_scot_car = travel.car_travel(ukpostcode_coords, car_scotland)
 
-    eng_car_data = travel.car_travel(ukpostcode_coords, car_eng)
+    eng_car_data, invalid_eng_car = travel.car_travel(ukpostcode_coords, car_eng)
 
-    wales_car_data = travel.car_travel(ukpostcode_coords, car_wales)
+    wales_car_data, invalid_wales_car = travel.car_travel(ukpostcode_coords, car_wales)
 
-    ni_car_data = travel.car_travel(ukpostcode_coords, car_ni)
+    ni_car_data, invalid_ni_car = travel.car_travel(ukpostcode_coords, car_ni)
+
+    all_invalid = invalid_scot_rail + invalid_eng_rail + invalid_wales_rail + invalid_ni_rail + invalid_scot_bus + invalid_eng_fly + invalid_wales_fly + invalid_ni_fly + invalid_scot_car + invalid_eng_car + invalid_wales_car + invalid_ni_car
 
     """=================================Initial leg of journey=================================="""
 
@@ -203,7 +206,7 @@ def main(emission_factors, transport_scot, transport_eng, transport_wales, trans
                                     index=['Country'])
 
     # Return the total emissions dataframe
-    return total_emissions_heatmap, total_distances, total_emissions, total_distances_dict
+    return total_emissions_heatmap, total_distances, total_emissions, total_distances_dict, all_invalid
 
 
 if __name__ == '__main__':
