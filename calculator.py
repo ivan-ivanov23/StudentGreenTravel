@@ -244,7 +244,6 @@ class Calculator(QWidget):
         """Check the number of trips chosen by the user"""
         self.num_trips = int(self.page2.trips_combo.currentText())
 
-
     def check_combo_mid_leg(self):
         """Check if the sum of the percentages for each country is 100. 
         If it is, then call the menu function. 
@@ -318,7 +317,6 @@ class Calculator(QWidget):
             msg.setIcon(QMessageBox.Icon.Information)
             msg.exec()
             self.hundred_percent_page3.emit(True)
-
 
         else:
             self.hundred_percent_page3.emit(False)
@@ -494,11 +492,9 @@ class Calculator(QWidget):
         QtWidgets.QApplication.processEvents()
 
         """-------------Create the dataframes & figures for Councils-------------"""
-
         # Scotland
         car_dict, bus_dict, rail_dict, taxi_dict = self.create_council_areas(self.scotland, 'Scotland')
-
-        
+ 
         # Create a dictionary with the total distance for each mode of transport for Scotland + Aberdeen
         new_car = {}
         new_car.update(car_dict)
@@ -511,7 +507,6 @@ class Calculator(QWidget):
         new_taxi = {}
         new_taxi.update(taxi_dict)
         new_taxi['Aberdeen City'] = aberdeen_fleg[1]
-
 
         df_car, df_car_emissions = create_dfs(new_car, self.emission_factors['car'], self.num_trips)
         df_bus, df_bus_emissions = create_dfs(new_bus, self.emission_factors['coach'], self.num_trips)
@@ -611,8 +606,7 @@ class Calculator(QWidget):
         self.page5.radio14.clicked.connect(lambda: self.display_figure(self.page5, wales_bus_emissions))
         self.page5.radio15.clicked.connect(lambda: self.display_figure(self.page5, wales_rail_emissions))
         self.page5.radio16.clicked.connect(lambda: self.display_figure(self.page5, wales_taxi_emissions))
-
-        
+ 
         self.pbar.setValue(65)
         QtWidgets.QApplication.processEvents()
         
@@ -652,8 +646,7 @@ class Calculator(QWidget):
 
         # Show the results page
         self.stackedLayout.setCurrentIndex(3)
-
-    
+ 
     def display_figure(self, page, figure):
         """Maybe add the figures and radiobuttons to lists
         and loop over them to connect them to the radio buttons"""
@@ -705,7 +698,6 @@ class Calculator(QWidget):
             bus_dict['Unknown'] = {'Bus' : init_total_bus - total_bus}
         if total_rail != init_total_rail:
             rail_dict['Unknown'] = {'Rail' : init_total_rail - total_rail}
-
 
         return car_dict, bus_dict, rail_dict, taxi_dict
 
