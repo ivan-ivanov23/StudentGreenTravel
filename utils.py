@@ -22,7 +22,6 @@ def init_leg(initial_distances_list: list):
     # i.e., from home to transport hub
     p_car = 40
     p_taxi = 40
-    p_bus = 20
 
     # Share of students travelling by each method
     car_share = math.ceil(len(initial_distances_list) * (p_car / 100))
