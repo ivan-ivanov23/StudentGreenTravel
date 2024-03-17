@@ -32,6 +32,7 @@ class Calculator(QWidget):
 
     # Signals 
     file_selected = pyqtSignal(bool)
+    file_preprocessed = pyqtSignal(bool)
     hundred_percent = pyqtSignal(bool)
     hundred_percent_page3 = pyqtSignal(bool)
 
@@ -90,7 +91,9 @@ class Calculator(QWidget):
         self.page1.button1.clicked.connect(lambda: self.go_to_page(1))
         self.page1.button2.clicked.connect(self.open_file)
         self.page1.button3.clicked.connect(self.select_emission_factors)
-        self.file_selected.connect(self.page1.enable_buttons1)
+        self.page1.button4.clicked.connect(self.preprocess_data)
+        self.file_selected.connect(self.page1.enable_button4)
+        self.file_preprocessed.connect(self.page1.enable_button1)
         self.page1.default_radio.clicked.connect(self.click_default_radio)
 
         # Connect signals for page2
@@ -143,12 +146,14 @@ class Calculator(QWidget):
         emissions = QIcon(os.path.join(basedir, 'icons/emissions.svg'))
         error = QIcon(os.path.join(basedir, 'icons/error.svg'))
         clear = QIcon(os.path.join(basedir, 'icons/clear.svg'))
+        process = QIcon(os.path.join(basedir, 'icons/process.svg'))
 
 
         # Set icons for all buttons
         self.page1.button1.setIcon(dash)
         self.page1.button2.setIcon(file_button)
         self.page1.button3.setIcon(emissions)
+        self.page1.button4.setIcon(process)
         self.page2.back.setIcon(back)
         self.page3.back.setIcon(back)
         self.page4.button1.setIcon(back)
@@ -177,8 +182,7 @@ class Calculator(QWidget):
 
     """@@@ Main Page (Menu) Methods @@@"""	
     def open_file(self):
-        """Open a file explorer to select a file"""
-        self.page1.file_label.setText("Please wait while the data is being processed...")
+        """Open a file explorer to select a file""" 
         file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
         # If the user selected a file, then read it using pandas
         if file:
@@ -189,16 +193,27 @@ class Calculator(QWidget):
             self.addresses.iloc[:, 1] = self.addresses.iloc[:, 1].str.replace(' ', '')
             # Add the file name to the label text with the file name without the path
             self.page1.file_label.setText(f"<b>Dataset:</b> {file.name.split('/')[-1]}")
-            self.scotland, self.wales, self.north_ireland, self.england, self.aberdeen, self.invalid1 = determine_postcode(self.addresses.iloc[:, 1])
-            # Call the add_invalid function from the invalid page to add the invalid postcodes
-            # pass the invalid postcodes as list 
-            self.invalid.extend([self.invalid1])
             # Emit signal that a file has been selected
             self.file_selected.emit(True)
         else:
             self.page1.file_label.setText("No file was selected.")
             # Emit a signal that a file has not been selected
             self.file_selected.emit(False)
+            self.file_preprocessed.emit(False)
+
+    def preprocess_data(self):
+        self.page1.file_label.setText("Please wait while the data is being prepared...")
+        # Process the event to show the message
+        # Source: https://stackoverflow.com/questions/30823863/pyqt-progress-bar-not-updating-or-appearing-until-100
+        QtWidgets.QApplication.processEvents()
+        self.scotland, self.wales, self.north_ireland, self.england, self.aberdeen, self.invalid1 = determine_postcode(self.addresses.iloc[:, 1])
+        # Call the add_invalid function from the invalid page to add the invalid postcodes
+        # pass the invalid postcodes as list 
+        self.invalid.extend([self.invalid1])
+        # Emit a signal that the data has been preprocessed
+        self.file_preprocessed.emit(True)
+        self.page1.file_label.setText("The data is ready for calculations!")
+
 
     def select_emission_factors(self):
         file = askopenfile(filetypes=[("Excel files", "*.xlsx")])

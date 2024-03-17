@@ -41,7 +41,11 @@ class MainPage(QWidget):
         self.button2.setFixedSize(300, 50)
         self.button3 = QPushButton("Add Emission Factors")
         self.button3.setFixedSize(300, 50)
+        self.button4 = QPushButton("Prepare Data")
+        self.button4.setFixedSize(300, 50)
+        self.button4.setEnabled(False)
         button_layout.addWidget(self.button1)
+        button_layout.addWidget(self.button4)
         button_layout.addWidget(self.button2)
         button_layout.addWidget(self.button3)
 
@@ -86,9 +90,16 @@ class MainPage(QWidget):
 
         self.setLayout(self.main_layout)
 
-    def enable_buttons1(self, file_selected):
+    def enable_button4(self, file_selected):
         """Enable the next button if a file has been selected """
         if file_selected:
+            self.button4.setEnabled(True)
+        else:
+            self.button4.setEnabled(False)
+
+    def enable_button1(self, file_preprocessed):
+        """Enable the next button if a file has been selected """
+        if file_preprocessed:
             self.button1.setEnabled(True)
         else:
             self.button1.setEnabled(False)
