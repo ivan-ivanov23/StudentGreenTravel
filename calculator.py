@@ -414,7 +414,6 @@ class Calculator(QWidget):
         base_emissions = self.emissions
         base_emissions = base_emissions.drop('Walk', axis=0)
         base_emissions = base_emissions * self.num_trips
-        # base_emissions = round(base_emissions, 1)
         base_emissions_fig = create_px(base_emissions, 'Total Emissions (kgCO2e) by Country and Method of Transport', 'Emissions (kgCO2e)', 'bupu')
         # Radio button 1
         self.page4.radio1.clicked.connect(lambda: self.display_figure(self.page4, base_emissions_fig))
@@ -429,7 +428,6 @@ class Calculator(QWidget):
 
         base_distances = self.distances
         base_distances = base_distances * self.num_trips
-        base_distances = round(base_distances, 1)
         base_distances_fig = create_px(base_distances, 'Total Distance (km) by Country and Method of Transport', 'Distance (km)', 'bugn')
         # Radio button 2
         self.page4.radio2.clicked.connect(lambda: self.display_figure(self.page4, base_distances_fig))
@@ -440,7 +438,6 @@ class Calculator(QWidget):
         self.total_emissions['Scotland'] = self.total_emissions['Scotland'] + aberdeen_total_emissions
         total_emissions = self.total_emissions
         total_emissions = total_emissions * self.num_trips
-        total_emissions = total_emissions.round(1)
         names = total_emissions.columns
         values = total_emissions.iloc[0, :]
         total_emissions_pie = px.pie(total_emissions, values=values, names=names, title='Total Emissions by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"))
@@ -452,7 +449,6 @@ class Calculator(QWidget):
         # Emissions per student by country
         per_student = self.total_emissions
         per_student = per_student * self.num_trips
-        per_student = round(per_student, 1)
          # Divide the total emissions by the number of students for each country
         total_scot_students = len(self.scotland) + len(self.aberdeen)
         scot_emissions = per_student.iloc[0, 0] / total_scot_students
