@@ -3,7 +3,11 @@
 # Author: Ivan Ivanov
 
 import numpy as np
-from itertools import islice
+from itertools import islice, accumulate
+import math
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 
 def extract_distances(data: dict):
     """Used for extracting bus, plane and train distances from the data dictionary"""
@@ -21,23 +25,22 @@ def init_leg(initial_distances_list: list):
     p_bus = 20
 
     # Share of students travelling by each method
-    car_share = int(len(initial_distances_list) * (p_car / 100))
-    taxi_share = int(len(initial_distances_list) * (p_taxi / 100))
-    bus_share = int(len(initial_distances_list) * (p_bus / 100))
+    car_share = math.ceil(len(initial_distances_list) * (p_car / 100))
+    taxi_share = math.ceil(len(initial_distances_list) * (p_taxi / 100))
+    bus_share = len(initial_distances_list) - car_share - taxi_share
 
     # Divide the all_initial list into 3 lists,
     # one for each mode of transport according to the percentages 
     # without overlapping
-    # Inspired by answer from senderle: https://stackoverflow.com/questions/312443/how-do-i-split-a-list-into-equally-sized-chunks
+    # Inspired by  Method 3 in https://www.geeksforgeeks.org/python-split-list-in-uneven-groups/
     seclist = [car_share, taxi_share, bus_share]
-    it = iter(initial_distances_list)
-    car_list, taxi_list, bus_list = [list(islice(it, 0, i)) for i in seclist]
+    res = [list(islice(initial_distances_list, start, end)) for start, end in zip([0]+list(accumulate(seclist)), accumulate(seclist))]
 
     # Sum the distances to get total travelled distances
     # by each method of transport
-    total_car = np.sum(car_list)
-    total_taxi = np.sum(taxi_list)
-    total_bus = np.sum(bus_list)
+    total_car = np.sum(res[0])
+    total_taxi = np.sum(res[1])
+    total_bus = np.sum(res[2])
 
     return total_car, total_taxi, total_bus
 
@@ -47,3 +50,43 @@ def split_list(lst, chunk_size=100):
     for i, item in enumerate(lst):
         chunks[i // chunk_size].append(item)
     return chunks
+
+def create_dfs(transport: dict, emission_factor: float, num_trips: int):
+    df_transport = pd.DataFrame(transport)
+    # Multiply the distances by the number of trips to get the total distance
+    df_transport = df_transport * num_trips
+    # Multiply the distances by the emission factor to get the emissions
+    df_emissions = df_transport * emission_factor
+    df_transport = round(df_transport, 1)
+    df_emissions = round(df_emissions, 1)
+    return df_transport, df_emissions
+
+def create_px(df: pd.DataFrame, title: str, color_vals: str, color_scheme: str):
+    fig = px.imshow(df, text_auto=True, aspect='auto', title=title,
+                    labels=dict(x="Country", y="Transport", color=color_vals),
+                    color_continuous_scale=color_scheme)
+    fig.update_traces(textfont_size=16)
+
+    return fig
+
+def create_go_bar(df: pd.DataFrame, title, ytitle):
+    fig = go.Figure(
+        data=[go.Bar(x=df.columns, y=df.iloc[0, :], text=df.iloc[0, :], textposition='auto')],
+        layout=go.Layout(title=title, xaxis=dict(title='Council Area'), yaxis=dict(title=ytitle))
+    )
+    fig.update_xaxes(categoryorder='category ascending')
+    return fig
+
+def create_go_table(df: pd.DataFrame, values: list, title: str):
+    fig = go.Figure(
+            data=[go.Table( header=dict(values=values),
+                            cells=dict(values=[df.columns, df.iloc[0, :]]))],
+            layout=go.Layout(title=title)
+        )
+    fig.update_xaxes(categoryorder='category ascending')
+    return fig
+
+def divide_combo_percentages(dict1: dict):
+    dict_land = [int(i) for key, i in dict1.items()][:4]
+    dict_air = [int(i) for key, i in dict1.items()][4:]
+    return dict_land, dict_air

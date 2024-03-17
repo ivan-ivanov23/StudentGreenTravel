@@ -4,6 +4,10 @@
 
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QComboBox, QGridLayout, QHBoxLayout, QPushButton, QWidget
 from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtGui import QPixmap
+import os
+
+basedir = os.path.dirname(__file__)
 
 
 class Page2(QWidget):
@@ -21,6 +25,13 @@ class Page2(QWidget):
         label = QLabel("Assumptions for Middle Leg of the Journey")
         label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
         self.layout2.addWidget(label)
+
+        # Picture of the final leg of the journey
+        mid_leg_pic = QLabel(self)
+        pixmap = QPixmap(os.path.join(basedir, "pictures/mid.png"))
+        mid_leg_pic.setPixmap(pixmap)
+        mid_leg_pic.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
 
         instruction1 = QLabel("""
             <b>Tip:</b> Select or enter the number of study-related trips a student makes on average per year.""")
@@ -57,92 +68,109 @@ class Page2(QWidget):
         instruction2.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
         self.layout2.addWidget(instruction2)
 
+        # Main grid to hold the scotland and uk grids
+        main_grid = QGridLayout()
+        main_grid.setHorizontalSpacing(100)
+        main_grid.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Grid layout for the combo boxes
-        grid = QGridLayout()
-        grid.setHorizontalSpacing(50)
-        grid.setVerticalSpacing(2)
+        # Scotland grid
+        grid1 = QGridLayout()
+        grid1.setHorizontalSpacing(25)
+        grid1.setVerticalSpacing(6)
+        grid1.setColumnStretch(1, 1)
+        grid1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Rest of UK grid
+        grid2 = QGridLayout()
+        grid2.setHorizontalSpacing(25)
+        grid2.setVerticalSpacing(6)
+        grid2.setColumnStretch(1, 1)
+        grid2.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
 
         # Scotland combo boxes and labels
         scotland_label = QLabel("Scotland")
-        scotland_label.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
-        grid.addWidget(scotland_label, 0, 0)
+        scotland_label.setStyleSheet("font-weight: bold; font-size: 18px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        grid1.addWidget(scotland_label, 0, 0, 1, 2)
 
         bus_scotland_label = QLabel("Bus %")
         bus_scotland_label.setStyleSheet("font-size: 14px; color: #2d3436")
-        grid.addWidget(bus_scotland_label, 1, 0)
+        grid1.addWidget(bus_scotland_label, 1, 0)
         self.combo_bus_scot = QComboBox()
         self.combo_bus_scot.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             val = str(i)
             self.combo_bus_scot.addItem(val)
-        grid.addWidget(self.combo_bus_scot, 1, 1)
+        grid1.addWidget(self.combo_bus_scot, 1, 1)
 
         car_scotland_label = QLabel("Car %", self)
         car_scotland_label.setStyleSheet("font-size: 14px; color: #2d3436")
-        grid.addWidget(car_scotland_label, 2, 0)
+        grid1.addWidget(car_scotland_label, 2, 0)
         self.combo_car_scot = QComboBox(self)
         self.combo_car_scot.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             val = str(i)
             self.combo_car_scot.addItem(val)
-        grid.addWidget(self.combo_car_scot, 2, 1)
+        grid1.addWidget(self.combo_car_scot, 2, 1)
 
         rail_scotland_label = QLabel("Train %", self)
         rail_scotland_label.setStyleSheet("font-size: 14px; color: #2d3436")
-        grid.addWidget(rail_scotland_label, 3, 0)
+        grid1.addWidget(rail_scotland_label, 3, 0)
         self.combo_rail_scot = QComboBox(self)
         self.combo_rail_scot.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             val = str(i)
             self.combo_rail_scot.addItem(val)
-        grid.addWidget(self.combo_rail_scot, 3, 1)
+        grid1.addWidget(self.combo_rail_scot, 3, 1)
 
         # label to show the percentages out of 100 that the user has selected
         self.scot_select = 0
         self.percent_label = QLabel(f"Selected: {self.scot_select}%")
         self.percent_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        grid.addWidget(self.percent_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignLeft)
+        grid1.addWidget(self.percent_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
 
 
         # UK
         uk_label = QLabel("Rest of UK", self)
-        uk_label.setStyleSheet("font-weight: bold; font-size: 16px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
-        grid.addWidget(uk_label, 0, 3)
+        uk_label.setStyleSheet("font-weight: bold; font-size: 18px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        grid2.addWidget(uk_label, 0, 0, 1, 2)
 
         plane_uk_label = QLabel("Plane %", self)
         plane_uk_label.setStyleSheet("font-size: 14px; color: #2d3436")
-        grid.addWidget(plane_uk_label, 1, 3)
+        grid2.addWidget(plane_uk_label, 1, 0)
         self.plane_uk = QComboBox(self)
         self.plane_uk.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             self.plane_uk.addItem(str(i))
-        grid.addWidget(self.plane_uk, 1, 4)
+        grid2.addWidget(self.plane_uk, 1, 1)
 
         car_uk_label = QLabel("Car %", self)
         car_uk_label.setStyleSheet("font-size: 14px; color: #2d3436")
-        grid.addWidget(car_uk_label, 2, 3)
+        grid2.addWidget(car_uk_label, 2, 0)
         self.car_uk = QComboBox(self)
         self.car_uk.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             self.car_uk.addItem(str(i))
-        grid.addWidget(self.car_uk, 2, 4)
+        grid2.addWidget(self.car_uk, 2, 1)
 
         rail_uk_label = QLabel("Train %", self)
         rail_uk_label.setStyleSheet("font-size: 14px; color: #2d3436")
-        grid.addWidget(rail_uk_label, 3, 3)
+        grid2.addWidget(rail_uk_label, 3, 0)
         self.rail_uk = QComboBox(self)
         self.rail_uk.setStyleSheet("font: Arial; font-size: 14px")
         for i in range(101):
             self.rail_uk.addItem(str(i))
-        grid.addWidget(self.rail_uk, 3, 4)
+        grid2.addWidget(self.rail_uk, 3, 1)
 
         # label to show the percentages out of 100 that the user has selected
         self.uk_select = 0
         self.uk_percent_label = QLabel(f"Selected: {self.uk_select}%")
         self.uk_percent_label.setStyleSheet("font-size: 14px; color: #2d3436; font: bold")
-        grid.addWidget(self.uk_percent_label, 4, 3, 1, 2, Qt.AlignmentFlag.AlignLeft)
+        grid2.addWidget(self.uk_percent_label, 4, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
+
+        # Add the grids to the main grid
+        main_grid.addLayout(grid1, 0, 0)
+        main_grid.addLayout(grid2, 0, 2)
 
 
         # Button layout
@@ -160,8 +188,9 @@ class Page2(QWidget):
         button_layout.addWidget(self.next_button2)
 
         # Add the grid and button to the main layout of the page
-        self.layout2.addLayout(grid)
+        self.layout2.addLayout(main_grid)
         self.layout2.addStretch(1)
+        self.layout2.addWidget(mid_leg_pic)
         self.layout2.addLayout(button_layout)
 
         self.setLayout(self.layout2)
