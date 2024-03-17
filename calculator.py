@@ -414,7 +414,7 @@ class Calculator(QWidget):
         base_emissions = self.emissions
         base_emissions = base_emissions.drop('Walk', axis=0)
         base_emissions = base_emissions * self.num_trips
-        base_emissions = round(base_emissions, 1)
+        # base_emissions = round(base_emissions, 1)
         base_emissions_fig = create_px(base_emissions, 'Total Emissions (kgCO2e) by Country and Method of Transport', 'Emissions (kgCO2e)', 'bupu')
         # Radio button 1
         self.page4.radio1.clicked.connect(lambda: self.display_figure(self.page4, base_emissions_fig))
