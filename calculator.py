@@ -254,7 +254,7 @@ class Calculator(QWidget):
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
-            success = QIcon('icons/success.svg')
+            success = QIcon(os.path.join(basedir, 'icons/success.svg'))
             msg.setWindowIcon(success)
             msg.setText("The data has been submitted!")
             # Add a success icon to the message box
@@ -274,7 +274,7 @@ class Calculator(QWidget):
             # Show a message box with the error
             msg = QMessageBox()
             msg.setWindowTitle("Error")
-            warning = QIcon('icons/warning.svg')
+            warning = QIcon(os.path.join(basedir, 'icons/warning.svg'))
             msg.setWindowIcon(warning)
             msg.setText("The sum of the percentages for each country must be 100!\nPlease try again.")
             msg.setIcon(QMessageBox.Icon.Warning)
@@ -296,7 +296,7 @@ class Calculator(QWidget):
             # Show a message that the data has been submitted
             msg = QMessageBox()
             msg.setWindowTitle("Success")
-            success = QIcon('icons/success.svg')
+            success = QIcon(os.path.join(basedir, 'icons/success.svg'))
             msg.setWindowIcon(success)
             msg.setText("The data has been submitted!")
             # Add a success icon to the message box
@@ -310,7 +310,7 @@ class Calculator(QWidget):
             # Show a message box with the error
             msg = QMessageBox()
             msg.setWindowTitle("Error")
-            warning = QIcon('icons/warning.svg')
+            warning = QIcon(os.path.join(basedir, 'icons/warning.svg'))
             msg.setWindowIcon(warning)
             msg.setText("The sum of the percentages for each country must be 100!\nPlease try again.")
             msg.setIcon(QMessageBox.Icon.Warning)
@@ -325,7 +325,7 @@ class Calculator(QWidget):
         pdg = QProgressDialog()
         pdg.setWindowTitle("Calculating")
         pdg.setLabelText("Please wait while distances and emissions are processed...")
-        loading_icon = QIcon('icons/loading.svg')
+        loading_icon = QIcon(os.path.join(basedir, 'icons/loading.svg'))
         pdg.setWindowIcon(loading_icon)
         self.pbar = QProgressBar()
         pdg.setBar(self.pbar)
