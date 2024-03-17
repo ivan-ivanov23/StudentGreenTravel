@@ -32,7 +32,7 @@ class Calculator(QWidget):
 
     # Signals 
     file_selected = pyqtSignal(bool)
-    file_preprocessed = pyqtSignal(bool)
+    file_prepared = pyqtSignal(bool)
     hundred_percent = pyqtSignal(bool)
     hundred_percent_page3 = pyqtSignal(bool)
 
@@ -91,9 +91,9 @@ class Calculator(QWidget):
         self.page1.button1.clicked.connect(lambda: self.go_to_page(1))
         self.page1.button2.clicked.connect(self.open_file)
         self.page1.button3.clicked.connect(self.select_emission_factors)
-        self.page1.button4.clicked.connect(self.preprocess_data)
+        self.page1.button4.clicked.connect(self.prepare_data)
         self.file_selected.connect(self.page1.enable_button4)
-        self.file_preprocessed.connect(self.page1.enable_button1)
+        self.file_prepared.connect(self.page1.enable_button1)
         self.page1.default_radio.clicked.connect(self.click_default_radio)
 
         # Connect signals for page2
@@ -199,9 +199,9 @@ class Calculator(QWidget):
             self.page1.file_label.setText("No file was selected.")
             # Emit a signal that a file has not been selected
             self.file_selected.emit(False)
-            self.file_preprocessed.emit(False)
+            self.file_prepared.emit(False)
 
-    def preprocess_data(self):
+    def prepare_data(self):
         self.page1.file_label.setText("Please wait while the data is being prepared...")
         # Process the event to show the message
         # Source: https://stackoverflow.com/questions/30823863/pyqt-progress-bar-not-updating-or-appearing-until-100
@@ -211,7 +211,7 @@ class Calculator(QWidget):
         # pass the invalid postcodes as list 
         self.invalid.extend([self.invalid1])
         # Emit a signal that the data has been preprocessed
-        self.file_preprocessed.emit(True)
+        self.file_prepared.emit(True)
         self.page1.file_label.setText("The data is ready for calculations!")
 
 
