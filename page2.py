@@ -70,7 +70,7 @@ class Page2(QWidget):
 
         # Main grid to hold the scotland and uk grids
         main_grid = QGridLayout()
-        main_grid.setHorizontalSpacing(150)
+        main_grid.setHorizontalSpacing(100)
         main_grid.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Scotland grid

@@ -59,7 +59,6 @@ class Page3(QWidget):
         self.leftlist.insertItem(4, 'Northern Ireland')
 
         self.leftlist.setFixedWidth(150)
-        self.leftlist.setFixedHeight(250)
         self.leftlist.setStyleSheet("background-color: #dfe6e9; border-radius: 5px; font-size: 14px; color: #2d3436; padding: 5px; margin-bottom: 10px;")
 
         # Right side widgets
@@ -109,7 +108,6 @@ class Page3(QWidget):
         self.layout3.addWidget(fin_leg_pic)
         self.layout3.addWidget(instruction)
         self.layout3.addLayout(hbox)
-        self.layout3.addStretch(1)
         self.leftlist.currentRowChanged.connect(self.display)
         self.layout3.addWidget(self.calculating_label)
         self.layout3.addLayout(button_layout)
@@ -184,14 +182,8 @@ class Page3(QWidget):
         lay1.setAlignment(Qt.AlignmentFlag.AlignLeft)
         lay1.addWidget(aberdeen_group)
 
-        # Create a page indicator
-        page_label = QLabel("1/5")
-        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
-        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
-
         layout.addWidget(city)
         layout.addLayout(lay1)
-        layout.addWidget(page_label)
         layout.addStretch(1)
 
         self.stack1.setLayout(layout)
@@ -265,14 +257,8 @@ class Page3(QWidget):
         lay1.setAlignment(Qt.AlignmentFlag.AlignLeft)
         lay1.addWidget(scotland_group)
 
-        # Create a page indicator
-        page_label = QLabel("2/5")
-        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
-        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
-
         layout.addWidget(country)
         layout.addLayout(lay1)
-        layout.addWidget(page_label)
         layout.addStretch(1)
 
         self.stack2.setLayout(layout)
@@ -398,14 +384,9 @@ class Page3(QWidget):
         lay1.addWidget(england_group_top)
         lay1.addWidget(england_group_bottom)
 
-        # Create a page indicator
-        page_label = QLabel("3/5")
-        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
-        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         layout.addWidget(country)
         layout.addLayout(lay1)
-        layout.addWidget(page_label)
         layout.addStretch(1)
             
         self.stack3.setLayout(layout)
@@ -533,14 +514,8 @@ class Page3(QWidget):
         lay1.addWidget(wales_group_top)
         lay1.addWidget(wales_group_bottom)
 
-        # Create a page indicator
-        page_label = QLabel("4/5")
-        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
-        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
-
         layout.addWidget(country)
         layout.addLayout(lay1)
-        layout.addWidget(page_label)
         layout.addStretch(1)
     
         self.stack4.setLayout(layout)
@@ -665,15 +640,10 @@ class Page3(QWidget):
         lay1.addWidget(ni_group_top)
         lay1.addWidget(ni_group_bottom)
 
-        # Create a page indicator
-        page_label = QLabel("5/5")
-        page_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #2d3436;")
-        page_label.setAlignment(Qt.AlignmentFlag.AlignRight)
-
         layout.addWidget(country)
         layout.addLayout(lay1)
-        layout.addWidget(page_label)
         layout.addStretch(1)
+
         self.stack5.setLayout(layout)
 
     def display(self, i):
