@@ -184,6 +184,8 @@ class Calculator(QWidget):
     def open_file(self):
         """Open a file explorer to select a file""" 
         file = askopenfile(filetypes=[("Excel files", "*.xlsx")])
+        self.page1.file_label.setText("Please wait while the data is being uploaded...")
+        QtWidgets.QApplication.processEvents()
         # If the user selected a file, then read it using pandas
         if file:
         # Read address file
