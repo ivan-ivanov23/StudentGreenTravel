@@ -89,7 +89,7 @@ class Travel:
 
         return data, invalid_postcodes
     
-    def land_travel(self, potcodes: dict, stops: dict, addresses: list):
+    def land_travel(self, potcodes: dict, stops: dict, addresses: list, aberdeen_hub: tuple):
         """Returns a dictionary with postcodes as keys and closest airports as values"""
         # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
         data = {}
@@ -105,7 +105,7 @@ class Travel:
                 # If the closest stop is not Aberdeen, calculate the distance to it
                 if closest_stop_name != 'Aberdeen':
                     # Calculate the distance between the two stops
-                    travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_bus_stop).km
+                    travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_hub).km
         
                 else:
                     # For default value, calculate the distance to the university
