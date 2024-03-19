@@ -17,15 +17,13 @@ aberdeen_rail_station = (-2.0983252205325833, 57.14372498503623)
 
 class Travel:
     
-    def __init__(self, bus_stops, rail_stations, airports, ukpostcodes):
+    def __init__(self, bus_stops, rail_stations, airports):
         # Student postcodes
         self.postcodes = None
         # Stops, stations or airports with coordinates
         self.stops = bus_stops
         self.stations = rail_stations
         self.airports = airports
-        # UK postcodes with coordinates
-        self.ukpostcodes = ukpostcodes
 
 
     def calculate_distances(self, coords1, coords2_array):
@@ -33,6 +31,8 @@ class Travel:
         distances = []
         # For single postcode coordinates in array of coordinates
         for coords2 in coords2_array:
+            if np.isnan(coords2).any():
+                continue
             # Find distance in km
             distances.append(geodesic(coords1, coords2).km)
         return np.array(distances)
@@ -105,6 +105,8 @@ class Travel:
         for postcode in addresses:
             cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
+            if postcode_coords is None:
+                invalid_postcodes.append(postcode)
             closest_stop_name, distance_to = self.closest_hub(postcode, postcode_coords, stops)
             
             # If the closest stop is not Aberdeen, calculate the distance to it

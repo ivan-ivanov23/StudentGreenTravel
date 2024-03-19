@@ -4,11 +4,11 @@
 import pandas as pd
 import numpy as np
 from travel_class import Travel
-from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict
+from preprocess_data import stops_dict, stations_dict, airports_dict
 from utils import extract_distances, extract_car_distances, init_leg
 
 def main(emission_factors, transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_fleg, scot_car_fleg, scot_taxi_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg):
-    travel = Travel(stops_dict, stations_dict, airports_dict, ukpostcode_coords)
+    travel = Travel(stops_dict, stations_dict, airports_dict)
 
     """=================================Transport methods=================================="""
     # Extract the lists of postcodes for each mode of transport and region

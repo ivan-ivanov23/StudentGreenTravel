@@ -16,10 +16,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 data_dir = os.path.join(script_dir, 'data')
 
 # Read ukpostcodes.csv
-ukpostcodes_path = os.path.join(data_dir, 'ukpostcodes.csv')
-ukpostcodes = pd.read_csv(ukpostcodes_path, usecols=['postcode', 'latitude', 'longitude'])
-ukpostcodes['postcode'] = ukpostcodes['postcode'].str.replace(' ', '')
-ukpostcode_coords = dict(zip(ukpostcodes['postcode'], zip(ukpostcodes['latitude'], ukpostcodes['longitude'])))
+# ukpostcodes_path = os.path.join(data_dir, 'ukpostcodes.csv')
+# ukpostcodes = pd.read_csv(ukpostcodes_path, usecols=['postcode', 'latitude', 'longitude'])
+# ukpostcodes['postcode'] = ukpostcodes['postcode'].str.replace(' ', '')
+# ukpostcode_coords = dict(zip(ukpostcodes['postcode'], zip(ukpostcodes['latitude'], ukpostcodes['longitude'])))
 
 # Read Scotland_Bus_Stations.csv
 bus_stops_path = os.path.join(data_dir, 'Scotland_Bus_Stations.csv')
