@@ -30,17 +30,17 @@ def main(emission_factors, transport_scot, transport_eng, transport_wales, trans
 
     """=================================Distance calculations=================================="""
     # Call the land_travel function to get the train travel distances for each postcode
-    scotland_rail_data, invalid_scot_rail = travel.rail_travel(ukpostcode_coords, stations_dict, rail_scotland)	
+    scotland_rail_data, invalid_scot_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_scotland)	
 
    
-    eng_rail_data, invalid_eng_rail = travel.rail_travel(ukpostcode_coords, stations_dict, rail_eng)
+    eng_rail_data, invalid_eng_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_eng)
 
-    wales_rail_data, invalid_wales_rail = travel.rail_travel(ukpostcode_coords, stations_dict, rail_wales)
+    wales_rail_data, invalid_wales_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_wales)
 
-    ni_rail_data, invalid_ni_rail = travel.rail_travel(ukpostcode_coords, stations_dict, rail_ni)
+    ni_rail_data, invalid_ni_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_ni)
 
     # Call the land_travel function to get the bus travel distances for each postcode
-    scotland_bus_data, invalid_scot_bus = travel.bus_travel(ukpostcode_coords, stops_dict, bus_scotland)
+    scotland_bus_data, invalid_scot_bus = travel.land_travel(ukpostcode_coords, stops_dict, bus_scotland)
 
     # Call air_travel function to get the distance to Aberdeen airport for each postcode
     eng_flying_data, invalid_eng_fly = travel.air_travel(ukpostcode_coords, airports_dict, plane_eng)

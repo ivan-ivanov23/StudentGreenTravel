@@ -89,7 +89,7 @@ class Travel:
 
         return data, invalid_postcodes
     
-    def bus_travel(self, potcodes: dict, stops: dict, addresses: list):
+    def land_travel(self, potcodes: dict, stops: dict, addresses: list):
         """Returns a dictionary with postcodes as keys and closest airports as values"""
         # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
         data = {}
@@ -123,35 +123,6 @@ class Travel:
                 invalid_postcodes.append(postcode)
                 continue
  
-        return data, invalid_postcodes
-    
-    def rail_travel(self, postcodes: dict, stations: dict, addresses: list):
-        """Returns a dictionary with postcodes as keys and closest rail stations as values"""
-        # Dictionary to store postcode as key and closest station, distance to it, and driving distance to Aberdeen as values
-        data = {}
-        # List to store invalid postcodes
-        invalid_postcodes = []
-
-        # For postcode in column 2 of address file
-        for postcode in addresses:
-            # Find the closest rail station to the given postcode and the distance to it
-            closest_station_name, distance_to = self.closest_hub(postcode, postcodes, stations)
-        
-            if postcode in postcodes:
-                travel_distance = geodesic((postcodes[postcode][0], postcodes[postcode][1]), aberdeen_rail_station).km
-                data[postcode] = (closest_station_name, distance_to, travel_distance)
-            elif postcode in additional_coords:
-                # If the code is not in csv file, use the additional_coords dictionary to find the coordinates
-                # And calculate the distance to the university
-                code_latitude = additional_coords[postcode][0]
-                code_longitude = additional_coords[postcode][1]
-                travel_distance = geodesic((code_longitude, code_latitude), aberdeen_rail_station).km
-                data[postcode] = (closest_station_name, distance_to, travel_distance)
-            else:
-                # If the postcode is invalid, add it to the list of invalid postcodes
-                invalid_postcodes.append(postcode)
-                continue
-
         return data, invalid_postcodes
 
     def car_travel(self, postcode_coords: dict, addresses: list):
