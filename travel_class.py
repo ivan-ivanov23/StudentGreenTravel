@@ -4,6 +4,7 @@
 import numpy as np
 from geopy.distance import geodesic
 from preprocess_data import additional_coords
+import sqlite3
 
 # Constant locations and their coordinates
 aberdeen_uni = (-2.0999, 57.1645)
@@ -32,20 +33,16 @@ class Travel:
         distances = []
         # For single postcode coordinates in array of coordinates
         for coords2 in coords2_array:
-            # If any of the two are nan
-            if np.isnan(coords2).any() or np.isnan(coords1).any():
-                continue
-            else:
-                # Find distance in km
-                distances.append(geodesic(coords1, coords2).km)
+            # Find distance in km
+            distances.append(geodesic(coords1, coords2).km)
         return np.array(distances)
     
     # Takes a postcode, a dictionary of UK postcodes and their coordinates, and a dictionary of stops and their coordinates
-    def closest_hub(self, postcode: str, postcodes: dict, stops_wcoords: dict):
+    def closest_hub(self, postcode: str, postcode_fetch: dict, stops_wcoords: dict):
         """Returns the closest transport hub to the postcode"""
         if 'AB' not in postcode:
             # Calculate the distance between the given postcode and bus stops
-            distances = self.calculate_distances((postcodes[postcode][0], postcodes[postcode][1]), np.array(list(stops_wcoords.values())))
+            distances = self.calculate_distances(postcode_fetch, np.array(list(stops_wcoords.values())))
             # Find the index of the closest bus stop
             closest_idx = np.nanargmin(distances)
             # Find the name of the closest bus stop
@@ -56,17 +53,22 @@ class Travel:
             return 'Aberdeen', 0
         
 
-    def air_travel(self, postcodes: dict, airports: dict, addresses: list):
+    def air_travel(self, airports: dict, addresses: list):
         """Returns a dictionary with postcodes as keys and closest airports as values"""
         # Dictionary to store postcode as key and closest airport, distance to it, and flying distance to Aberdeen as values
         data = {}
         # List to store invalid postcodes
         invalid_postcodes = []
 
+        with sqlite3.connect('data.db') as conn:
+            cursor = conn.cursor()
+
         # For postcode in addresses
         for postcode in addresses:
+            cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
+            postcode_coords = cursor.fetchone()
         # Find the closest airport to the postcode
-            closest_airport_name, distance_to = self.closest_hub(postcode, postcodes, airports)
+            closest_airport_name, distance_to = self.closest_hub(postcode, postcode_coords, airports)
             
             # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is not from Scotland or London
             if closest_airport_name != 'Aberdeen' and postcode[:2] not in london_postcodes:
@@ -89,66 +91,98 @@ class Travel:
 
         return data, invalid_postcodes
     
-    def land_travel(self, potcodes: dict, stops: dict, addresses: list):
+    def land_travel(self, stops: dict, addresses: list):
         """Returns a dictionary with postcodes as keys and closest airports as values"""
         # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
         data = {}
         # List to store invalid postcodes
         invalid_postcodes = []
 
+        with sqlite3.connect('data.db') as conn:
+            cursor = conn.cursor()
+
         # For postcode in column 2 of address file
         for postcode in addresses:
-            # Find the closest bus stop to the given postcode and the distance to it
-            if postcode in potcodes:
-                closest_stop_name, distance_to = self.closest_hub(postcode, potcodes, stops)
-                
-                # If the closest stop is not Aberdeen, calculate the distance to it
-                if closest_stop_name != 'Aberdeen':
-                    # Calculate the distance between the two stops
-                    travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_bus_stop).km
-        
-                else:
-                    # For default value, calculate the distance to the university
-                    travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_uni).km
-                data[postcode] = (closest_stop_name, distance_to, travel_distance)
-            elif postcode in additional_coords:
-                # If the code is not in csv file, use the additional_coords dictionary to find the coordinates
-                # And calculate the distance to the university
-                code_latitude = additional_coords[postcode][0]
-                code_longitude = additional_coords[postcode][1]
-                travel_distance = geodesic((code_longitude, code_latitude), aberdeen_uni).km
-                data[postcode] = (closest_stop_name, distance_to, travel_distance)
+            cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
+            postcode_coords = cursor.fetchone()
+            closest_stop_name, distance_to = self.closest_hub(postcode, postcode_coords, stops)
+            
+            # If the closest stop is not Aberdeen, calculate the distance to it
+            if closest_stop_name != 'Aberdeen':
+                # Calculate the distance between the two stops
+                travel_distance = geodesic((postcode_coords[1], postcode_coords[0]), aberdeen_bus_stop).km
+    
             else:
-                # If the postcode is invalid, add it to the list of invalid postcodes
-                invalid_postcodes.append(postcode)
-                continue
+                # For default value, calculate the distance to the university
+                travel_distance = geodesic((postcode_coords[1], postcode_coords[0]), aberdeen_uni).km
+            data[postcode] = (closest_stop_name, distance_to, travel_distance)
+            
+            # if postcode in additional_coords:
+            #     # If the code is not in csv file, use the additional_coords dictionary to find the coordinates
+            #     # And calculate the distance to the university
+            #     code_latitude = additional_coords[postcode][0]
+            #     code_longitude = additional_coords[postcode][1]
+            #     travel_distance = geodesic((code_longitude, code_latitude), aberdeen_uni).km
+            #     data[postcode] = (closest_stop_name, distance_to, travel_distance)
+            # else:
+            #     # If the postcode is invalid, add it to the list of invalid postcodes
+            #     invalid_postcodes.append(postcode)
+            #     continue
  
         return data, invalid_postcodes
 
-    def car_travel(self, postcode_coords: dict, addresses: list):
+    def car_travel(self, addresses: list):
         # Dictionary to store postcode and distance to the university
         car_data = {}
         # List to store invalid postcodes
         invalid_postcodes = []
 
+        with sqlite3.connect('data.db') as conn:
+            cursor = conn.cursor()
+
         # For postcode in column 2 of address file
         for postcode in addresses:
-            # Find the distance between the given postcode and the university
-            if postcode in postcode_coords:
-                distance = geodesic((postcode_coords[postcode][1], postcode_coords[postcode][0]), aberdeen_uni).km
-                car_data[postcode] = distance
-            elif postcode in additional_coords:
-                # If the code is not in csv file, use the additional_coords dictionary to find the coordinates
-                # And calculate the distance to the university
-                code_latitude = additional_coords[postcode][0]
-                code_longitude = additional_coords[postcode][1]
-                distance = geodesic((code_longitude, code_latitude), aberdeen_uni).km
-                car_data[postcode] = distance
-            else:
-                # If the postcode is invalid, add it to the list of invalid postcodes
+            cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
+            postcode_coords = cursor.fetchone()
+            if postcode_coords is None:
                 invalid_postcodes.append(postcode)
-                continue
+            else:
+            # Find the distance between the given postcode and the university
+                distance = geodesic((postcode_coords[1], postcode_coords[0]), aberdeen_uni).km
+                car_data[postcode] = distance
+
+            for postcode in invalid_postcodes:    
+                if postcode in additional_coords:
+                    # If the code is not in csv file, use the additional_coords dictionary to find the coordinates
+                    # And calculate the distance to the university
+                    code_latitude = additional_coords[postcode][0]
+                    code_longitude = additional_coords[postcode][1]
+                    distance = geodesic((code_longitude, code_latitude), aberdeen_uni).km
+                    car_data[postcode] = distance
+                    invalid_postcodes.remove(postcode)
 
         return car_data, invalid_postcodes
             
     
+# Test the air_travel method
+# travel = Travel(aberdeen_bus_stop, aberdeen_rail_station, aberdeen_airport, additional_coords)
+
+# # Read Test.xlsx
+# import pandas as pd
+# from preprocess_data import additional_coords, airports_dict, stops_dict, stations_dict
+# postcodes = ['HA9 0WS', 'AB24 3AD', 'L36 3XR']
+
+# Test the air_travel method
+# airports, invalid = travel.air_travel(airports_dict, postcodes)
+# print(airports)
+# print(invalid)
+
+# Test the land_travel method
+# stops, invalid = travel.land_travel(stations_dict, postcodes)
+# print(stops)
+# print(invalid)
+
+# # Test the car_travel method	
+# car, invalid = travel.car_travel(postcodes)
+# print(car)
+# print(invalid)
