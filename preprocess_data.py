@@ -33,8 +33,8 @@ stations_dict = dict(zip(rail_stations['Station'], zip(rail_stations['Lat'], rai
 
 # Read airports
 airports_path = os.path.join(data_dir, 'GBairports.csv')
-airports = pd.read_csv(airports_path, usecols=['Airport', 'Latitude', 'Longitude'])
-airports_dict = dict(zip(airports['Airport'], zip(airports['Latitude'], airports['Longitude'])))
+airports = pd.read_csv(airports_path, usecols=['Unnamed: 0', 'Latitude', 'Longitude'])
+airports_dict = dict(zip(airports['Unnamed: 0'], zip(airports['Latitude'], airports['Longitude'])))
 
 
 scot_postcodes = ['DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
