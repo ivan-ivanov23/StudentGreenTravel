@@ -103,6 +103,8 @@ class Travel:
 
         # For postcode in column 2 of address file
         for postcode in addresses:
+            if postcode is None:
+                continue
             cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
@@ -112,11 +114,11 @@ class Travel:
             # If the closest stop is not Aberdeen, calculate the distance to it
             if closest_stop_name != 'Aberdeen':
                 # Calculate the distance between the two stops
-                travel_distance = geodesic((postcode_coords[1], postcode_coords[0]), aberdeen_bus_stop).km
+                travel_distance = geodesic(stops[closest_stop_name], aberdeen_bus_stop).km
     
             else:
                 # For default value, calculate the distance to the university
-                travel_distance = geodesic((postcode_coords[1], postcode_coords[0]), aberdeen_uni).km
+                travel_distance = geodesic(aberdeen_bus_stop, aberdeen_uni).km
             data[postcode] = (closest_stop_name, distance_to, travel_distance)
             
             # if postcode in additional_coords:
