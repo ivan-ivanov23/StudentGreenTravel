@@ -20,7 +20,6 @@ from results_emissions import ResultEmissions
 from invalid_page import InvalidPage
 from main import main
 import plotly.express as px
-import plotly.graph_objects as go
 from council_areas import get_district, group_district, find_percentage
 from style_sheets import main_stylesheet, widget_stylesheet
 from utils import create_px, create_dfs, create_go_bar, create_go_table, divide_combo_percentages
