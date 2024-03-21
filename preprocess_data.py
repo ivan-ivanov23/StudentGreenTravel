@@ -16,6 +16,9 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 data_dir = os.path.join(script_dir, 'data')
 
 # Read ukpostcodes.csv
+# Contains Ordnance Survey data © Crown copyright and database right 2021
+# Contains Royal Mail data © Royal Mail copyright and database right 2021
+# Source: Office for National Statistics licensed under the Open Government Licence v.3.0
 ukpostcodes_path = os.path.join(data_dir, 'ukpostcodes.csv')
 ukpostcodes = pd.read_csv(ukpostcodes_path, usecols=['postcode', 'latitude', 'longitude'])
 ukpostcodes['postcode'] = ukpostcodes['postcode'].str.replace(' ', '')
