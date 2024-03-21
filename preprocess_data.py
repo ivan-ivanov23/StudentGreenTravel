@@ -19,23 +19,23 @@ data_dir = os.path.join(script_dir, 'data')
 # Contains Ordnance Survey data © Crown copyright and database right 2021
 # Contains Royal Mail data © Royal Mail copyright and database right 2021
 # Source: Office for National Statistics licensed under the Open Government Licence v.3.0
-ukpostcodes_path = os.path.join(data_dir, 'ukpostcodes.csv')
+ukpostcodes_path = os.path.join(data_dir, 'uk_postcodes.csv')
 ukpostcodes = pd.read_csv(ukpostcodes_path, usecols=['postcode', 'latitude', 'longitude'])
 ukpostcodes['postcode'] = ukpostcodes['postcode'].str.replace(' ', '')
 ukpostcode_coords = dict(zip(ukpostcodes['postcode'], zip(ukpostcodes['latitude'], ukpostcodes['longitude'])))
 
 # Read Scotland_Bus_Stations.csv
-bus_stops_path = os.path.join(data_dir, 'Scotland_Bus_Stations.csv')
+bus_stops_path = os.path.join(data_dir, 'scotland_bus_stations.csv')
 bus_stops = pd.read_csv(bus_stops_path, usecols=['StationName', 'Latitude', 'Longitude'])
 stops_dict = dict(zip(bus_stops['StationName'], zip(bus_stops['Latitude'], bus_stops['Longitude'])))
 
 # Read Railway Stations
-rail_stations_path = os.path.join(data_dir, 'stations.csv')
+rail_stations_path = os.path.join(data_dir, 'rail_stations.csv')
 rail_stations = pd.read_csv(rail_stations_path, usecols=['Station', 'Lat', 'Long'])
 stations_dict = dict(zip(rail_stations['Station'], zip(rail_stations['Lat'], rail_stations['Long'])))
 
 # Read airports
-airports_path = os.path.join(data_dir, 'GBairports.csv')
+airports_path = os.path.join(data_dir, 'airports.csv')
 airports = pd.read_csv(airports_path, usecols=['Unnamed: 0', 'Latitude', 'Longitude'])
 airports_dict = dict(zip(airports['Unnamed: 0'], zip(airports['Latitude'], airports['Longitude'])))
 
