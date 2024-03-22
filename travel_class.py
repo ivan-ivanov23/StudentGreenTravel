@@ -28,7 +28,7 @@ class Travel:
 
 
     def calculate_distances(self, coords1, coords2_array):
-        """Calculate distances between two coordinates and an array of coordinates."""
+        """Calculate distances between coordinates of a point and an array of coordinates."""
         distances = []
         # For single postcode coordinates in array of coordinates
         for coords2 in coords2_array:
