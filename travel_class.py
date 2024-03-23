@@ -7,15 +7,13 @@ from preprocess_data import additional_coords
 import sqlite3
 
 # Constant locations and their coordinates
-# aberdeen_uni = (-2.0999, 57.1645)
 aberdeen_uni = (57.1645, -2.0999)
 scot_postcodes = ['AB', 'DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
 london_postcodes = ['E', 'EW', 'EC', 'N', 'NW', 'SE', 'SW', 'W', 'WC', 'EN', 'HA', 'IG', 'KT', 'TW', 'UB', 'WD']
-# aberdeen_bus_stop = (-2.095330457035445, 57.14450856576696)
 aberdeen_bus_stop = (57.14450856576696, -2.095330457035445)
 aberdeen_airport = (57.2019004822, -2.1977798939)
 gatwick_airport = (51.15380339080233, -0.18165520746018157)
-aberdeen_rail_station = (-2.0983252205325833, 57.14372498503623)
+aberdeen_rail_station = (57.14372498503623, -2.0983252205325833)
 
 class Travel:
     
@@ -42,18 +40,22 @@ class Travel:
         return np.array(distances)
     
     # Takes a postcode, a dictionary of UK postcodes and their coordinates, and a dictionary of stops and their coordinates
-    def closest_hub(self, postcode_fetch: dict, stops_wcoords: dict):
+    def closest_hub(self,postcode: str, postcode_fetch: dict, stops_wcoords: dict):
         """Returns the closest transport hub to the postcode"""
-        # Calculate the distance between the given postcode and bus stops
-        longitude = postcode_fetch[0]
-        latitude = postcode_fetch[1]
-        distances = self.calculate_distances([longitude, latitude], np.array(list(stops_wcoords.values())))
-        # Find the index of the closest bus stop
-        closest_idx = np.nanargmin(distances)
-        # Find the name of the closest bus stop
-        closest_hub_name = list(stops_wcoords.keys())[closest_idx]
-        # Return the name of the closest bus stop and the distance to it
-        return closest_hub_name, distances[closest_idx]
+        if postcode[:2] != 'AB':
+            # Calculate the distance between the given postcode and bus stops
+            longitude = postcode_fetch[0]
+            latitude = postcode_fetch[1]
+            distances = self.calculate_distances([longitude, latitude], np.array(list(stops_wcoords.values())))
+            # Find the index of the closest bus stop
+            closest_idx = np.nanargmin(distances)
+            # Find the name of the closest bus stop
+            closest_hub_name = list(stops_wcoords.keys())[closest_idx]
+            # Return the name of the closest bus stop and the distance to it
+            return closest_hub_name, distances[closest_idx]
+        else:
+            # If the postcode is in Aberdeen, return the name of the university and 0 distance
+            return 'Aberdeen', 0
         
 
     def air_travel(self, airports: dict, addresses: list):
@@ -74,7 +76,7 @@ class Travel:
                 longitude = postcode_coords[0]
                 latitude = postcode_coords[1]
                 # Find the closest airport to the postcode
-                closest_airport_name, distance_to = self.closest_hub([longitude, latitude], airports)
+                closest_airport_name, distance_to = self.closest_hub(postcode, [longitude, latitude], airports)
                 
                 # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is not from Scotland or London
                 if closest_airport_name != 'Aberdeen' and postcode[:2] not in london_postcodes:
@@ -97,7 +99,7 @@ class Travel:
 
         return data, invalid_postcodes
     
-    def land_travel(self, stops: dict, addresses: list):
+    def land_travel(self, stops: dict, addresses: list, aberdeen_hub: tuple):
         """Returns a dictionary with postcodes as keys and closest airports as values"""
         # Dictionary to store postcode as key and closest stop, distance to it, and driving distance to Aberdeen as values
         data = {}
@@ -114,28 +116,28 @@ class Travel:
             if postcode_coords is not None:
                 longitude = postcode_coords[0]
                 latitude = postcode_coords[1]
-                closest_stop_name, distance_to = self.closest_hub([longitude, latitude], stops)
+                closest_stop_name, distance_to = self.closest_hub(postcode, [latitude, longitude], stops)
                 # If the closest stop is not Aberdeen, calculate the distance to it
                 if closest_stop_name != 'Aberdeen':
                     # Calculate the distance between the two stops
-                    travel_distance = geodesic(stops[closest_stop_name], aberdeen_bus_stop).km
+                    travel_distance = geodesic(stops[closest_stop_name], aberdeen_hub).km
         
                 else:
                     # For default value, calculate the distance to the university
-                    travel_distance = geodesic(aberdeen_bus_stop, aberdeen_uni).km
+                    travel_distance = geodesic(aberdeen_hub, aberdeen_uni).km
                 data[postcode] = (closest_stop_name, distance_to, travel_distance)
             else:
                 invalid_postcodes.append(postcode)
                 continue
 
 
-            for postcode in invalid_postcodes:
-                if postcode in additional_coords:
-                    code_latitude = additional_coords[postcode][0]
-                    code_longitude = additional_coords[postcode][1]
-                    travel_distance = geodesic((code_longitude, code_latitude), aberdeen_uni).km
-                    data[postcode] = (closest_stop_name, distance_to, travel_distance)
-                    invalid_postcodes.remove(postcode)
+        for postcode in invalid_postcodes:
+            if postcode in additional_coords:
+                code_latitude = additional_coords[postcode][0]
+                code_longitude = additional_coords[postcode][1]
+                travel_distance = geodesic((code_longitude, code_latitude), aberdeen_uni).km
+                data[postcode] = (closest_stop_name, distance_to, travel_distance)
+                invalid_postcodes.remove(postcode)
 
         return data, invalid_postcodes
 
@@ -175,12 +177,12 @@ class Travel:
 # Test the air_travel method
 # travel = Travel(aberdeen_bus_stop, aberdeen_rail_station, aberdeen_airport)
 
-# Read Test.xlsx
+# # Read Test.xlsx
 # import pandas as pd
 # from preprocess_data import additional_coords, airports_dict, stops_dict, stations_dict
 # postcodes = pd.read_excel('datasets/Test.xlsx', usecols=[1])
 # postcodes = postcodes.dropna()
-# drop float values
+# # drop float values
 # postcodes = postcodes[postcodes.iloc[:, 0].apply(lambda x: isinstance(x, str))]
 # postcodes = postcodes.iloc[:, 0].tolist()
 
@@ -190,11 +192,11 @@ class Travel:
 # print(invalid)
 
 # Test the land_travel method
-# stops, invalid = travel.land_travel(stations_dict, postcodes)
+# stops, invalid = travel.land_travel(stations_dict, postcodes, aberdeen_rail_station)
 # print(stops)
 # print(invalid)
 
 # Test the car_travel method	
 # car, invalid = travel.car_travel(postcodes)
 # print(car)
-# print(invalid)
+# # print(invalid)

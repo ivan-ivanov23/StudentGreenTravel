@@ -3,7 +3,7 @@
 
 import pandas as pd
 import numpy as np
-from travel_class import Travel
+from travel_class import Travel, aberdeen_bus_stop, aberdeen_rail_station
 from preprocess_data import stops_dict, stations_dict, airports_dict
 from utils import extract_distances, extract_car_distances, init_leg
 
@@ -30,17 +30,17 @@ def main(emission_factors, transport_scot, transport_eng, transport_wales, trans
 
     """=================================Distance calculations=================================="""
     # Call the land_travel function to get the train travel distances for each postcode
-    scotland_rail_data, invalid_scot_rail = travel.land_travel(stations_dict, rail_scotland)	
+    scotland_rail_data, invalid_scot_rail = travel.land_travel(stations_dict, rail_scotland, aberdeen_rail_station)	
 
    
-    eng_rail_data, invalid_eng_rail = travel.land_travel(stations_dict, rail_eng)
+    eng_rail_data, invalid_eng_rail = travel.land_travel(stations_dict, rail_eng, aberdeen_rail_station)
 
-    wales_rail_data, invalid_wales_rail = travel.land_travel(stations_dict, rail_wales)
+    wales_rail_data, invalid_wales_rail = travel.land_travel(stations_dict, rail_wales, aberdeen_rail_station)
 
-    ni_rail_data, invalid_ni_rail = travel.land_travel(stations_dict, rail_ni)
+    ni_rail_data, invalid_ni_rail = travel.land_travel(stations_dict, rail_ni, aberdeen_rail_station)
 
     # Call the land_travel function to get the bus travel distances for each postcode
-    scotland_bus_data, invalid_scot_bus = travel.land_travel(stops_dict, bus_scotland)
+    scotland_bus_data, invalid_scot_bus = travel.land_travel(stops_dict, bus_scotland, aberdeen_bus_stop)
 
     # Call air_travel function to get the distance to Aberdeen airport for each postcode
     eng_flying_data, invalid_eng_fly = travel.air_travel(airports_dict, plane_eng)
