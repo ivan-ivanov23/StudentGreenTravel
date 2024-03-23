@@ -191,7 +191,7 @@ class Calculator(QWidget):
             self.addresses = pd.read_excel(file.name, engine='openpyxl')
             # Shuffle dataframe with addresses
             self.addresses = self.addresses.sample(frac=1)
-            self.addresses.iloc[:, 1] = self.addresses.iloc[:, 1].str.replace(' ', '')
+            # self.addresses.iloc[:, 1] = self.addresses.iloc[:, 1].str.replace(' ', '')
             # Add the file name to the label text with the file name without the path
             self.page1.file_label.setText(f"<b>Dataset:</b> {file.name.split('/')[-1]}")
             # Emit signal that a file has been selected
