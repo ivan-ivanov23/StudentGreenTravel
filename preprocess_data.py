@@ -18,17 +18,26 @@ data_dir = os.path.join(script_dir, 'data')
 # Read Scotland_Bus_Stations.csv
 bus_stops_path = os.path.join(data_dir, 'Scotland_Bus_Stations.csv')
 bus_stops = pd.read_csv(bus_stops_path, usecols=['StationName', 'Latitude', 'Longitude'])
-stops_dict = dict(zip(bus_stops['StationName'], zip(bus_stops['Latitude'], bus_stops['Longitude'])))
+# zip together each stop with each latitude and longitude in a dictionary
+stops_coordinates = zip(bus_stops['Latitude'], bus_stops['Longitude'])
+zipped_stops = zip(bus_stops['StationName'], stops_coordinates)
+stops_dict = dict(zipped_stops)
 
 # Read Railway Stations
 rail_stations_path = os.path.join(data_dir, 'stations.csv')
 rail_stations = pd.read_csv(rail_stations_path, usecols=['Station', 'Lat', 'Long'])
-stations_dict = dict(zip(rail_stations['Station'], zip(rail_stations['Lat'], rail_stations['Long'])))
+# zip together each staion with each latitude and longitude in a dictionary
+stations_coordinates = zip(rail_stations['Lat'], rail_stations['Long'])
+zipped_stations = zip(rail_stations['Station'], stations_coordinates)
+stations_dict = dict(zipped_stations)
 
 # Read airports
 airports_path = os.path.join(data_dir, 'GBairports.csv')
 airports = pd.read_csv(airports_path, usecols=['Airport', 'Latitude', 'Longitude'])
-airports_dict = dict(zip(airports['Airport'], zip(airports['Latitude'], airports['Longitude'])))
+# zip together each airport with each latitude and longitude in a dictionary
+airport_coordinates = zip(airports['Latitude'], airports['Longitude'])
+zipped_airports = zip(airports['Airport'], airport_coordinates)
+airports_dict = dict(zipped_airports)
 
 
 scot_postcodes = ['DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
