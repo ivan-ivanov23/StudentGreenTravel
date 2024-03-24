@@ -65,7 +65,7 @@ class Travel:
         # List to store invalid postcodes
         invalid_postcodes = []
 
-        with sqlite3.connect('postcodes.db') as conn:
+        with sqlite3.connect('data/postcodes.db') as conn:
             cursor = conn.cursor()
 
         # For postcode in addresses
@@ -106,7 +106,7 @@ class Travel:
         # List to store invalid postcodes
         invalid_postcodes = []
 
-        with sqlite3.connect('postcodes.db') as conn:
+        with sqlite3.connect('data/postcodes.db') as conn:
             cursor = conn.cursor()
 
         # For postcode in column 2 of address file
@@ -147,7 +147,7 @@ class Travel:
         # List to store invalid postcodes
         invalid_postcodes = []
 
-        with sqlite3.connect('postcodes.db') as conn:
+        with sqlite3.connect('data/postcodes.db') as conn:
             cursor = conn.cursor()
 
         # For postcode in column 2 of address file
