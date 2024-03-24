@@ -279,10 +279,10 @@ class Calculator(QWidget):
             self.hundred_percent.emit(True)
 
             # call the divide_address functions for each country
-            self.travel_scotland = divide_scot_addresses(self.scotland, scot_bus, scot_car, scot_rail)
-            self.travel_england = divide_uk_addresses(self.england, uk_plane, uk_car, uk_rail)
-            self.travel_wales = divide_uk_addresses(self.wales, uk_plane, uk_car, uk_rail)
-            self.travel_ni = divide_uk_addresses(self.north_ireland, uk_plane, uk_car, uk_rail)
+            self.travel_scotland = divide_scot_addresses(self.scotland, scot_bus, scot_car)
+            self.travel_england = divide_uk_addresses(self.england, uk_plane, uk_car)
+            self.travel_wales = divide_uk_addresses(self.wales, uk_plane, uk_car)
+            self.travel_ni = divide_uk_addresses(self.north_ireland, uk_plane, uk_car)
 
         else:
             self.hundred_percent.emit(False)

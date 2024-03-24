@@ -53,7 +53,7 @@ north_ireland = []
 additional_coords = {}
 
 def determine_postcode(postcodes):
-    postcodes = postcodes.dropna()  # Drop NaN values
+    postcodes = postcodes.dropna()
     scotland = postcodes[(postcodes.str[:2].isin(scot_postcodes)) | ((postcodes.str[:2] == 'G') & ~(postcodes.str[:2].isin(eng_postcodes)))]
     england = postcodes[(postcodes.str[:2].isin(eng_postcodes)) & ~(postcodes.str[:2].isin(scot_postcodes)) & ~(postcodes.str[:2]).isin(wales_postcodes)]
     wales = postcodes[postcodes.str[:2].isin(wales_postcodes)]
@@ -101,11 +101,12 @@ def find_country(postcodes):
 
 
 
-def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
+def divide_scot_addresses(scot_addresses: list,  p_bus, p_car):
     """The function divides the list of Scottish postcodes into 3 parts based on the percentages of each transport method."""
 
     p_bus_scot = math.ceil(len(scot_addresses) * (p_bus / 100))
-    p_car_scot = math.ceil(len(scot_addresses) * (p_car / 100))   
+    p_car_scot = math.ceil(len(scot_addresses) * (p_car / 100))
+    # Train percentages are the left out of 100   
     p_rail_scot = len(scot_addresses) - p_bus_scot - p_car_scot
 
     split_list = [p_bus_scot, p_car_scot, p_rail_scot]
@@ -115,13 +116,14 @@ def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
 
     return res
 
-def divide_uk_addresses(country: list, p_plane, p_car, p_rail):
+def divide_uk_addresses(country: list, p_plane, p_car):
     """The function divides the list of UK postcodes into 3 parts based on the percentages of each transport method.
         It is used for England, Wales and Northern Ireland."""
 
     # Calculate the number of postcodes for each transport method
     p_plane_uk = math.ceil(len(country) * (p_plane / 100))
     p_car_uk = math.ceil(len(country) * (p_car / 100))
+    # Train percentages are the left out of 100
     p_rail_uk = len(country) - p_plane_uk - p_car_uk 
 
     # randomly divide 'uk' into 3 parts based on the percentages
