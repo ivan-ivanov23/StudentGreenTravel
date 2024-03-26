@@ -1,6 +1,4 @@
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QHBoxLayout, QListWidget
-from PyQt6.QtCore import Qt
-import pandas as pd
 
 class InvalidPage(QWidget):
 
