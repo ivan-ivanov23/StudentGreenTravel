@@ -60,11 +60,10 @@ class Travel:
 
     def air_travel(self, airports: dict, addresses: list):
         """Returns a dictionary with postcodes as keys and closest airports as values"""
-        # Dictionary to store postcode as key and closest airport, distance to it, and flying distance to Aberdeen as values
+        
         data = {}
-        # List to store invalid postcodes
         invalid_postcodes = []
-
+        # Connect to database
         with sqlite3.connect('data/postcodes.db') as conn:
             cursor = conn.cursor()
 
@@ -75,24 +74,20 @@ class Travel:
             if postcode_coords is not None:
                 longitude = postcode_coords[0]
                 latitude = postcode_coords[1]
-                # Find the closest airport to the postcode
+                # Find the closest airport to the postcode and distance to it
                 closest_airport_name, distance_to = self.closest_hub(postcode, [longitude, latitude], airports)
                 
-                # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is not from Scotland or London
                 if closest_airport_name != 'Aberdeen' and postcode[:2] not in london_postcodes:
-                    # Calculate the distance between the two airports
+                    # Calculate the distance between Gatwick (layover) and Aberdeen airport
                     travel_distance1 = geodesic(airports[closest_airport_name], gatwick_airport).km
-                    # Calculate the distance 2: between Gatwick (layover) and Aberdeen airport
-                    gatwick_aberdeen = 685.68  # Distance between Gatwick and Aberdeen airport in km (source: Google Maps)
+                    gatwick_aberdeen = 685.68
                     travel_distance = travel_distance1 + gatwick_aberdeen
 
-                # If the closest airport is not Aberdeen (default value for nan postcodes) and the postcode is from Scotland or London
                 elif closest_airport_name != 'Aberdeen' and  postcode[:2] in london_postcodes:
-                    # Calculate the distance 1: between closest airport and Gatwick (layover)
+                    # Calculate the distance between closest airport and Aberdeen airport
                     travel_distance = geodesic(airports[closest_airport_name], aberdeen_airport).km
 
                 else:
-                    # If the postcode is invalid, add it to the list of invalid postcodes
                     invalid_postcodes.append(postcode)
                     continue
                 data[postcode] = (closest_airport_name, distance_to,travel_distance)
