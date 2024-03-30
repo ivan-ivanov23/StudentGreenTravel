@@ -42,10 +42,9 @@ class Page3(QWidget):
                              <br>
                              Please, do this for each of the countries in the list on the left. 
                              <br><br>
-                             Additionally, you can check the '<b>Include Aberdeen</b>' box to include the city of Aberdeen in the list and 
-                             make assumptions for students living there.
+                             Additionally, select or enter the percentage of students traveling by each transport method for the city of Aberdeen in the list.
                             <br><br>
-                             Once you have selected the percentages for the middle leg of the journey, click '<b>Submit</b>' to confirm your choices.
+                             Once you have selected the percentages for the final leg of the journey, click '<b>Submit</b>' to confirm your choices.
                              """)
         instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
 

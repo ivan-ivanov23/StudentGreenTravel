@@ -34,7 +34,8 @@ class Page2(QWidget):
 
 
         instruction1 = QLabel("""
-            <b>Tip:</b> Select or enter the number of study-related trips a student makes on average per year.""")
+            <b>Tip:</b> Select or enter the number of study-related trips a student makes on average per year.<br>
+                        Please, select at least 2 trips (from home to Aberdeen and back) and at most 10 trips.""")
         instruction1.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
         self.layout2.addWidget(instruction1)
 
@@ -52,17 +53,17 @@ class Page2(QWidget):
         self.layout2.addWidget(self.trips_combo)
 
         instruction2 = QLabel("""
-            <b>Tip:</b> Select or enter the percentage of students traveling by each transport method 
+            <b>Tip:</b> The initial leg of the journey (from home address to local transportation hub) is already pre-defined:
+            <br>
+            40% of students travel by car, 40% by taxi, and 20% by bus.
+            <br><br>
+            Select or enter the percentage of students traveling by each transport method 
             for the middle leg of their journey, from the transportation hub in their city to Aberdeen.
             <br><br>
             The percentages selected under the 'Scotland' section will be used for the Scottish students,
             <br>
             and the percentages selected under the 'Rest of UK' section will be used for the students from England, Wales, and Northern Ireland.
-            <br><br>
-            The initial leg of the journey (from home address to local transportation hub) is already pre-defined:
             <br>
-            40% of students travel by car, 40% by taxi, and 20% by bus.
-            <br><br>
             Once you have selected the percentages for the middle leg of the journey, click '<b>Submit</b>' to confirm your choices.
         """)
         instruction2.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
