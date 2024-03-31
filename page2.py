@@ -35,7 +35,7 @@ class Page2(QWidget):
 
         instruction1 = QLabel("""
             <b>Tip:</b> Select or enter the number of study-related trips a student makes on average per year.<br>
-                        Please, select at least 2 trips (from home to Aberdeen and back) and at most 10 trips.""")
+                        Please, select at least 2 trips (one at the start of the academic year and one at the end) and at most 10 trips.""")
         instruction1.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
         self.layout2.addWidget(instruction1)
 
