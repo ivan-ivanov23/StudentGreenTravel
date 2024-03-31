@@ -41,7 +41,7 @@ class Travel:
         return np.array(distances)
     
     # Takes a postcode, a dictionary of UK postcodes and their coordinates, and a dictionary of stops and their coordinates
-    def closest_hub(self,postcode: str, postcode_fetch: dict, stops_wcoords: dict):
+    def closest_hub(self, postcode_fetch: dict, stops_wcoords: dict):
         """Returns the closest transport hub to the postcode"""
         # Calculate the distance between the given postcode and bus stops
         longitude = postcode_fetch[0]
@@ -89,7 +89,7 @@ class Travel:
                 latitude = postcode_coords[0]
             
             # Find the closest airport to the postcode and distance to it
-            closest_airport_name, distance_to = self.closest_hub(postcode, [longitude, latitude], airports)
+            closest_airport_name, distance_to = self.closest_hub([longitude, latitude], airports)
 
             # if the postcode is not in London
             if postcode[:2] not in london_postcodes:
@@ -138,7 +138,7 @@ class Travel:
                 latitude = postcode_coords[0]
                 
 
-            closest_stop_name, distance_to = self.closest_hub(postcode, [latitude, longitude], stops)
+            closest_stop_name, distance_to = self.closest_hub([latitude, longitude], stops)
 
             # If the closest stop is not Aberdeen, calculate the distance to it
             if closest_stop_name != 'Aberdeen':
