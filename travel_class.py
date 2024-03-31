@@ -77,11 +77,9 @@ class Travel:
 
         # For postcode in addresses
         for postcode in addresses:
-            postcode = postcode.replace(' ', '')
             cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
-                postcode = postcode.replace(' ', '')
                 longitude, latitude = self.find_coordinates(postcode)
                 if (longitude, latitude) == (0, 0):
                     invalid_postcodes.append(postcode)
@@ -126,11 +124,9 @@ class Travel:
 
         # For postcode in column 2 of address file
         for postcode in addresses:
-            postcode = postcode.replace(' ', '')
             cursor.execute("SELECT longitude, latitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
-                postcode = postcode.replace(' ', '')
                 longitude, latitude = self.find_coordinates(postcode)
                 if (longitude, latitude) == (0, 0):
                     invalid_postcodes.append(postcode)
@@ -173,11 +169,9 @@ class Travel:
 
         # For postcode in column 2 of address file
         for postcode in addresses:
-            postcode = postcode.replace(' ', '')
             cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
-                postcode = postcode.replace(' ', '')
                 longitude, latitude = self.find_coordinates(postcode)
                 if (longitude, latitude) == (0, 0):
                     invalid_postcodes.append(postcode)
