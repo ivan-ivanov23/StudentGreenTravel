@@ -72,11 +72,12 @@ class Travel:
         data = {}
         invalid_postcodes = []
         # Connect to database
-        with sqlite3.connect('data/postcodes.db') as conn:
-            cursor = conn.cursor()
+        conn = sqlite3.connect('data/postcodes.db')
+        cursor = conn.cursor()
 
         # For postcode in addresses
         for postcode in addresses:
+            postcode = postcode.replace(' ', '')
             cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
@@ -86,8 +87,8 @@ class Travel:
                     invalid_postcodes.append(postcode)
                     continue
             else:
-                longitude = postcode_coords[0]
-                latitude = postcode_coords[1]
+                longitude = postcode_coords[1]
+                latitude = postcode_coords[0]
             
             # Find the closest airport to the postcode and distance to it
             closest_airport_name, distance_to = self.closest_hub(postcode, [longitude, latitude], airports)
@@ -109,6 +110,8 @@ class Travel:
 
             data[postcode] = (closest_airport_name, distance_to,travel_distance)
 
+        conn.close()
+
         return data, invalid_postcodes
     
 
@@ -118,11 +121,12 @@ class Travel:
         data = {}
         invalid_postcodes = []
 
-        with sqlite3.connect('data/postcodes.db') as conn:
-            cursor = conn.cursor()
+        conn = sqlite3.connect('data/postcodes.db')
+        cursor = conn.cursor()
 
         # For postcode in column 2 of address file
         for postcode in addresses:
+            postcode = postcode.replace(' ', '')
             cursor.execute("SELECT longitude, latitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
@@ -134,8 +138,8 @@ class Travel:
 
                 
             else:
-                longitude = postcode_coords[0]
-                latitude = postcode_coords[1]
+                longitude = postcode_coords[1]
+                latitude = postcode_coords[0]
                 
 
             closest_stop_name, distance_to = self.closest_hub(postcode, [latitude, longitude], stops)
@@ -154,6 +158,8 @@ class Travel:
             
             data[postcode] = (closest_stop_name, distance_to, travel_distance)
 
+        conn.close()
+
         return data, invalid_postcodes
     
     def car_travel(self, addresses: list):
@@ -162,11 +168,12 @@ class Travel:
         # List to store invalid postcodes
         invalid_postcodes = []
 
-        with sqlite3.connect('data/postcodes.db') as conn:
-            cursor = conn.cursor()
+        conn = sqlite3.connect('data/postcodes.db')
+        cursor = conn.cursor()
 
         # For postcode in column 2 of address file
         for postcode in addresses:
+            postcode = postcode.replace(' ', '')
             cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
@@ -176,12 +183,15 @@ class Travel:
                     invalid_postcodes.append(postcode)
                     continue
             else:
-                longitude = postcode_coords[0]
-                latitude = postcode_coords[1]
+                longitude = postcode_coords[1]
+                latitude = postcode_coords[0]
 
             # Find the distance between the given postcode and the university
             distance = geodesic((latitude, longitude), aberdeen_uni).km
             car_data[postcode] = distance
+        
+        # Close the connection
+        conn.close()
 
         return car_data, invalid_postcodes
     
@@ -189,10 +199,10 @@ class Travel:
 #Test the air_travel method
 # travel = Travel(aberdeen_bus_stop, aberdeen_rail_station, aberdeen_airport)
 
-# # # Read Test.xlsx
+# # Read Test.xlsx
 # import pandas as pd
 # from preprocess_data import airports_dict, stops_dict, stations_dict, determine_postcode
-# postcodes = pd.read_excel('datasets/Sample Data - 2019 - UK & Home Students.xlsx', usecols=[1])
+# postcodes = pd.read_excel('datasets/Test.xlsx', usecols=[1])
 # postcodes = postcodes.dropna()
 # # drop float values
 # postcodes = postcodes[postcodes.iloc[:, 0].apply(lambda x: isinstance(x, str))]
@@ -200,7 +210,7 @@ class Travel:
 
 # scotland, wales, north_ireland, england, aberdeen, new_invalid = determine_postcode(postcodes)
 
-#Test the air_travel method
+# #Test the air_travel method
 # airports, invalid = travel.air_travel(airports_dict, england)
 # print(f"airports: {airports}")
 # print("===========================================================================================================================")
