@@ -67,3 +67,13 @@ main_stylesheet = ("QPushButton {"
         """)
 
 widget_stylesheet = ("font-size: 12px; font-weight: bold; color: #2d3436;")
+
+page_header_stylesheet = ("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
+
+page_instruction_stylesheet = ("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
+
+page2_label_stylesheet = ("font-weight: bold; font-size: 18px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+
+page2_transport_stylesheet = ("font-size: 14px; color: #2d3436")
+
+page2_comobo_stylesheet = ("font: Arial; font-size: 14px")
