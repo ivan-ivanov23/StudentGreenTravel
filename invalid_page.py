@@ -1,4 +1,9 @@
+# Code for the invalid data page of the application
+# Sources of code snippets/pictures are provided in the comments of functions.
+# Author: Ivan Ivanov
+
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QHBoxLayout, QListWidget
+from style_sheets import page_header_stylesheet, page_instruction_stylesheet
 
 class InvalidPage(QWidget):
 
@@ -10,7 +15,7 @@ class InvalidPage(QWidget):
     def initializeUI(self):
         layout = QVBoxLayout()
         self.invalid_label = QLabel("Invalid Postcodes")
-        self.invalid_label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
+        self.invalid_label.setStyleSheet(page_header_stylesheet)
 
         # Create list widget to hold invalid postcodes
         self.invalid_list = QListWidget()
@@ -23,7 +28,7 @@ class InvalidPage(QWidget):
             <br>
             Click the '<b>Clear</b>' button to clear the list of invalid postcodes.
         """)
-        instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
+        instruction.setStyleSheet(page_instruction_stylesheet)
 
         # Layout for buttons
         self.button_layout = QHBoxLayout()

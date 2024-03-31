@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QStackedWidget, QListWidg
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap
 import os
-from style_sheets import page_header_stylesheet, page_instruction_stylesheet, page2_label_stylesheet, page2_transport_stylesheet, page2_comobo_stylesheet
+from style_sheets import page_header_stylesheet, page_instruction_stylesheet, page2_label_stylesheet, page2_transport_stylesheet
 
 basedir = os.path.dirname(__file__)
 
