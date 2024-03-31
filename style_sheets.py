@@ -1,4 +1,5 @@
 # This file contains the stylesheets for the app and its widgets
+# Color codes were generated using the website https://htmlcolorcodes.com/ 
 # Author: Ivan Ivanov
 
 main_stylesheet = ("QPushButton {"
