@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QStackedWidget, QListWidg
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap
 import os
+from style_sheets import page_header_stylesheet, page_instruction_stylesheet, page2_label_stylesheet, page2_transport_stylesheet, page2_comobo_stylesheet
 
 basedir = os.path.dirname(__file__)
 
@@ -28,7 +29,7 @@ class Page3(QWidget):
         """Create and arrange widgets for Page 3"""
         self.layout3 = QVBoxLayout()
         label = QLabel("Assumptions for Final Leg of the Journey")
-        label.setStyleSheet("font-size: 16px; font-weight: bold; color: white; background-color: #2C2C2C; padding: 10px; border-radius: 5px; margin-bottom: 10px;")
+        label.setStyleSheet(page_header_stylesheet)
         
         # Picture of the final leg of the journey
         fin_leg_pic = QLabel(self)
@@ -46,7 +47,7 @@ class Page3(QWidget):
                             <br><br>
                              Once you have selected the percentages for the final leg of the journey, click '<b>Submit</b>' to confirm your choices.
                              """)
-        instruction.setStyleSheet("font-size: 14px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #D7D7D7; padding: 5px;")
+        instruction.setStyleSheet(page_instruction_stylesheet)
 
         # Source: https://www.tutorialspoint.com/pyqt/pyqt_qstackedwidget.htm
         # List of countries
@@ -117,7 +118,7 @@ class Page3(QWidget):
         """UI for Aberdeen"""
         layout = QVBoxLayout()
         city = QLabel("Aberdeen City")
-        city.setStyleSheet("font-weight: bold; font-size: 18px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        city.setStyleSheet(page2_label_stylesheet)
         aberdeen_grid = QGridLayout()
         # Reduce space between labels and combo box columns
         aberdeen_grid.setHorizontalSpacing(20)
@@ -128,13 +129,13 @@ class Page3(QWidget):
 
 
         car = QLabel("Car %")
-        car.setStyleSheet("font-size: 14px; color: #2d3436")
+        car.setStyleSheet(page2_transport_stylesheet)
         taxi = QLabel("Taxi %")
-        taxi.setStyleSheet("font-size: 14px; color: #2d3436")
+        taxi.setStyleSheet(page2_transport_stylesheet)
         bus = QLabel("Bus %")
-        bus.setStyleSheet("font-size: 14px; color: #2d3436")
+        bus.setStyleSheet(page2_transport_stylesheet)
         walk = QLabel("Walk %")
-        walk.setStyleSheet("font-size: 14px; color: #2d3436")
+        walk.setStyleSheet(page2_transport_stylesheet)
       
         # Combo boxes
         self.aberdeen_car_box = QComboBox()
@@ -192,7 +193,7 @@ class Page3(QWidget):
         layout = QVBoxLayout()
         lay1 = QHBoxLayout()
         country = QLabel("Scotland")
-        country.setStyleSheet("font-weight: bold; font-size: 18px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        country.setStyleSheet(page2_label_stylesheet)
         scot_grid = QGridLayout()
         # Reduce space between labels and combo box columns
         scot_grid.setHorizontalSpacing(20)
@@ -203,13 +204,13 @@ class Page3(QWidget):
 
 
         car = QLabel("Car %")
-        car.setStyleSheet("font-size: 14px; color: #2d3436")
+        car.setStyleSheet(page2_transport_stylesheet)
         taxi = QLabel("Taxi %")
-        taxi.setStyleSheet("font-size: 14px; color: #2d3436")
+        taxi.setStyleSheet(page2_transport_stylesheet)
         bus = QLabel("Bus %")
-        bus.setStyleSheet("font-size: 14px; color: #2d3436")
+        bus.setStyleSheet(page2_transport_stylesheet)
         walk = QLabel("Walk %")
-        walk.setStyleSheet("font-size: 14px; color: #2d3436")
+        walk.setStyleSheet(page2_transport_stylesheet)
       
         # Combo boxes
         self.scot_car_box = QComboBox()
@@ -266,7 +267,7 @@ class Page3(QWidget):
         """UI for England""" 
         layout = QVBoxLayout()
         country = QLabel("England")
-        country.setStyleSheet("font-weight: bold; font-size: 18px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        country.setStyleSheet(page2_label_stylesheet)
         eng_grid_top = QGridLayout()
         # Reduce space between labels and combo box columns
         eng_grid_top.setHorizontalSpacing(20)
@@ -285,22 +286,22 @@ class Page3(QWidget):
 
 
         car_top = QLabel("Car %")
-        car_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        car_top.setStyleSheet(page2_transport_stylesheet)
         taxi_top = QLabel("Taxi %")
-        taxi_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        taxi_top.setStyleSheet(page2_transport_stylesheet)
         bus_top = QLabel("Bus %")
-        bus_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        bus_top.setStyleSheet(page2_transport_stylesheet)
         walk_top = QLabel("Walk %")
-        walk_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        walk_top.setStyleSheet(page2_transport_stylesheet)
 
         car_bottom = QLabel("Car %")
-        car_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        car_bottom.setStyleSheet(page2_transport_stylesheet)
         taxi_bottom = QLabel("Taxi %")
-        taxi_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        taxi_bottom.setStyleSheet(page2_transport_stylesheet)
         bus_bottom = QLabel("Bus %")
-        bus_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        bus_bottom.setStyleSheet(page2_transport_stylesheet)
         walk_bottom = QLabel("Walk %")
-        walk_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        walk_bottom.setStyleSheet(page2_transport_stylesheet)
       
         # Combo boxes for left side
         self.eng_car_box_top = QComboBox()
@@ -394,7 +395,7 @@ class Page3(QWidget):
         """UI for Wales""" 
         layout = QVBoxLayout()
         country = QLabel("Wales")
-        country.setStyleSheet("font-weight: bold; font-size: 18px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        country.setStyleSheet(page2_label_stylesheet)
         wales_grid_top = QGridLayout()
         # Reduce space between labels and combo box columns
         wales_grid_top.setHorizontalSpacing(20)
@@ -413,22 +414,22 @@ class Page3(QWidget):
 
 
         car_top = QLabel("Car %")
-        car_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        car_top.setStyleSheet(page2_transport_stylesheet)
         taxi_top = QLabel("Taxi %")
-        taxi_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        taxi_top.setStyleSheet(page2_transport_stylesheet)
         bus_top = QLabel("Bus %")
-        bus_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        bus_top.setStyleSheet(page2_transport_stylesheet)
         walk_top = QLabel("Walk %")
-        walk_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        walk_top.setStyleSheet(page2_transport_stylesheet)
 
         car_bottom = QLabel("Car %")
-        car_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        car_bottom.setStyleSheet(page2_transport_stylesheet)
         taxi_bottom = QLabel("Taxi %")
-        taxi_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        taxi_bottom.setStyleSheet(page2_transport_stylesheet)
         bus_bottom = QLabel("Bus %")
-        bus_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        bus_bottom.setStyleSheet(page2_transport_stylesheet)
         walk_bottom = QLabel("Walk %")
-        walk_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        walk_bottom.setStyleSheet(page2_transport_stylesheet)
       
         # Combo boxes for left side
         self.wales_car_box_top = QComboBox()
@@ -523,7 +524,7 @@ class Page3(QWidget):
         """UI for Northern Ireland""" 
         layout = QVBoxLayout()
         country = QLabel("Northern Ireland")
-        country.setStyleSheet("font-weight: bold; font-size: 18px; color: #2d3436; margin-bottom: 10px; border-radius: 5px; background-color: #dfe6e9; padding: 5px;")
+        country.setStyleSheet(page2_label_stylesheet)
         ni_grid_top = QGridLayout()
         # Reduce space between labels and combo box columns
         ni_grid_top.setHorizontalSpacing(20)
@@ -542,22 +543,22 @@ class Page3(QWidget):
 
 
         car_top = QLabel("Car %")
-        car_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        car_top.setStyleSheet(page2_transport_stylesheet)
         taxi_top = QLabel("Taxi %")
-        taxi_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        taxi_top.setStyleSheet(page2_transport_stylesheet)
         bus_top = QLabel("Bus %")
-        bus_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        bus_top.setStyleSheet(page2_transport_stylesheet)
         walk_top = QLabel("Walk %")
-        walk_top.setStyleSheet("font-size: 14px; color: #2d3436")
+        walk_top.setStyleSheet(page2_transport_stylesheet)
 
         car_bottom = QLabel("Car %")
-        car_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        car_bottom.setStyleSheet(page2_transport_stylesheet)
         taxi_bottom = QLabel("Taxi %")
-        taxi_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        taxi_bottom.setStyleSheet(page2_transport_stylesheet)
         bus_bottom = QLabel("Bus %")
-        bus_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        bus_bottom.setStyleSheet(page2_transport_stylesheet)
         walk_bottom = QLabel("Walk %")
-        walk_bottom.setStyleSheet("font-size: 14px; color: #2d3436")
+        walk_bottom.setStyleSheet(page2_transport_stylesheet)
       
         # Combo boxes for left side
         self.ni_car_box_top = QComboBox()
