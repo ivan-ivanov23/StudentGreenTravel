@@ -1,3 +1,8 @@
+# This file contains manual tests for all the main functions in the project.
+# These tests can be run by executing the file in the terminal.
+# Sources of code snippets and data are provided in the comments of functions.
+# Author: Ivan Ivanov
+
 import pandas as pd
 import math
 from preprocess_data import determine_postcode, divide_scot_addresses, divide_uk_addresses, airports_dict, stations_dict
