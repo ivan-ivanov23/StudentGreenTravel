@@ -50,7 +50,6 @@ def fleg_assumptions(students: list, mode_of_transport: str, hub_uni: float, car
         return final_plane
     
     else:
-        print("Invalid mode of transport")
         # Call the function again if the mode of transport is invalid
         fleg_assumptions(students, mode_of_transport, hub_uni)
 

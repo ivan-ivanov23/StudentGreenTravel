@@ -28,7 +28,7 @@ class Travel:
 
 
     def calculate_distances(self, coords1, coords2_array):
-        """Calculate distances between two coordinates and an array of coordinates."""
+        """Calculate distances between coordinates of a point and an array of coordinates."""
         distances = []
         # For single postcode coordinates in array of coordinates
         for coords2 in coords2_array:
@@ -112,8 +112,12 @@ class Travel:
 
         return data, invalid_postcodes
     
+<<<<<<< HEAD
 
     def land_travel(self, stops: dict, addresses: list, aberdeen_hub: tuple):
+=======
+    def land_travel(self, potcodes: dict, stops: dict, addresses: list, aberdeen_hub: tuple):
+>>>>>>> fcc94f0b21a0c3b14ea1a1e4300306509e935e13
         """Returns a dictionary with postcodes as keys and closest airports as values"""
         
         data = {}
@@ -133,6 +137,25 @@ class Travel:
                     continue
 
                 
+<<<<<<< HEAD
+=======
+                # If the closest stop is not Aberdeen, calculate the distance to it
+                if closest_stop_name != 'Aberdeen':
+                    # Calculate the distance between the two stops
+                    travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_hub).km
+        
+                else:
+                    # For default value, calculate the distance to the university
+                    travel_distance = geodesic((potcodes[postcode][1], potcodes[postcode][0]), aberdeen_uni).km
+                data[postcode] = (closest_stop_name, distance_to, travel_distance)
+            elif postcode in additional_coords:
+                # If the code is not in csv file, use the additional_coords dictionary to find the coordinates
+                # And calculate the distance to the university
+                code_latitude = additional_coords[postcode][0]
+                code_longitude = additional_coords[postcode][1]
+                travel_distance = geodesic((code_longitude, code_latitude), aberdeen_uni).km
+                data[postcode] = (closest_stop_name, distance_to, travel_distance)
+>>>>>>> fcc94f0b21a0c3b14ea1a1e4300306509e935e13
             else:
                 longitude = postcode_coords[1]
                 latitude = postcode_coords[0]

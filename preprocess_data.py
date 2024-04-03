@@ -15,6 +15,18 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 # Construct the absolute path to the data directory
 data_dir = os.path.join(script_dir, 'data')
 
+<<<<<<< HEAD
+=======
+# Read ukpostcodes.csv
+# Contains Ordnance Survey data © Crown copyright and database right 2021
+# Contains Royal Mail data © Royal Mail copyright and database right 2021
+# Source: Office for National Statistics licensed under the Open Government Licence v.3.0
+ukpostcodes_path = os.path.join(data_dir, 'uk_postcodes.csv')
+ukpostcodes = pd.read_csv(ukpostcodes_path, usecols=['postcode', 'latitude', 'longitude'])
+ukpostcodes['postcode'] = ukpostcodes['postcode'].str.replace(' ', '')
+ukpostcode_coords = dict(zip(ukpostcodes['postcode'], zip(ukpostcodes['latitude'], ukpostcodes['longitude'])))
+
+>>>>>>> fcc94f0b21a0c3b14ea1a1e4300306509e935e13
 # Read Scotland_Bus_Stations.csv
 bus_stops_path = os.path.join(data_dir, 'scotland_bus_stations.csv')
 bus_stops = pd.read_csv(bus_stops_path, usecols=['StationName', 'Latitude', 'Longitude'])
