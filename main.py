@@ -4,11 +4,11 @@
 import pandas as pd
 import numpy as np
 from travel_class import Travel, aberdeen_bus_stop, aberdeen_rail_station
-from preprocess_data import ukpostcode_coords, stops_dict, stations_dict, airports_dict
+from preprocess_data import stops_dict, stations_dict, airports_dict
 from utils import extract_distances, extract_car_distances, init_leg
 
 def main(emission_factors, transport_scot, transport_eng, transport_wales, transport_ni, scot_bus_fleg, scot_car_fleg, scot_taxi_fleg, scot_walk_fleg, eng_car_fleg, eng_taxi_fleg, eng_bus_fleg, eng_walk_fleg, wales_car_fleg, wales_taxi_fleg, wales_bus_fleg, wales_walk_fleg, ni_car_fleg, ni_taxi_fleg, ni_bus_fleg, ni_walk_fleg):
-    travel = Travel(stops_dict, stations_dict, airports_dict, ukpostcode_coords)
+    travel = Travel(stops_dict, stations_dict, airports_dict)
 
     """=================================Transport methods=================================="""
     # Extract the lists of postcodes for each mode of transport and region
@@ -30,33 +30,33 @@ def main(emission_factors, transport_scot, transport_eng, transport_wales, trans
 
     """=================================Distance calculations=================================="""
     # Call the land_travel function to get the train travel distances for each postcode
-    scotland_rail_data, invalid_scot_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_scotland, aberdeen_rail_station)	
+    scotland_rail_data, invalid_scot_rail = travel.land_travel(stations_dict, rail_scotland, aberdeen_rail_station)	
 
    
-    eng_rail_data, invalid_eng_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_eng, aberdeen_rail_station)
+    eng_rail_data, invalid_eng_rail = travel.land_travel(stations_dict, rail_eng, aberdeen_rail_station)
 
-    wales_rail_data, invalid_wales_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_wales, aberdeen_rail_station)
+    wales_rail_data, invalid_wales_rail = travel.land_travel(stations_dict, rail_wales, aberdeen_rail_station)
 
-    ni_rail_data, invalid_ni_rail = travel.land_travel(ukpostcode_coords, stations_dict, rail_ni, aberdeen_rail_station)
+    ni_rail_data, invalid_ni_rail = travel.land_travel(stations_dict, rail_ni, aberdeen_rail_station)
 
     # Call the land_travel function to get the bus travel distances for each postcode
-    scotland_bus_data, invalid_scot_bus = travel.land_travel(ukpostcode_coords, stops_dict, bus_scotland, aberdeen_bus_stop)
+    scotland_bus_data, invalid_scot_bus = travel.land_travel(stops_dict, bus_scotland, aberdeen_bus_stop)
 
     # Call air_travel function to get the distance to Aberdeen airport for each postcode
-    eng_flying_data, invalid_eng_fly = travel.air_travel(ukpostcode_coords, airports_dict, plane_eng)
+    eng_flying_data, invalid_eng_fly = travel.air_travel(airports_dict, plane_eng)
 
-    wales_flying_data, invalid_wales_fly = travel.air_travel(ukpostcode_coords, airports_dict, plane_wales)
+    wales_flying_data, invalid_wales_fly = travel.air_travel(airports_dict, plane_wales)
 
-    ni_flying_data, invalid_ni_fly = travel.air_travel(ukpostcode_coords, airports_dict, plane_ni)
+    ni_flying_data, invalid_ni_fly = travel.air_travel(airports_dict, plane_ni)
 
     # Call car_travel function to get the distance to the university for each postcode
-    scotland_car_data, invalid_scot_car = travel.car_travel(ukpostcode_coords, car_scotland)
+    scotland_car_data, invalid_scot_car = travel.car_travel( car_scotland)
 
-    eng_car_data, invalid_eng_car = travel.car_travel(ukpostcode_coords, car_eng)
+    eng_car_data, invalid_eng_car = travel.car_travel(car_eng)
 
-    wales_car_data, invalid_wales_car = travel.car_travel(ukpostcode_coords, car_wales)
+    wales_car_data, invalid_wales_car = travel.car_travel(car_wales)
 
-    ni_car_data, invalid_ni_car = travel.car_travel(ukpostcode_coords, car_ni)
+    ni_car_data, invalid_ni_car = travel.car_travel(car_ni)
 
     all_invalid = invalid_scot_rail + invalid_eng_rail + invalid_wales_rail + invalid_ni_rail + invalid_scot_bus + invalid_eng_fly + invalid_wales_fly + invalid_ni_fly + invalid_scot_car + invalid_eng_car + invalid_wales_car + invalid_ni_car
 
@@ -143,7 +143,7 @@ def main(emission_factors, transport_scot, transport_eng, transport_wales, trans
 
     # Create a dataframe to store the total distances
     total_distances = pd.DataFrame(total_distances_dict,
-                                    index=['Train', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
+                                    index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
 
     """=================================Emissions=================================="""
     
@@ -195,7 +195,7 @@ def main(emission_factors, transport_scot, transport_eng, transport_wales, trans
                                     'England': [rail_emissions_england, plane_emissions_england, bus_emissions_england, car_emissions_england, taxi_emissions_england, walk_emissions_england],
                                     'Wales': [rail_emissions_wales, plane_emissions_wales, bus_emissions_wales, car_emissions_wales, taxi_emissions_wales, walk_emissions_wales],
                                     'Northern Ireland': [rail_emissions_ni, plane_emissions_ni, bus_emissions_ni, car_emissions_ni, taxi_emissions_ni, walk_emissions_ni]},
-                                    index=['Train', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
+                                    index=['Rail', 'Plane', 'Bus', 'Car', 'Taxi', 'Walk'])
     
 
     # Dataframe to store the total emissions

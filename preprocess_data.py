@@ -15,29 +15,29 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 # Construct the absolute path to the data directory
 data_dir = os.path.join(script_dir, 'data')
 
-# Read ukpostcodes.csv
-# Contains Ordnance Survey data © Crown copyright and database right 2021
-# Contains Royal Mail data © Royal Mail copyright and database right 2021
-# Source: Office for National Statistics licensed under the Open Government Licence v.3.0
-ukpostcodes_path = os.path.join(data_dir, 'uk_postcodes.csv')
-ukpostcodes = pd.read_csv(ukpostcodes_path, usecols=['postcode', 'latitude', 'longitude'])
-ukpostcodes['postcode'] = ukpostcodes['postcode'].str.replace(' ', '')
-ukpostcode_coords = dict(zip(ukpostcodes['postcode'], zip(ukpostcodes['latitude'], ukpostcodes['longitude'])))
-
 # Read Scotland_Bus_Stations.csv
 bus_stops_path = os.path.join(data_dir, 'scotland_bus_stations.csv')
 bus_stops = pd.read_csv(bus_stops_path, usecols=['StationName', 'Latitude', 'Longitude'])
-stops_dict = dict(zip(bus_stops['StationName'], zip(bus_stops['Latitude'], bus_stops['Longitude'])))
+# zip together each stop with each latitude and longitude in a dictionary
+stops_coordinates = zip(bus_stops['Latitude'], bus_stops['Longitude'])
+zipped_stops = zip(bus_stops['StationName'], stops_coordinates)
+stops_dict = dict(zipped_stops)
 
 # Read Railway Stations
 rail_stations_path = os.path.join(data_dir, 'rail_stations.csv')
 rail_stations = pd.read_csv(rail_stations_path, usecols=['Station', 'Lat', 'Long'])
-stations_dict = dict(zip(rail_stations['Station'], zip(rail_stations['Lat'], rail_stations['Long'])))
+# zip together each staion with each latitude and longitude in a dictionary
+stations_coordinates = zip(rail_stations['Lat'], rail_stations['Long'])
+zipped_stations = zip(rail_stations['Station'], stations_coordinates)
+stations_dict = dict(zipped_stations)
 
 # Read airports
 airports_path = os.path.join(data_dir, 'airports.csv')
 airports = pd.read_csv(airports_path, usecols=['Airport', 'Latitude', 'Longitude'])
-airports_dict = dict(zip(airports['Airport'], zip(airports['Latitude'], airports['Longitude'])))
+# zip together each airport with each latitude and longitude in a dictionary
+airport_coordinates = zip(airports['Latitude'], airports['Longitude'])
+zipped_airports = zip(airports['Airport'], airport_coordinates)
+airports_dict = dict(zipped_airports)
 
 
 scot_postcodes = ['DD', 'DG', 'EH', 'FK', 'G', 'HS', 'IV', 'KA', 'KW', 'KY', 'ML', 'PA', 'PH', 'TD', 'ZE']
@@ -49,11 +49,8 @@ england = []
 wales = []
 north_ireland = []
 
-# Dictionary to store postcodes and coordinates which are not found in initial csv file
-additional_coords = {}
-
 def determine_postcode(postcodes):
-    postcodes = postcodes.dropna()  # Drop NaN values
+    postcodes = postcodes.dropna()
     scotland = postcodes[(postcodes.str[:2].isin(scot_postcodes)) | ((postcodes.str[:2] == 'G') & ~(postcodes.str[:2].isin(eng_postcodes)))]
     england = postcodes[(postcodes.str[:2].isin(eng_postcodes)) & ~(postcodes.str[:2].isin(scot_postcodes)) & ~(postcodes.str[:2]).isin(wales_postcodes)]
     wales = postcodes[postcodes.str[:2].isin(wales_postcodes)]
@@ -82,16 +79,12 @@ def find_country(postcodes):
                 else:
                     if item["result"]["country"] == 'Scotland' or item["result"]["country"] == 'Isle of Man':
                         scotland.append(postcode)
-                        additional_coords[postcode] = [item["result"]["latitude"], item["result"]["longitude"]]
                     elif item["result"]["country"] == 'England' or item["result"]["country"] == 'Channel Islands':
                         england.append(postcode)
-                        additional_coords[postcode] = [item["result"]["latitude"], item["result"]["longitude"]]
                     elif item["result"]["country"] == 'Wales':
                         wales.append(postcode)
-                        additional_coords[postcode] = [item["result"]["latitude"], item["result"]["longitude"]]
                     elif item["result"]["country"] == 'Northern Ireland':
                         north_ireland.append(postcode)
-                        additional_coords[postcode] = [item["result"]["latitude"], item["result"]["longitude"]]
                     else:
                         if item["result"]["country"]:
                             result[postcode] = item["result"]["country"]
@@ -101,11 +94,12 @@ def find_country(postcodes):
 
 
 
-def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
+def divide_scot_addresses(scot_addresses: list,  p_bus, p_car):
     """The function divides the list of Scottish postcodes into 3 parts based on the percentages of each transport method."""
 
     p_bus_scot = math.ceil(len(scot_addresses) * (p_bus / 100))
-    p_car_scot = math.ceil(len(scot_addresses) * (p_car / 100))   
+    p_car_scot = math.ceil(len(scot_addresses) * (p_car / 100))
+    # Train percentages are the left out of 100   
     p_rail_scot = len(scot_addresses) - p_bus_scot - p_car_scot
 
     split_list = [p_bus_scot, p_car_scot, p_rail_scot]
@@ -115,13 +109,14 @@ def divide_scot_addresses(scot_addresses: list,  p_bus, p_car, p_rail):
 
     return res
 
-def divide_uk_addresses(country: list, p_plane, p_car, p_rail):
+def divide_uk_addresses(country: list, p_plane, p_car):
     """The function divides the list of UK postcodes into 3 parts based on the percentages of each transport method.
         It is used for England, Wales and Northern Ireland."""
 
     # Calculate the number of postcodes for each transport method
     p_plane_uk = math.ceil(len(country) * (p_plane / 100))
     p_car_uk = math.ceil(len(country) * (p_car / 100))
+    # Train percentages are the left out of 100
     p_rail_uk = len(country) - p_plane_uk - p_car_uk 
 
     # randomly divide 'uk' into 3 parts based on the percentages

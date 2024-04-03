@@ -189,6 +189,7 @@ class Calculator(QWidget):
             self.addresses = pd.read_excel(file.name, engine='openpyxl')
             # Shuffle dataframe with addresses
             self.addresses = self.addresses.sample(frac=1)
+            # Remove white spaces from the postcodes
             self.addresses.iloc[:, 1] = self.addresses.iloc[:, 1].str.replace(' ', '')
             # Add the file name to the label text with the file name without the path
             self.page1.file_label.setText(f"<b>Dataset:</b> {file.name.split('/')[-1]}")
@@ -277,10 +278,10 @@ class Calculator(QWidget):
             self.hundred_percent.emit(True)
 
             # call the divide_address functions for each country
-            self.travel_scotland = divide_scot_addresses(self.scotland, scot_bus, scot_car, scot_rail)
-            self.travel_england = divide_uk_addresses(self.england, uk_plane, uk_car, uk_rail)
-            self.travel_wales = divide_uk_addresses(self.wales, uk_plane, uk_car, uk_rail)
-            self.travel_ni = divide_uk_addresses(self.north_ireland, uk_plane, uk_car, uk_rail)
+            self.travel_scotland = divide_scot_addresses(self.scotland, scot_bus, scot_car)
+            self.travel_england = divide_uk_addresses(self.england, uk_plane, uk_car)
+            self.travel_wales = divide_uk_addresses(self.wales, uk_plane, uk_car)
+            self.travel_ni = divide_uk_addresses(self.north_ireland, uk_plane, uk_car)
 
         else:
             self.hundred_percent.emit(False)
@@ -367,7 +368,7 @@ class Calculator(QWidget):
         # Scotland
         # Combine the bus and rail postcodes for Scotland in a list to be used in the final leg function
         scot_bus_rail = self.travel_scotland[0] + self.travel_scotland[2]
-        scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2], scot[3])
+        scot_fleg = assign_scotland(scot_bus_rail, scot[0], scot[1], scot[2])
 
         scot_car_fleg = scot_fleg[0] + aberdeen_fleg[0]
         scot_taxi_fleg = scot_fleg[1] + aberdeen_fleg[1]
@@ -377,7 +378,7 @@ class Calculator(QWidget):
         # England
         eng_rail = self.travel_england[2]
         eng_plane = self.travel_england[0]
-        eng_fleg_bus_rail, eng_fleg_plane = assign_uk(eng_rail, eng_plane, eng_land[0], eng_land[1], eng_land[2], eng_land[3], eng_air[0], eng_air[1], eng_air[2], eng_air[3])
+        eng_fleg_bus_rail, eng_fleg_plane = assign_uk(eng_rail, eng_plane, eng_land[0], eng_land[1], eng_land[2], eng_air[0], eng_air[1], eng_air[2])
         
         eng_car_fleg = eng_fleg_bus_rail[0] + eng_fleg_plane[0]
         eng_taxi_fleg = eng_fleg_bus_rail[1] + eng_fleg_plane[1]
@@ -387,7 +388,7 @@ class Calculator(QWidget):
         # Wales
         wales_rail = self.travel_wales[2]
         wales_plane = self.travel_wales[0]
-        wales_fleg_bus_rail, wales_fleg_plane = assign_uk(wales_rail, wales_plane, wales_land[0], wales_land[1], wales_land[2], wales_land[3], wales_air[0], wales_air[1], wales_air[2], wales_air[3])
+        wales_fleg_bus_rail, wales_fleg_plane = assign_uk(wales_rail, wales_plane, wales_land[0], wales_land[1], wales_land[2], wales_air[0], wales_air[1], wales_air[2])
 
         wales_car_fleg = wales_fleg_bus_rail[0] + wales_fleg_plane[0]
         wales_taxi_fleg = wales_fleg_bus_rail[1] + wales_fleg_plane[1]
@@ -397,7 +398,7 @@ class Calculator(QWidget):
         # Northern Ireland
         ni_rail = self.travel_ni[2]
         ni_plane = self.travel_ni[0]
-        ni_fleg_bus_rail, ni_fleg_plane = assign_uk(ni_rail, ni_plane, ni_land[0], ni_land[1], ni_land[2], ni_land[3], ni_air[0], ni_air[1], ni_air[2], ni_air[3])
+        ni_fleg_bus_rail, ni_fleg_plane = assign_uk(ni_rail, ni_plane, ni_land[0], ni_land[1], ni_land[2], ni_air[0], ni_air[1], ni_air[2])
 
         ni_car_fleg = ni_fleg_bus_rail[0] + ni_fleg_plane[0]
         ni_taxi_fleg = ni_fleg_bus_rail[1] + ni_fleg_plane[1]
