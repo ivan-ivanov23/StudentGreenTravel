@@ -1,7 +1,8 @@
 import pandas as pd
 import math
-from preprocess_data import determine_postcode, divide_scot_addresses, divide_uk_addresses, airports_dict, stops_dict, stations_dict
-from travel_class import Travel, aberdeen_airport, aberdeen_bus_stop, aberdeen_rail_station, aberdeen_uni
+from preprocess_data import determine_postcode, divide_scot_addresses, divide_uk_addresses, airports_dict, stations_dict
+from travel_class import Travel, aberdeen_airport, aberdeen_bus_stop, aberdeen_rail_station
+from aberdeen import distance_home_uni, divide_aberdeen
 
 """/////////////////////////// TEST OF THE FUNCTIONS IN preprocess_data.py ///////////////////////////"""
 
@@ -172,7 +173,49 @@ else:
     print(car_data)
 
 ###########################################################################################################################
-"""/////////////////////////// TEST OF THE FUNCTIONS IN travel_clas.py ///////////////////////////"""
+"""/////////////////////////// TEST OF THE FUNCTIONS IN aberdeen.py ///////////////////////////"""
+# Postcode of King street Lidl next ot Seaton Park
+students = ['AB241XZ', 'AB106RN', 'AB107JB', 'AB115QN', 'AB116UL', 'AB118RU', 'AB123FJ', 'AB124NQ', 'AB125GL', 'AB243AD']
+
+car = 40
+taxi = 40
+bus = 10
+walk = 10
+
+print("=============================== distance_home_uni() TEST ===============================")
+# Test the distance_home_uni function
+distances = distance_home_uni(students)
+# From Google Maps, the distance between the postcode and the university is around 1 km
+if math.isclose(distances[students[0]], 1, rel_tol=1):
+    print("The function distance_home_uni() works correctly.")
+    print(f"Output: {distances[students[0]]}")
+
+else:
+    print("The function distance_home_uni() does not work correctly.")
+    print(distances[students[0]])
+
+###########################################################################################################################
+print("=============================== divide_aberdeen() TEST ===============================")
+
+# Test the divide_aberdeen function
+result = divide_aberdeen(distances, car, taxi, bus, walk)
+print(f'Distances between studetns homes and uni: {distances}')
+# Due to 40% of students using cars, 40% using taxis, 10% using buses and 10% walking
+# there should be 4 students using cars, 4 using taxis, 1 using buses and 1 walking
+# So for each list of transport, the total distance is callculated by summing the distances of each student
+# For the first 4 students (car), total distance should be around 12km
+# For the next 4 students (taxi), total distance should be around 15km
+# For the next student (bus), total distance should be around 12km
+# For the last student (walk), total distance should be around 1km or under it
+if math.isclose(result[0], 12, rel_tol=1) and math.isclose(result[1], 15, rel_tol=1) and math.isclose(result[2], 12, rel_tol=1) and math.isclose(result[3], 1, rel_tol=1):
+    print("The function divide_aberdeen() works correctly.")
+    print(f"Output: {result}")
+else:
+    print("The function divide_aberdeen() does not work correctly.")
+    print(result)
+###########################################################################################################################
+
+
 
 
 
