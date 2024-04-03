@@ -1,6 +1,7 @@
 # This file contains manual tests for all the main functions in the project.
 # These tests can be run by executing the file in the terminal.
 # Sources of code snippets and data are provided in the comments of functions.
+# Lists of postcodes were generated using: https://www.doogal.co.uk/PostcodeGenerator 
 # Author: Ivan Ivanov
 
 import pandas as pd
