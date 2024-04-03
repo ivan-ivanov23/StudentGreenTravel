@@ -1,5 +1,6 @@
 from geopy.distance import geodesic
 from itertools import islice, accumulate
+import math
 import requests
 from utils import split_list
 
@@ -32,10 +33,10 @@ def distance_home_uni(students: list):
 
 def divide_aberdeen(distances: dict, p_car, p_taxi, p_bus, p_walk):
     len_students = len(distances)
-    p_car = int((p_car / 100) * len_students)
-    p_taxi = int((p_taxi / 100) * len_students)
-    p_bus = int((p_bus / 100) * len_students)
-    p_walk = int((p_walk / 100) * len_students)
+    p_car = math.ceil((p_car / 100) * len_students)
+    p_taxi = math.ceil((p_taxi / 100) * len_students)
+    p_bus = math.ceil((p_bus / 100) * len_students)
+    p_walk = len_students - p_car - p_taxi - p_bus
 
     seclist = [p_car, p_taxi, p_bus, p_walk]
     
@@ -65,11 +66,11 @@ def divide_aberdeen(distances: dict, p_car, p_taxi, p_bus, p_walk):
 
 
 # Test the function
-# students = ['AB101XG', 'AB106RN', 'AB107JB', 'AB115QN', 'AB116UL', 'AB118RU', 'AB123FJ', 'AB124NQ', 'AB125GL']
+# students = ['AB101XG', 'AB106RN', 'AB107JB', 'AB115QN', 'AB116UL', 'AB118RU', 'AB123FJ', 'AB124NQ', 'AB125GL', 'AB243AD']
 # car = 40
 # taxi = 40
-# bus = 20
-# walk = 0
+# bus = 10
+# walk = 10
 
 # distances = distance_home_uni(students)
 # print(divide_aberdeen(distances, car, taxi, bus, walk))
