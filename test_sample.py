@@ -3,6 +3,7 @@ import math
 from preprocess_data import determine_postcode, divide_scot_addresses, divide_uk_addresses, airports_dict, stations_dict
 from travel_class import Travel, aberdeen_airport, aberdeen_bus_stop, aberdeen_rail_station
 from aberdeen import distance_home_uni, divide_aberdeen
+from council_areas import get_district, group_district, find_percentage
 
 """/////////////////////////// TEST OF THE FUNCTIONS IN preprocess_data.py ///////////////////////////"""
 
@@ -214,8 +215,50 @@ else:
     print("The function divide_aberdeen() does not work correctly.")
     print(result)
 ###########################################################################################################################
+"""/////////////////////////// TEST OF THE FUNCTIONS IN council_areas.py ///////////////////////////"""
+council_postcodes = ["EH11 1EG", "G81 2NR", "DD2 4TZ", "FK15 0LN"]
 
+print("=============================== get_district() TEST ===============================")
+# Test the get_district function
+districts = get_district(council_postcodes)
 
+# Postcode council areas below are found in https://www.doogal.co.uk/ShowMap 
+if districts["EH11 1EG"] == 'City of Edinburgh' and districts["G81 2NR"] == 'West Dunbartonshire' and districts["DD2 4TZ"] == 'Dundee City' and districts["FK15 0LN"] == 'Stirling':
+    print("The function get_district() works correctly.")
+    print(f"Output: {districts}")
+else:
+    print("The function get_district() does not work correctly.")
+    print(districts)
+
+###########################################################################################################################
+print("=============================== group_district() TEST ===============================")
+# Test the group_district function
+districts['DD2 4RH'] = 'Dundee City'
+grouped = group_district(districts)
+
+# The postcodes are grouped by their council areas
+# In this case we have 4 council areas and 1 postcode for each apart from Dundee City which has 2 postcodes
+# Dundee City: ['DD2 4TZ', 'DD2 4RH']
+if len(grouped) == 4 and len(grouped["City of Edinburgh"]) == 1 and len(grouped["West Dunbartonshire"]) == 1 and len(grouped["Dundee City"]) == 2 and len(grouped["Stirling"]) == 1:
+    print("The function group_district() works correctly.")
+    print(f"Output: {grouped}")
+else:
+    print("The function group_district() does not work correctly.")
+    print(grouped)
+
+###########################################################################################################################
+print("=============================== find_percentage() TEST ===============================")
+# Test the find_percentage function
+percentages = find_percentage(grouped, council_postcodes)
+
+# There are 5 postcodes in total and 4 council areas
+# Therefore there should be 25% of postcodes in each council area except Dundee City which has 50%
+if percentages['City of Edinburgh'] == 25 and percentages['West Dunbartonshire'] == 25 and percentages['Dundee City'] == 50 and percentages['Stirling'] == 25:
+    print("The function find_percentage() works correctly.")
+    print(f"Output: {percentages}")
+else:
+    print("The function find_percentage() does not work correctly.")
+    print(percentages)
 
 
 
