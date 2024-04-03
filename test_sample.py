@@ -12,6 +12,7 @@ from aberdeen import distance_home_uni, divide_aberdeen
 from council_areas import get_district, group_district, find_percentage
 
 """/////////////////////////// TEST OF THE FUNCTIONS IN preprocess_data.py ///////////////////////////"""
+print("~.~.~.~.~.~.~.~.~.~.~.~. PREPROCESS_DATA.PY TESTS ~.~.~.~.~.~.~.~.~.~.~.~.")
 
 scottish_postcodes = ["EH11 1EG", "G81 2NR", "HS7 5LE", "DD2 4TZ", "FK15 0LN"]
 aberdeen_postcodes = ["AB10 1SN", "AB53 8RL", "AB24 1WU", "AB15 8PU", "AB16 5ST"]
@@ -114,9 +115,10 @@ else:
     print("The function divide_uk_addresses() does not work correctly.")
     print(res)
 
+print("")
 ###########################################################################################################################
 """/////////////////////////// TEST OF THE FUNCTIONS IN travel_class.py ///////////////////////////"""
-
+print("~.~.~.~.~.~.~.~.~.~.~.~. TRAVEL_CLASS.PY TESTS ~.~.~.~.~.~.~.~.~.~.~.~.")
 # Stadium of Manchester United postcode
 # Closest airport: Manchester Airport
 postcode = ['M16 0RA']
@@ -179,8 +181,10 @@ else:
     print("The function car_travel() does not work correctly.")
     print(car_data)
 
+print("")
 ###########################################################################################################################
 """/////////////////////////// TEST OF THE FUNCTIONS IN aberdeen.py ///////////////////////////"""
+print("~.~.~.~.~.~.~.~.~.~.~.~. ABERDEEN.PY TESTS ~.~.~.~.~.~.~.~.~.~.~.~.")
 # Postcode of King street Lidl next ot Seaton Park
 students = ['AB241XZ', 'AB106RN', 'AB107JB', 'AB115QN', 'AB116UL', 'AB118RU', 'AB123FJ', 'AB124NQ', 'AB125GL', 'AB243AD']
 
@@ -220,8 +224,12 @@ if math.isclose(result[0], 12, rel_tol=1) and math.isclose(result[1], 15, rel_to
 else:
     print("The function divide_aberdeen() does not work correctly.")
     print(result)
+
+print("")
 ###########################################################################################################################
 """/////////////////////////// TEST OF THE FUNCTIONS IN council_areas.py ///////////////////////////"""
+print("~.~.~.~.~.~.~.~.~.~.~.~. COUNCIL_AREAS.PY TESTS ~.~.~.~.~.~.~.~.~.~.~.~.")
+
 council_postcodes = ["EH11 1EG", "G81 2NR", "DD2 4TZ", "FK15 0LN"]
 
 print("=============================== get_district() TEST ===============================")
@@ -266,6 +274,7 @@ else:
     print("The function find_percentage() does not work correctly.")
     print(percentages)
 
+print("")
 ###########################################################################################################################
 print("=============================== END OF TESTS ===============================")
 
