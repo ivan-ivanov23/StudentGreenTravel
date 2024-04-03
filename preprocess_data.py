@@ -51,7 +51,7 @@ north_ireland = []
 
 def determine_postcode(postcodes):
     postcodes = postcodes.dropna()
-    scotland = postcodes[(postcodes.str[:2].isin(scot_postcodes)) | ((postcodes.str[:2] == 'G') & ~(postcodes.str[:2].isin(eng_postcodes)))]
+    scotland = postcodes[(postcodes.str[:2].isin(scot_postcodes)) | ((postcodes.str[:1] == 'G') & ~(postcodes.str[:2].isin(eng_postcodes)))]
     england = postcodes[(postcodes.str[:2].isin(eng_postcodes)) & ~(postcodes.str[:2].isin(scot_postcodes)) & ~(postcodes.str[:2]).isin(wales_postcodes)]
     wales = postcodes[postcodes.str[:2].isin(wales_postcodes)]
     north_ireland = postcodes[postcodes.str[:2] == 'BT']
