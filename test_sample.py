@@ -6,7 +6,7 @@
 
 import pandas as pd
 import math
-from preprocess_data import determine_postcode, divide_scot_addresses, divide_uk_addresses, airports_dict, stations_dict
+from preprocess_data import determine_postcode, divide_scot_addresses, divide_uk_addresses, airports_dict, stations_dict, stops_dict
 from travel_class import Travel, aberdeen_airport, aberdeen_bus_stop, aberdeen_rail_station
 from aberdeen import distance_home_uni, divide_aberdeen
 from council_areas import get_district, group_district, find_percentage
@@ -121,49 +121,91 @@ print("")
 print("~.~.~.~.~.~.~.~.~.~.~.~. TRAVEL_CLASS.PY TESTS ~.~.~.~.~.~.~.~.~.~.~.~.")
 # Stadium of Manchester United postcode
 # Closest airport: Manchester Airport
-postcode = ['M16 0RA']
+non_london_postcode = ['M16 0RA']
 
+# Initialize the Travel class
 travel = Travel(aberdeen_bus_stop, aberdeen_rail_station, aberdeen_airport)
 
-print("=============================== air_travel() TEST ===============================")
+print("=============================== air_travel() TEST1 ===============================")
 
-# Test the air_travel method
-airports, invalid = travel.air_travel(airports_dict, postcode)
+# Test the air_travel method with non-London postcode
+airports1, invalid1 = travel.air_travel(airports_dict, non_london_postcode)
 
-result = []
-for key, value in airports.items():
+result1 = []
+for key, value in airports1.items():
     for i in value:
-        result.append(i)
+        result1.append(i)
 # From Google Maps, the distance between Manchester Airport and Manchester United Stadium is 12 km
 # Considering layover the total flight distance is 969 km -> Manchester Airport to Gatwick Airport to Aberdeen Airport
-if result[0] == 'Manchester Airport' and math.isclose(result[1], 12, rel_tol=1) and math.isclose(result[1], 969, rel_tol=1):
+if result1[0] == 'Manchester Airport' and math.isclose(result1[1], 12, rel_tol=1) and math.isclose(result1[1], 969, rel_tol=1):
     print("The function air_travel() works correctly.")
-    print(f"Output: {airports}")
+    print(f"Output: {airports1}")
 else:
     print("The function air_travel() does not work correctly.")
-    print(airports)
+    print(airports1)
+
+print("=============================== air_travel() TEST2 ===============================")
+# Random london postcode, generated using https://www.doogal.co.uk/PostcodeGenerator
+london_postcode = ['EC2Y 9AL']
+
+# Test the air_travel method with London postcode
+airports2, invalid2 = travel.air_travel(airports_dict, london_postcode)
+result2 = []
+for key, value in airports2.items():
+    for i in value:
+        result2.append(i)
+
+# From Google Maps, the closest airport is London City Airport and is around 10 km
+# There is no layover, so the distance between London City Airport and Aberdeen Airport is around 650 km
+if result2[0] == 'London City Airport' and math.isclose(result2[1], 10, rel_tol=1) and math.isclose(result2[1], 650, rel_tol=1):
+    print("The function air_travel() works correctly.")
+    print(f"Output: {airports2}")
+else:
+    print("The function air_travel() does not work correctly.")
+    print(airports2)
+
 
 ###########################################################################################################################
-print("=============================== land_travel() TEST ===============================")
-# Test the land_travel method
-postcode = ['G42 9BJ']
+print("=============================== land_travel() TEST1 ===============================")
+# Test the land_travel method with train travel
+train_postcode = ['G42 9BJ']
 aberdeen_rail_station = (57.14372498503623, -2.0983252205325833)
 
-rail_stations, invalid = travel.land_travel(stations_dict, postcode, aberdeen_rail_station)
+rail_stations, invalid = travel.land_travel(stations_dict, train_postcode, aberdeen_rail_station)
 
-result = []
+result1 = []
 for key, value in rail_stations.items():
     for i in value:
-        result.append(i)
+        result1.append(i)
 
 # From Google Maps, the closest rail station to the postcode is Mount Florida and is around 300 metres
 # From Google Maps, the distance between Mount Florida and Aberdeen Rail Station is around 197 km
-if result[0] == 'Mount Florida Railway Station' and math.isclose(result[1], 0.3, rel_tol=0.2) and math.isclose(result[2], 197, rel_tol=1):
+if result1[0] == 'Mount Florida Railway Station' and math.isclose(result1[1], 0.3, rel_tol=0.2) and math.isclose(result1[2], 197, rel_tol=1):
     print("The function bus_travel() works correctly.")
     print(f"Output: {rail_stations}")
 else:
     print("The function bus_travel() does not work correctly.")
     print(rail_stations)
+
+print("=============================== land_travel() TEST2 ===============================")
+bus_postcode = ['EH5 2AX']
+aberdeen_bus_station = (57.14372498503623, -2.0983252205325833)
+
+bus_stops, invalid = travel.land_travel(stops_dict, bus_postcode, aberdeen_bus_station)
+
+result2 = []
+for key, value in bus_stops.items():
+    for i in value:
+        result2.append(i)
+
+# From Google Maps, the closest bus station to the postcode is Edinburgh bus station and is around 4 km
+# From Google Maps, the distance between Edinburgh bus station and Aberdeen bus station is around 200 km
+if result2[0] == 'Edinburgh bus station' and math.isclose(result2[1], 4, rel_tol=1) and math.isclose(result2[2], 200, rel_tol=1):
+    print("The function bus_travel() works correctly.")
+    print(f"Output: {bus_stops}")
+else:
+    print("The function bus_travel() does not work correctly.")
+    print(bus_stops)
 
 ###########################################################################################################################
 print("=============================== car_travel() TEST ===============================")
@@ -187,6 +229,7 @@ print("")
 print("~.~.~.~.~.~.~.~.~.~.~.~. ABERDEEN.PY TESTS ~.~.~.~.~.~.~.~.~.~.~.~.")
 # Postcode of King street Lidl next ot Seaton Park
 students = ['AB241XZ', 'AB106RN', 'AB107JB', 'AB115QN', 'AB116UL', 'AB118RU', 'AB123FJ', 'AB124NQ', 'AB125GL', 'AB243AD']
+# AB124NQ is invalid postcode, so the distance should be 0
 
 car = 40
 taxi = 40
@@ -200,10 +243,12 @@ distances = distance_home_uni(students)
 if math.isclose(distances[students[0]], 1, rel_tol=1):
     print("The function distance_home_uni() works correctly.")
     print(f"Output: {distances[students[0]]}")
+    print(f"Invalid postcode: AB124NQ has distance {distances['AB124NQ']}")
 
 else:
     print("The function distance_home_uni() does not work correctly.")
     print(distances[students[0]])
+
 
 ###########################################################################################################################
 print("=============================== divide_aberdeen() TEST ===============================")
@@ -230,14 +275,15 @@ print("")
 """/////////////////////////// TEST OF THE FUNCTIONS IN council_areas.py ///////////////////////////"""
 print("~.~.~.~.~.~.~.~.~.~.~.~. COUNCIL_AREAS.PY TESTS ~.~.~.~.~.~.~.~.~.~.~.~.")
 
-council_postcodes = ["EH11 1EG", "G81 2NR", "DD2 4TZ", "FK15 0LN"]
+council_postcodes = ["EH11 1EG", "G81 2NR", "DD2 4TZ", "FK15 0LN", "AB0 0XX"]
+# AB0 0XX is an invalid postcode and should not be found in the list of districts
 
 print("=============================== get_district() TEST ===============================")
 # Test the get_district function
 districts = get_district(council_postcodes)
 
 # Postcode council areas below are found in https://www.doogal.co.uk/ShowMap 
-if districts["EH11 1EG"] == 'City of Edinburgh' and districts["G81 2NR"] == 'West Dunbartonshire' and districts["DD2 4TZ"] == 'Dundee City' and districts["FK15 0LN"] == 'Stirling':
+if districts["EH11 1EG"] == 'City of Edinburgh' and districts["G81 2NR"] == 'West Dunbartonshire' and districts["DD2 4TZ"] == 'Dundee City' and districts["FK15 0LN"] == 'Stirling' and districts["AB0 0XX"] == 'Uknown district':
     print("The function get_district() works correctly.")
     print(f"Output: {districts}")
 else:
@@ -247,13 +293,11 @@ else:
 ###########################################################################################################################
 print("=============================== group_district() TEST ===============================")
 # Test the group_district function
-districts['DD2 4RH'] = 'Dundee City'
 grouped = group_district(districts)
 
 # The postcodes are grouped by their council areas
-# In this case we have 4 council areas and 1 postcode for each apart from Dundee City which has 2 postcodes
-# Dundee City: ['DD2 4TZ', 'DD2 4RH']
-if len(grouped) == 4 and len(grouped["City of Edinburgh"]) == 1 and len(grouped["West Dunbartonshire"]) == 1 and len(grouped["Dundee City"]) == 2 and len(grouped["Stirling"]) == 1:
+# In this case we have 5 council areas and 1 postcode for each
+if len(grouped) == 5 and len(grouped["City of Edinburgh"]) == 1 and len(grouped["West Dunbartonshire"]) == 1 and len(grouped["Dundee City"]) == 1 and len(grouped["Stirling"]) == 1 and len(grouped["Uknown district"]) == 1:
     print("The function group_district() works correctly.")
     print(f"Output: {grouped}")
 else:
@@ -265,9 +309,9 @@ print("=============================== find_percentage() TEST ==================
 # Test the find_percentage function
 percentages = find_percentage(grouped, council_postcodes)
 
-# There are 5 postcodes in total and 4 council areas
-# Therefore there should be 25% of postcodes in each council area except Dundee City which has 50%
-if percentages['City of Edinburgh'] == 25 and percentages['West Dunbartonshire'] == 25 and percentages['Dundee City'] == 50 and percentages['Stirling'] == 25:
+# There are 5 postcodes in total and 5 council areas
+# Therefore there should be 20% of postcodes in each council area
+if percentages['City of Edinburgh'] == 20 and percentages['West Dunbartonshire'] == 20 and percentages['Dundee City'] == 20 and percentages['Stirling'] == 20:
     print("The function find_percentage() works correctly.")
     print(f"Output: {percentages}")
 else:
