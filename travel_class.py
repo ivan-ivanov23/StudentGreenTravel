@@ -7,6 +7,7 @@ import sqlite3
 import requests
 
 # Constant locations and their coordinates
+# (latitude, longitude)
 aberdeen_uni = (57.1645, -2.0999)
 aberdeen_bus_stop = (57.14450856576696, -2.095330457035445)
 aberdeen_airport = (57.2019004822, -2.1977798939)
@@ -35,18 +36,19 @@ class Travel:
             if np.isnan(coords2).any():
                 continue
             # Find distance in km
-            longitude = coords1[0]
-            latitude = coords1[1]
-            distances.append(geodesic((longitude, latitude), (coords2[1], coords2[0])).km)
+            latitude = coords1[0]
+            longitude = coords1[1]
+            distances.append(geodesic((latitude, longitude), (coords2[0], coords2[1])).km)
         return np.array(distances)
     
     # Takes a postcode, a dictionary of UK postcodes and their coordinates, and a dictionary of stops and their coordinates
     def closest_hub(self, postcode_fetch: dict, stops_wcoords: dict):
         """Returns the closest transport hub to the postcode"""
         # Calculate the distance between the given postcode and bus stops
-        longitude = postcode_fetch[0]
-        latitude = postcode_fetch[1]
-        distances = self.calculate_distances([longitude, latitude], np.array(list(stops_wcoords.values())))
+        latitude = postcode_fetch[0]
+        longitude = postcode_fetch[1]
+        distances = self.calculate_distances([latitude, longitude], list(stops_wcoords.values()))
+        distances = np.array(distances)
         # Find the index of the closest bus stop
         closest_idx = np.nanargmin(distances)
         # Find the name of the closest bus stop
@@ -62,7 +64,7 @@ class Travel:
             if response_json["result"] is None:
                 return 0, 0
             else:
-                return response_json["result"]["longitude"], response_json["result"]["latitude"]
+                return response_json["result"]["latitude"], response_json["result"]["longitude"]
         else:
             return 0, 0
             
@@ -80,16 +82,16 @@ class Travel:
             cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
-                longitude, latitude = self.find_coordinates(postcode)
-                if (longitude, latitude) == (0, 0):
+                latitude, longitude = self.find_coordinates(postcode)
+                if (latitude, longitude) == (0, 0):
                     invalid_postcodes.append(postcode)
                     continue
             else:
-                longitude = postcode_coords[1]
                 latitude = postcode_coords[0]
+                longitude = postcode_coords[1]
             
             # Find the closest airport to the postcode and distance to it
-            closest_airport_name, distance_to = self.closest_hub([longitude, latitude], airports)
+            closest_airport_name, distance_to = self.closest_hub([latitude, longitude], airports)
 
             # if the postcode is not in London
             if postcode[:2] not in london_postcodes:
@@ -127,15 +129,15 @@ class Travel:
             cursor.execute("SELECT longitude, latitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
-                longitude, latitude = self.find_coordinates(postcode)
-                if (longitude, latitude) == (0, 0):
+                latitude, longitude = self.find_coordinates(postcode)
+                if (latitude, longitude) == (0, 0):
                     invalid_postcodes.append(postcode)
                     continue
 
                 
             else:
-                longitude = postcode_coords[1]
                 latitude = postcode_coords[0]
+                longitude = postcode_coords[1]
                 
 
             closest_stop_name, distance_to = self.closest_hub([latitude, longitude], stops)
@@ -172,13 +174,13 @@ class Travel:
             cursor.execute("SELECT latitude, longitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
-                longitude, latitude = self.find_coordinates(postcode)
-                if (longitude, latitude) == (0, 0):
+                latitude, longitude = self.find_coordinates(postcode)
+                if (latitude, longitude) == (0, 0):
                     invalid_postcodes.append(postcode)
                     continue
             else:
-                longitude = postcode_coords[1]
                 latitude = postcode_coords[0]
+                longitude = postcode_coords[1]
 
             # Find the distance between the given postcode and the university
             distance = geodesic((latitude, longitude), aberdeen_uni).km
@@ -211,7 +213,7 @@ class Travel:
 # print(f"invalid: {invalid}")
 
 # Test the land_travel method
-# stops, invalid = travel.land_travel(stations_dict, scotland, aberdeen_rail_station)
+# stops, invalid = travel.land_travel(stations_dict, wales, aberdeen_rail_station)
 # print(f"stops: {stops}")
 # print("===========================================================================================================================")
 # print(f"invalid: {invalid}")
