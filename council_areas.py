@@ -21,7 +21,7 @@ def get_district(country_postcodes):
                 # Postcode taken from the query
                 postcode = item["query"]
                 if item["result"] is None:
-                    result[postcode] = 'Uknown district'
+                    result[postcode] = 'Unknown district'
                 else:
                     district = item["result"]["admin_district"]
                     result[postcode] = district
