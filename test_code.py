@@ -38,6 +38,7 @@ class PreprocessTest(unittest.TestCase):
         self.assertEqual(invalid_keys, self.invalid_postcodes)
 
     def test_divide_scot_addresses(self):
+        # Percentages for each transport method
         p_bus = 20
         p_car = 30
         # p_rail = 100 - p_bus - p_car = 50
@@ -52,6 +53,7 @@ class PreprocessTest(unittest.TestCase):
         self.assertEqual(len(train_scot), 5)
 
     def test_divide_uk_addresses(self):
+        # Percentages for each transport method
         p_plane = 50
         p_car_uk = 30
         # p_train_uk = 100 - p_plane - p_car_uk
@@ -179,8 +181,6 @@ class AberdeenTest(unittest.TestCase):
         self.assertTrue(math.isclose(student_results[7], 0, rel_tol=0.2))
         self.assertTrue(math.isclose(student_results[8], 13, rel_tol=0.2))
         self.assertTrue(math.isclose(student_results[9], 0.3, rel_tol=0.05))
-
-        # return self.distances
 
     def test_divide_aberdeen(self):
         distances = distance_home_uni(self.students)
