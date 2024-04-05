@@ -126,15 +126,14 @@ class Travel:
 
         # For postcode in column 2 of address file
         for postcode in addresses:
-            cursor.execute("SELECT longitude, latitude FROM postcodes WHERE postcode = ?", (postcode,))
+            cursor.execute("SELECT latitude,longitude FROM postcodes WHERE postcode = ?", (postcode,))
             postcode_coords = cursor.fetchone()
             if postcode_coords is None:
                 latitude, longitude = self.find_coordinates(postcode)
                 if (latitude, longitude) == (0, 0):
                     invalid_postcodes.append(postcode)
                     continue
-
-                
+        
             else:
                 latitude = postcode_coords[0]
                 longitude = postcode_coords[1]
@@ -198,13 +197,19 @@ class Travel:
 # # Read Test.xlsx
 # import pandas as pd
 # from preprocess_data import airports_dict, stops_dict, stations_dict, determine_postcode
-# postcodes = pd.read_excel('datasets/Test.xlsx', usecols=[1])
+# postcodes = pd.read_excel('datasets/Addresses.xlsx', usecols=[1])
 # postcodes = postcodes.dropna()
 # # drop float values
 # postcodes = postcodes[postcodes.iloc[:, 0].apply(lambda x: isinstance(x, str))]
 # postcodes = postcodes.iloc[:, 0]#.tolist()
 
 # scotland, wales, north_ireland, england, aberdeen, new_invalid = determine_postcode(postcodes)
+
+# # Test the closest_hub method
+# coords = travel.find_coordinates('G429BA')
+# closest_hub, distance = travel.closest_hub(coords, stops_dict)
+# print(f"closest_hub: {closest_hub}")
+# print(f"distance: {distance}")
 
 # #Test the air_travel method
 # airports, invalid = travel.air_travel(airports_dict, england)
