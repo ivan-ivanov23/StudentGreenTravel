@@ -607,7 +607,7 @@ class Calculator(QWidget):
         self.page5.radio15.clicked.connect(lambda: self.display_figure(self.page5, wales_rail_emissions))
         self.page5.radio16.clicked.connect(lambda: self.display_figure(self.page5, wales_taxi_emissions))
  
-        self.pbar.setValue(65)
+        self.pbar.setValue(75)
         QtWidgets.QApplication.processEvents()
         
         # Northern Ireland
@@ -641,7 +641,7 @@ class Calculator(QWidget):
         self.page5.radio19.clicked.connect(lambda: self.display_figure(self.page5, ni_rail_emissions))
         self.page5.radio20.clicked.connect(lambda: self.display_figure(self.page5, ni_taxi_emissions))
         
-        self.pbar.setValue(75)
+        self.pbar.setValue(100)
         QtWidgets.QApplication.processEvents()
 
         # Show the results page
