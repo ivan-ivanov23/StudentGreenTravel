@@ -1,5 +1,4 @@
-# This file was used to generate the GBairports.csv file which is used in distance_between_points.py
-# The GBairports.csv file contains only the public UK airports and their longitude and latitude
+# This file was used to generate the airports.csv file which  contains only the public UK airports and their longitude and latitude
 # This filtering was done manually in Excel with the help of wikipedia
 
 import airportsdata
@@ -15,4 +14,4 @@ for i in airports:
         
 # Save airports_dict to a csv file
 df_airports = pd.DataFrame.from_dict(airports_dict, orient='index', columns=['Latitude', 'Longitude'])
-df_airports.to_csv('data/GBairports.csv')
+df_airports.to_csv('data/airports.csv')
