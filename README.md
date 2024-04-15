@@ -17,16 +17,19 @@
 -**"StudentGreenTravel.zip":** contains the packaged version of the project
 
 ## How to run the project:
+1. Install Python 3.10 or higher
 
-1. Install the required libraries by running the command:
+2. Install pip
+
+3. Install the required libraries by running the command:
 pip install -r requirements.txt
 
-2. Run the command: 
+4. Run the command: 
 'python calculator.py'
 or
 'calculator.py'
 
-3. The GUI will open, and you can start using the application
+5. The GUI will open, and you can start using the application
 
 ## How to run the packaged version of the project:
 1. Unzip the "StudentGreenTravel.zip" file
