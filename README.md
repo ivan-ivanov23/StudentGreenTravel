@@ -14,6 +14,7 @@
     - **"Student Data.xlsx":** contains the student data
     - **"Custom Emission Factors.xlsx":** contains the emission factor data
 - **"calculator.spec":** contains the packaging information of the project
+-**"StudentGreenTravel.zip":** contains the packaged version of the project
 
 ## How to run the project:
 
@@ -26,6 +27,10 @@ or
 'calculator.py'
 
 3. The GUI will open, and you can start using the application
+
+## How to run the packaged version of the project:
+1. Unzip the "StudentGreenTravel.zip" file
+2. Run the "StudentGreenTravel.exe" file
 
 ## How to use the application:
 

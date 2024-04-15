@@ -3,13 +3,13 @@
 a = Analysis(
     ['calculator.py'],
     pathex=[],
-    binaries=[('C:\Users\Ivan_PC\AppData\Local\Programs\Python\Python310\python310.dll', '.')],
+    binaries=[(r'C:\Users\Ivan_PC\AppData\Local\Programs\Python\Python312\python312.dll', '.')],
     datas=[('data', 'data'), ('icons', 'icons'), ('pictures', 'pictures')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['pytest'],
+    excludes=[],
     noarchive=False,
 )
 pyz = PYZ(a.pure)

@@ -5,6 +5,7 @@ import numpy as np
 from geopy.distance import geodesic
 import sqlite3
 import requests
+import os
 
 # Constant locations and their coordinates
 # (latitude, longitude)
@@ -74,7 +75,8 @@ class Travel:
         data = {}
         invalid_postcodes = []
         # Connect to database
-        conn = sqlite3.connect('data/postcodes.db')
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        conn = sqlite3.connect(os.path.join(basedir, 'data/postcodes.db'))
         cursor = conn.cursor()
 
         # For postcode in addresses
@@ -121,7 +123,8 @@ class Travel:
         data = {}
         invalid_postcodes = []
 
-        conn = sqlite3.connect('data/postcodes.db')
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        conn = sqlite3.connect(os.path.join(basedir, 'data/postcodes.db'))
         cursor = conn.cursor()
 
         # For postcode in column 2 of address file
@@ -165,7 +168,8 @@ class Travel:
         # List to store invalid postcodes
         invalid_postcodes = []
 
-        conn = sqlite3.connect('data/postcodes.db')
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        conn = sqlite3.connect(os.path.join(basedir, 'data/postcodes.db'))
         cursor = conn.cursor()
 
         # For postcode in column 2 of address file
