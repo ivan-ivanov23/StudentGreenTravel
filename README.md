@@ -19,9 +19,9 @@
 pip install -r requirements.txt
 
 2. Run the command: 
-python calculator.py
+'python calculator.py'
 or
-calculator.py
+'calculator.py'
 
 3. The GUI will open, and you can start using the application
 
