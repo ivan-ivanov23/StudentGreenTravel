@@ -10,8 +10,9 @@
 - **README.md:** contains the information about the project
 - **"Maintenance Manual.pdf":** contains the maintenance manual of the project
 - **packaged:** contains the packaged version of the project
-- **"Student Data.xlsx":** example test data to run the project
-- **"Custom Emission Factors.xlsx":** example custom emission factors to run the project
+- **"datasets:** contains the student and emission factor data used in the project:
+    - **"Student Data.xlsx":** contains the student data
+    - **"Custom Emission Factors.xlsx":** contains the emission factor data
 - **"calculator.spec":** contains the packaging information of the project
 
 ## How to run the project:
