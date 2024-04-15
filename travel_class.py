@@ -190,41 +190,4 @@ class Travel:
 
         return car_data, invalid_postcodes
     
-
-#Test the air_travel method
-# travel = Travel(aberdeen_bus_stop, aberdeen_rail_station, aberdeen_airport)
-
-# # Read Test.xlsx
-# import pandas as pd
-# from preprocess_data import airports_dict, stops_dict, stations_dict, determine_postcode
-# postcodes = pd.read_excel('datasets/Addresses.xlsx', usecols=[1])
-# postcodes = postcodes.dropna()
-# # drop float values
-# postcodes = postcodes[postcodes.iloc[:, 0].apply(lambda x: isinstance(x, str))]
-# postcodes = postcodes.iloc[:, 0]#.tolist()
-
-# scotland, wales, north_ireland, england, aberdeen, new_invalid = determine_postcode(postcodes)
-
-# # Test the closest_hub method
-# coords = travel.find_coordinates('G429BA')
-# closest_hub, distance = travel.closest_hub(coords, stops_dict)
-# print(f"closest_hub: {closest_hub}")
-# print(f"distance: {distance}")
-
-# #Test the air_travel method
-# airports, invalid = travel.air_travel(airports_dict, england)
-# print(f"airports: {airports}")
-# print("===========================================================================================================================")
-# print(f"invalid: {invalid}")
-
-# Test the land_travel method
-# stops, invalid = travel.land_travel(stations_dict, wales, aberdeen_rail_station)
-# print(f"stops: {stops}")
-# print("===========================================================================================================================")
-# print(f"invalid: {invalid}")
-
-# Test the car_travel method	
-# car, invalid = travel.car_travel(scotland)
-# print(f"car: {car}")
-# print("===========================================================================================================================")
-# print(f"invalid: {invalid}")
+fi

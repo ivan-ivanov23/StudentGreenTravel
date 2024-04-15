@@ -1,5 +1,6 @@
 # This file was used to generate the airports.csv file which  contains only the public UK airports and their longitude and latitude
 # This filtering was done manually in Excel with the help of wikipedia
+# Author: Ivan Ivanov
 
 import airportsdata
 import pandas as pd
@@ -10,7 +11,6 @@ airports_dict = {}
 for i in airports:
     if airports[i]['country'] == 'GB':
         airports_dict[airports[i]['name']] = [airports[i]['lat'], airports[i]['lon']]
-# print(airports_dict)
         
 # Save airports_dict to a csv file
 df_airports = pd.DataFrame.from_dict(airports_dict, orient='index', columns=['Latitude', 'Longitude'])

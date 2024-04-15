@@ -1,3 +1,9 @@
+# This file contains the functions which calculate the distance from a Aberdeen postcode to university
+# and then divide the students into groups based on the mode of transport they use to travel.
+# Sources of code snippets are provided in the comments of functions.
+# Author: Ivan Ivanov
+
+
 from geopy.distance import geodesic
 from itertools import islice, accumulate
 import math
@@ -32,6 +38,8 @@ def distance_home_uni(students: list):
 
 
 def divide_aberdeen(distances: dict, p_car, p_taxi, p_bus, p_walk):
+    """Divides the students into groups based on the mode of transport they use to travel"""
+    
     len_students = len(distances)
     p_car = math.ceil((p_car / 100) * len_students)
     p_taxi = math.ceil((p_taxi / 100) * len_students)
@@ -49,7 +57,7 @@ def divide_aberdeen(distances: dict, p_car, p_taxi, p_bus, p_walk):
     bus = res[2]
     walk = res[3]
 
-    # # Calculate the total distance for each mode of transport
+    # Calculate the total distance for each mode of transport
     total_car = sum([distances[student] for student in car])
     total_taxi = sum([distances[student] for student in taxi])
     total_bus = sum([distances[student] for student in bus])
@@ -63,14 +71,3 @@ def divide_aberdeen(distances: dict, p_car, p_taxi, p_bus, p_walk):
     total_aberdeen = [total_car, total_taxi, total_bus, total_walk]
 
     return total_aberdeen
-
-
-# Test the function
-# students = ['AB101XG', 'AB106RN', 'AB107JB', 'AB115QN', 'AB116UL', 'AB118RU', 'AB123FJ', 'AB124NQ', 'AB125GL', 'AB243AD']
-# car = 40
-# taxi = 40
-# bus = 10
-# walk = 10
-
-# distances = distance_home_uni(students)
-# print(divide_aberdeen(distances, car, taxi, bus, walk))
