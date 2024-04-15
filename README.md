@@ -12,6 +12,7 @@
 - **packaged:** contains the packaged version of the project
 - **"Student Data.xlsx":** example test data to run the project
 - **"Custom Emission Factors.xlsx":** example custom emission factors to run the project
+- **"calculator.spec":** contains the packaging information of the project
 
 ## How to run the project:
 
