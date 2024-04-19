@@ -60,29 +60,42 @@ def create_dfs(transport: dict, emission_factor: float, num_trips: int):
     df_emissions = round(df_emissions, 1)
     return df_transport, df_emissions
 
+# The 4 methods below use code snippets from plotly documentation: https://plotly.com/python
 def create_px(df: pd.DataFrame, title: str, color_vals: str, color_scheme: str):
-    fig = px.imshow(df, text_auto=True, aspect='auto', title=title,
-                    labels=dict(x="Country", y="Transport", color=color_vals),
-                    color_continuous_scale=color_scheme)
-    fig.update_traces(textfont_size=16)
+    fig = px.imshow(df, text_auto = True, aspect = 'auto', title = title,
+                    labels= dict(x = "Country", y = "Transport", color = color_vals),
+                    color_continuous_scale = color_scheme)
+    fig.update_traces(textfont_size = 16)
 
     return fig
 
 def create_go_bar(df: pd.DataFrame, title, ytitle):
     fig = go.Figure(
-        data=[go.Bar(x=df.columns, y=df.iloc[0, :], text=df.iloc[0, :], textposition='auto')],
-        layout=go.Layout(title=title, xaxis=dict(title='Council Area'), yaxis=dict(title=ytitle))
+        data = [go.Bar(x = df.columns, y = df.iloc[0, :], text = df.iloc[0, :], textposition = 'auto')],
+        layout = go.Layout(title = title, xaxis = dict(title = 'Council Area'), yaxis = dict(title = ytitle))
     )
     fig.update_xaxes(categoryorder='category ascending')
     return fig
 
 def create_go_table(df: pd.DataFrame, values: list, title: str):
     fig = go.Figure(
-            data=[go.Table( header=dict(values=values),
-                            cells=dict(values=[df.columns, df.iloc[0, :]]))],
-            layout=go.Layout(title=title)
+            data = [go.Table( header = dict(values = values),
+                            cells = dict(values = [df.columns, df.iloc[0, :]]))],
+            layout = go.Layout(title = title)
         )
-    fig.update_xaxes(categoryorder='category ascending')
+    fig.update_xaxes(categoryorder = 'category ascending')
+    return fig
+
+def create_go_table_dict(dict1: dict, title: str):
+    vals = list(dict1.values())
+    keys = list(dict1.keys())
+
+    fig = go.Figure(
+        data = [go.Table(header = dict(values = ['Council Area', 'Emissions (kg)']),
+                        cells = dict(values = [keys, vals]))],
+        layout = go.Layout(title = title)
+    )
+    fig.update_xaxes(categoryorder = 'category ascending')
     return fig
 
 def divide_combo_percentages(dict1: dict):

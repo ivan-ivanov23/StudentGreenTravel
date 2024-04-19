@@ -22,7 +22,7 @@ from main import main
 import plotly.express as px
 from council_areas import get_district, group_district, find_percentage
 from style_sheets import main_stylesheet, widget_stylesheet
-from utils import create_px, create_dfs, create_go_bar, create_go_table, divide_combo_percentages
+from utils import create_px, create_dfs, create_go_bar, create_go_table, divide_combo_percentages, create_go_table_dict
 from aberdeen import distance_home_uni, divide_aberdeen
 
 basedir = os.path.dirname(__file__)
@@ -493,7 +493,7 @@ class Calculator(QWidget):
 
         """-------------Create the dataframes & figures for Councils-------------"""
         # Scotland
-        car_dict, bus_dict, rail_dict, taxi_dict = self.create_council_areas(self.scotland, 'Scotland')
+        car_dict, bus_dict, rail_dict, taxi_dict, total_ems = self.create_council_areas(self.scotland, 'Scotland')
  
         # Create a dictionary with the total distance for each mode of transport for Scotland + Aberdeen
         new_car = {}
@@ -536,12 +536,17 @@ class Calculator(QWidget):
         self.page5.radio6.clicked.connect(lambda: self.display_figure(self.page5, scot_bus_emissions))
         self.page5.radio7.clicked.connect(lambda: self.display_figure(self.page5, scot_rail_emissions))
         self.page5.radio8.clicked.connect(lambda: self.display_figure(self.page5, scot_taxi_emissions))
+
+        # Table for total emissions by council area
+        total_emissions_table = create_go_table_dict(total_ems, 'Total Emissions (kgCO2e) by Council Area')
+        # Radio button 1
+        self.page5.radio1.clicked.connect(lambda: self.display_figure(self.page5, total_emissions_table))
         
         self.pbar.setValue(45)
         QtWidgets.QApplication.processEvents()
 
         # England
-        car_dict_eng, bus_dict_eng, rail_dict_eng, taxi_dict_eng = self.create_council_areas(self.england, 'England')
+        car_dict_eng, bus_dict_eng, rail_dict_eng, taxi_dict_eng, total_ems_eng = self.create_council_areas(self.england, 'England')
         df_car_eng, df_car_emissions_eng = create_dfs(car_dict_eng, self.emission_factors['car'], self.num_trips)
         df_bus_eng, df_bus_emissions_eng = create_dfs(bus_dict_eng, self.emission_factors['coach'], self.num_trips)
         df_rail_eng, df_rail_emissions_eng = create_dfs(rail_dict_eng, self.emission_factors['rail'], self.num_trips)
@@ -572,12 +577,17 @@ class Calculator(QWidget):
         self.page5.radio10.clicked.connect(lambda: self.display_figure(self.page5, eng_bus_emissions))
         self.page5.radio11.clicked.connect(lambda: self.display_figure(self.page5, eng_rail_emissions))
         self.page5.radio12.clicked.connect(lambda: self.display_figure(self.page5, eng_taxi_emissions))
+
+        # Table for total emissions by council area
+        total_emissions_table_eng = create_go_table_dict(total_ems_eng, 'Total Emissions (kgCO2e) by English Council Area')
+        # Radio button 2
+        self.page5.radio2.clicked.connect(lambda: self.display_figure(self.page5, total_emissions_table_eng))
         
         self.pbar.setValue(55)
         QtWidgets.QApplication.processEvents()
         
         # Wales
-        car_dict_wales, bus_dict_wales, rail_dict_wales, taxi_dict_wales = self.create_council_areas(self.wales, 'Wales')
+        car_dict_wales, bus_dict_wales, rail_dict_wales, taxi_dict_wales, total_ems_wales = self.create_council_areas(self.wales, 'Wales')
         df_car_wales, df_car_emissions_wales = create_dfs(car_dict_wales, self.emission_factors['car'], self.num_trips)
         df_bus_wales, df_bus_emissions_wales = create_dfs(bus_dict_wales, self.emission_factors['coach'], self.num_trips)
         df_rail_wales, df_rail_emissions_wales = create_dfs(rail_dict_wales, self.emission_factors['rail'], self.num_trips)
@@ -606,12 +616,17 @@ class Calculator(QWidget):
         self.page5.radio14.clicked.connect(lambda: self.display_figure(self.page5, wales_bus_emissions))
         self.page5.radio15.clicked.connect(lambda: self.display_figure(self.page5, wales_rail_emissions))
         self.page5.radio16.clicked.connect(lambda: self.display_figure(self.page5, wales_taxi_emissions))
+
+        # Table for total emissions by council area
+        total_emissions_table_wales = create_go_table_dict(total_ems_wales, 'Total Emissions (kgCO2e) by Welsh Council Area')
+        # Radio button 3
+        self.page5.radio3.clicked.connect(lambda: self.display_figure(self.page5, total_emissions_table_wales))
  
         self.pbar.setValue(75)
         QtWidgets.QApplication.processEvents()
         
         # Northern Ireland
-        car_dict_ni, bus_dict_ni, rail_dict_ni, taxi_dict_ni = self.create_council_areas(self.north_ireland, 'Northern Ireland')
+        car_dict_ni, bus_dict_ni, rail_dict_ni, taxi_dict_ni, total_ems_ni = self.create_council_areas(self.north_ireland, 'Northern Ireland')
         df_car_ni, df_car_emissions_ni = create_dfs(car_dict_ni, self.emission_factors['car'], self.num_trips)
         df_bus_ni, df_bus_emissions_ni = create_dfs(bus_dict_ni, self.emission_factors['coach'], self.num_trips)
         df_rail_ni, df_rail_emissions_ni = create_dfs(rail_dict_ni, self.emission_factors['rail'], self.num_trips)
@@ -640,6 +655,11 @@ class Calculator(QWidget):
         self.page5.radio18.clicked.connect(lambda: self.display_figure(self.page5, ni_bus_emissions))
         self.page5.radio19.clicked.connect(lambda: self.display_figure(self.page5, ni_rail_emissions))
         self.page5.radio20.clicked.connect(lambda: self.display_figure(self.page5, ni_taxi_emissions))
+
+        # Table for total emissions by council area
+        total_emissions_table_ni = create_go_table_dict(total_ems_ni, 'Total Emissions (kgCO2e) by Northern Irish Council Area')
+        # Radio button 4
+        self.page5.radio4.clicked.connect(lambda: self.display_figure(self.page5, total_emissions_table_ni))
         
         self.pbar.setValue(100)
         QtWidgets.QApplication.processEvents()
@@ -654,7 +674,7 @@ class Calculator(QWidget):
 
 
     def create_council_areas(self, country_posctodes: list, country: str):
-        # Scotland
+        # Get the districts for each country
         country_districts = get_district(country_posctodes)
         country_grouped = group_district(country_districts)
         country_percent = find_percentage(country_grouped, country_posctodes)
@@ -673,6 +693,7 @@ class Calculator(QWidget):
         bus_dict = {}
         rail_dict = {}
         taxi_dict = {}
+        total_emissions = {}
 
         for key, value in country_percent.items():
             # Divide the total distance for each mode of transport by the percentage of people using it
@@ -680,6 +701,7 @@ class Calculator(QWidget):
             bus_dict[key] = {'Bus' : bus * (value / 100)}
             rail_dict[key] = {'Rail' : rail * (value / 100)}
             taxi_dict[key] = {'Taxi' : taxi * (value / 100)}
+            total_emissions[key] = car_dict[key]['Car'] * self.emission_factors['car'] + bus_dict[key]['Bus'] * self.emission_factors['coach'] + rail_dict[key]['Rail'] * self.emission_factors['rail'] + taxi_dict[key]['Taxi'] * self.emission_factors['taxi']
 
         total_car = sum(car_dict[key]['Car'] for key in car_dict)
         total_bus = sum(bus_dict[key]['Bus'] for key in bus_dict)
@@ -699,7 +721,7 @@ class Calculator(QWidget):
         if total_rail != init_total_rail:
             rail_dict['Unknown'] = {'Rail' : init_total_rail - total_rail}
 
-        return car_dict, bus_dict, rail_dict, taxi_dict
+        return car_dict, bus_dict, rail_dict, taxi_dict, total_emissions
 
 """==============================================Run the app=============================================="""
 app = QApplication(sys.argv)

@@ -27,8 +27,6 @@ def get_district(country_postcodes):
                     result[postcode] = district
 
     return result
-    
-
 
 def group_district(districts: dict):
     """Groups the postcodes by their admin district."""

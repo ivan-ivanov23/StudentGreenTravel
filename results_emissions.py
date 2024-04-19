@@ -29,13 +29,13 @@ class ResultEmissions(QWidget):
         vbox1 = QVBoxLayout()
 
         # create a group box to hold radio buttons
-        group_box = QGroupBox("Basic Data")
+        group_box = QGroupBox("Total Council Emissions")
         group_box.setFixedWidth(200)
         radio_layout = QVBoxLayout()
-        self.radio1 = QRadioButton("Emissions by Country")
-        self.radio2 = QRadioButton("Distance by Country")
-        self.radio3 = QRadioButton("Total Emissions by Country")
-        self.radio4 = QRadioButton("Emissions per Student")
+        self.radio1 = QRadioButton("Scotland Council Emissions")
+        self.radio2 = QRadioButton("England Council Emissions")
+        self.radio3 = QRadioButton("Wales Council Emissions")
+        self.radio4 = QRadioButton("N.Ireland Council Emissions")
 
         radio_layout.addWidget(self.radio1)
         radio_layout.addWidget(self.radio2)
