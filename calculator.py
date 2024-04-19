@@ -541,7 +541,7 @@ class Calculator(QWidget):
         self.page5.radio8.clicked.connect(lambda: self.display_figure(self.page5, scot_taxi_emissions))
 
         # Table for total emissions by council area
-        total_emissions_table = create_go_table_dict(total_ems, 'Total Emissions (kgCO2e) by Council Area')
+        total_emissions_table = create_go_table_dict(total_ems, 'Total Emissions (kgCO2e) by Scottish Council Area')
         # Radio button 1
         self.page5.radio1.clicked.connect(lambda: self.display_figure(self.page5, total_emissions_table))
         
