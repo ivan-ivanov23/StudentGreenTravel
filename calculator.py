@@ -508,6 +508,9 @@ class Calculator(QWidget):
         new_taxi.update(taxi_dict)
         new_taxi['Aberdeen City'] = aberdeen_fleg[1]
 
+        # Add the Aberdeen emissions to the total_ems dictionary
+        total_ems['Aberdeen City'] = aberdeen_total_emissions
+
         df_car, df_car_emissions = create_dfs(new_car, self.emission_factors['car'], self.num_trips)
         df_bus, df_bus_emissions = create_dfs(new_bus, self.emission_factors['coach'], self.num_trips)
         df_rail, df_rail_emissions = create_dfs(rail_dict, self.emission_factors['rail'], self.num_trips)
