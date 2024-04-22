@@ -27,9 +27,7 @@ def init_leg(initial_distances_list: list):
     taxi_share = math.ceil(len(initial_distances_list) * (p_taxi / 100))
     bus_share = len(initial_distances_list) - car_share - taxi_share
 
-    # Divide the all_initial list into 3 lists,
-    # one for each mode of transport according to the percentages 
-    # without overlapping
+    # Divide the students into 3 groups without overlapping
     # Inspired by  Method 3 in https://www.geeksforgeeks.org/python-split-list-in-uneven-groups/
     seclist = [car_share, taxi_share, bus_share]
     res = [list(islice(initial_distances_list, start, end)) for start, end in zip([0]+list(accumulate(seclist)), accumulate(seclist))]
