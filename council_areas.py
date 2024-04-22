@@ -1,7 +1,6 @@
 # This file deals with getting the admin district for a list of postcodes and then 
 # grouping them by the admin district. It also finds the percentage of postcodes in each
 # admin district in respect to all postcodes for the country.
-# Sources of code snippets are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 import requests

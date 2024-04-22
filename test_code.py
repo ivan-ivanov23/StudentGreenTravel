@@ -1,7 +1,5 @@
 # This file contains unittests for all the main functions in the project.
 # These tests can be run by executing the file in the terminal.
-# Sources of code snippets and data are provided in the comments of functions.
-# The structure of testing follows the one outlined in the documentation of unittest: https://docs.python.org/3/library/unittest.html
 # Author: Ivan Ivanov
 
 import unittest

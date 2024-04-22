@@ -1,6 +1,5 @@
 # This file contains the functions which calculate the distance from a Aberdeen postcode to university
 # and then divide the students into groups based on the mode of transport they use to travel.
-# Sources of code snippets are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 

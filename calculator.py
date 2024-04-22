@@ -1,5 +1,4 @@
 # Calculator class that combines all pages and functions of the application
-# Sources of code snippets/pictures are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 import sys

@@ -1,6 +1,5 @@
 # This is the final page which contains the webview for the ploty heatmaps and 
 # the other widgets
-# Sources of code snippets are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QRadioButton, QPushButton, QWidget

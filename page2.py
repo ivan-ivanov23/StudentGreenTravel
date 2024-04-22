@@ -1,5 +1,4 @@
 # Code for the second page of the application (Mid leg assumptions page)
-# # Sources of code snippets/pictures are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QComboBox, QGridLayout, QHBoxLayout, QPushButton, QWidget

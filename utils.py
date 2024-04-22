@@ -1,5 +1,4 @@
 # This file contains utility functions used in other files
-# Sources of code snippets are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 import numpy as np

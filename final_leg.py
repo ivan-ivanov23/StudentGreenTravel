@@ -1,5 +1,4 @@
 # This file contains the functions to calculate the distance for each mode of transport for the students from Scotland and the rest of the UK.
-# Sources of code snippets are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 from itertools import islice, accumulate

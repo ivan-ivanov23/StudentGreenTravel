@@ -1,5 +1,4 @@
 # Code for the main page of the application
-# Sources of code snippets/pictures are provided in the comments of functions.
 # Author: Ivan Ivanov
 
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QWidget, QHBoxLayout, QRadioButton
