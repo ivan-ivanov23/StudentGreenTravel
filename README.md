@@ -1,9 +1,11 @@
 # StudentGreenTravel README
 
+## Link to Github: https://github.com/ivan-ivanov23/CS4529
+
 ## Contents:
 
 - **data:** contains the data used in the project
-- **"datasets:** contains the student and emission factor data used in the project:
+- **datasets:** contains the student and emission factor data used in the project:
     - **"Student Data.xlsx":** contains the student data
     - **"Custom Emission Factors.xlsx":** contains the emission factor data
 - **icons:** contains the icons used in the project
