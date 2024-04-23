@@ -9,13 +9,16 @@ import math
 import requests
 from utils import split_list
 
+# University of Aberdeen coordinates (latitude, longitude)
 aberdeen_uni = (57.1661, -2.1065)
 
 
 def distance_home_uni(students: list):
     """The function calculates the distance from the students' homes to the university based on the mode of transport they use to travel from home to Aberdeen."""
     distances = {}
+    # Split postcodes in chunks of 100 due to limits of api
     students = split_list(students)
+    # Iterate over chunks to find postcode coordinates
     for part in students:
         data = {"postcodes": part}
         response = requests.post("https://api.postcodes.io/postcodes", json=data)
@@ -47,7 +50,7 @@ def divide_aberdeen(distances: dict, p_car, p_taxi, p_bus, p_walk):
 
     seclist = [p_car, p_taxi, p_bus, p_walk]
     
-    # Divide the all_initial list into 4 lists,
+    # Divide the dictionary into 4 lists,
     # Source: Method 3 in https://www.geeksforgeeks.org/python-split-list-in-uneven-groups/
     res = [list(islice(distances, start, end)) for start, end in zip([0]+list(accumulate(seclist)), accumulate(seclist))]
 
@@ -62,11 +65,13 @@ def divide_aberdeen(distances: dict, p_car, p_taxi, p_bus, p_walk):
     total_bus = sum([distances[student] for student in bus])
     total_walk = sum([distances[student] for student in walk])
 
+    # Round the values
     total_car = round(total_car, 1)
     total_taxi = round(total_taxi, 1)
     total_bus = round(total_bus, 1)
     total_walk = round(total_walk, 1)
 
+    # List of total distances for each transport
     total_aberdeen = [total_car, total_taxi, total_bus, total_walk]
 
     return total_aberdeen

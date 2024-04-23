@@ -131,7 +131,7 @@ class Calculator(QWidget):
         self.setStyleSheet(main_stylesheet)
 
         # Get icons from icons folder
-        # Source: https://www.svgrepo.com/
+        # Source for icons: https://www.svgrepo.com/
         calculate_icon = QIcon(os.path.join(basedir, 'icons/calculator.svg'))
         back = QIcon(os.path.join(basedir, 'icons/back.svg'))
         submit = QIcon(os.path.join(basedir, 'icons/submit.svg'))
@@ -476,7 +476,7 @@ class Calculator(QWidget):
         # Source: https://plotly.com/python/pie-charts/
         labels = ['Scotland', 'England', 'Wales', 'Northern Ireland']
         values = [scot_emissions, eng_emissions, wales_emissions, ni_emissions]
-        # Round the values to 0 decimal places
+        # Round the values to 1 decimal places
         values = [round(i, 1) for i in values]
         # Figure to store the pie chart with the emissions per student
         per_student = px.pie(values=values, names=labels, title='Emissions per Student by Country (in kgCO2e)', labels=dict(names="Country", values="Emissions (kgCO2e)"), color_discrete_sequence=px.colors.sequential.RdBu)
