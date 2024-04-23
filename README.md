@@ -3,16 +3,15 @@
 ## Contents:
 
 - **data:** contains the data used in the project
+- **"datasets:** contains the student and emission factor data used in the project:
+    - **"Student Data.xlsx":** contains the student data
+    - **"Custom Emission Factors.xlsx":** contains the emission factor data
 - **icons:** contains the icons used in the project
 - **images:** contains the images used in the project
 - **requirements.txt:** contains the required libraries to run the project
 - **.py files:** contain the code of the project
 - **README.md:** contains the information about the project
 - **"Maintenance Manual.pdf":** contains the maintenance manual of the project
-- **packaged:** contains the packaged version of the project
-- **"datasets:** contains the student and emission factor data used in the project:
-    - **"Student Data.xlsx":** contains the student data
-    - **"Custom Emission Factors.xlsx":** contains the emission factor data
 - **"calculator.spec":** contains the packaging information of the project
 -**"StudentGreenTravel.zip":** contains the packaged version of the project
 
@@ -22,12 +21,15 @@
 2. Install pip
 
 3. Install the required libraries by running the command:
-pip install -r requirements.txt
+'pip install -r requirements.txt'
 
 4. Run the command: 
 'python calculator.py'
 or
 'calculator.py'
+
+OR
+Run the calculator.py file using an IDE
 
 5. The GUI will open, and you can start using the application
 
